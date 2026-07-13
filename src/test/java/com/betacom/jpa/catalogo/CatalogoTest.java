@@ -1,7 +1,9 @@
 package com.betacom.jpa.catalogo;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,7 +28,9 @@ import com.betacom.jpa.dto.input.ProdottoReq;
 import com.betacom.jpa.dto.input.UtenteReq;
 import com.betacom.jpa.dto.input.VarianteProdottoReq;
 import com.betacom.jpa.dto.output.AuthResponseDTO;
+import com.betacom.jpa.dto.output.CategoriaDTO;
 import com.betacom.jpa.dto.output.ProdottoDTO;
+import com.betacom.jpa.dto.output.VarianteProdottoDTO;
 import com.betacom.jpa.enums.Roles;
 import com.betacom.jpa.models.Utente;
 import com.betacom.jpa.repositories.IUtenteRepository;
@@ -226,6 +230,196 @@ public class CatalogoTest {
 
 		assertFalse(lista.isEmpty());
 		lista.forEach(p -> log.debug(p.toString()));
+	}
+
+	@Test
+	@Order(10)
+	public void getByIdCategoriaTest() throws Exception {
+		log.debug("getByIdCategoriaTest");
+
+		MvcResult result = mockMvc.perform(get("/rest/categoria/getById").param("id", "1"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		CategoriaDTO dto = objectMapper.readValue(result.getResponse().getContentAsString(), CategoriaDTO.class);
+		log.debug("categoria: {}", dto);
+	}
+
+	@Test
+	@Order(11)
+	public void updateCategoriaTest() throws Exception {
+		log.debug("updateCategoriaTest");
+
+		CategoriaReq req = new CategoriaReq();
+		req.setId(1);
+		req.setNome("Integratori Alimentari");
+
+		mockMvc.perform(patch("/rest/categoria/update")
+				.header("Authorization", adminToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(req)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.msg").exists());
+	}
+
+	@Test
+	@Order(12)
+	public void deleteCategoriaTestErrorHasProdotti() throws Exception {
+		log.debug("deleteCategoriaTestErrorHasProdotti - la categoria 1 ha il prodotto 1 collegato");
+
+		mockMvc.perform(delete("/rest/categoria/delete/1")
+				.header("Authorization", adminToken))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.msg").exists());
+	}
+
+	@Test
+	@Order(13)
+	public void createEDeleteCategoriaVuotaTest() throws Exception {
+		log.debug("createEDeleteCategoriaVuotaTest - categoria senza prodotti, cancellabile");
+
+		CategoriaReq req = new CategoriaReq();
+		req.setNome("Categoria Temporanea");
+
+		mockMvc.perform(post("/rest/categoria/create")
+				.header("Authorization", adminToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(req)))
+				.andExpect(status().isOk());
+
+		mockMvc.perform(delete("/rest/categoria/delete/2")
+				.header("Authorization", adminToken))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.msg").exists());
+	}
+
+	@Test
+	@Order(14)
+	public void getByIdProdottoTest() throws Exception {
+		log.debug("getByIdProdottoTest");
+
+		MvcResult result = mockMvc.perform(get("/rest/prodotto/getById").param("id", "1"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		ProdottoDTO dto = objectMapper.readValue(result.getResponse().getContentAsString(), ProdottoDTO.class);
+		log.debug("prodotto: {}", dto);
+	}
+
+	@Test
+	@Order(15)
+	public void updateProdottoTest() throws Exception {
+		log.debug("updateProdottoTest");
+
+		ProdottoReq req = new ProdottoReq();
+		req.setId(1);
+		req.setDescrizione("Descrizione aggiornata");
+
+		mockMvc.perform(patch("/rest/prodotto/update")
+				.header("Authorization", adminToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(req)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.msg").exists());
+	}
+
+	@Test
+	@Order(16)
+	public void findByFilterProdottoTest() throws Exception {
+		log.debug("findByFilterProdottoTest");
+
+		mockMvc.perform(get("/rest/prodotto/list")
+				.param("idCategoria", "1")
+				.param("marca", "Hakustore")
+				.param("nome", "Proteine"))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	@Order(17)
+	public void createEDeleteProdottoTest() throws Exception {
+		log.debug("createEDeleteProdottoTest - prodotto usa e getta, per non toccare l'id=1 usato dagli altri test");
+
+		ProdottoReq req = new ProdottoReq();
+		req.setIdCategoria(1);
+		req.setNome("Prodotto temporaneo");
+		req.setMarca("Hakustore");
+
+		mockMvc.perform(post("/rest/prodotto/create")
+				.header("Authorization", adminToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(req)))
+				.andExpect(status().isOk());
+
+		mockMvc.perform(delete("/rest/prodotto/delete/2")
+				.header("Authorization", adminToken))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.msg").exists());
+	}
+
+	@Test
+	@Order(18)
+	public void getByIdVarianteTest() throws Exception {
+		log.debug("getByIdVarianteTest");
+
+		MvcResult result = mockMvc.perform(get("/rest/varianteProdotto/getById").param("id", "1"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		VarianteProdottoDTO dto = objectMapper.readValue(result.getResponse().getContentAsString(), VarianteProdottoDTO.class);
+		log.debug("variante: {}", dto);
+	}
+
+	@Test
+	@Order(19)
+	public void updateVarianteTest() throws Exception {
+		log.debug("updateVarianteTest");
+
+		VarianteProdottoReq req = new VarianteProdottoReq();
+		req.setId(1);
+		req.setPrezzo(new BigDecimal("27.90"));
+
+		mockMvc.perform(patch("/rest/varianteProdotto/update")
+				.header("Authorization", adminToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(req)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.msg").exists());
+	}
+
+	@Test
+	@Order(20)
+	public void listVarianteByProdottoTest() throws Exception {
+		log.debug("listVarianteByProdottoTest");
+
+		MvcResult result = mockMvc.perform(get("/rest/varianteProdotto/list").param("idProdotto", "1"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		List<VarianteProdottoDTO> lista = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<VarianteProdottoDTO>>() {});
+		assertFalse(lista.isEmpty());
+	}
+
+	@Test
+	@Order(21)
+	public void createEDeleteVarianteTest() throws Exception {
+		log.debug("createEDeleteVarianteTest - variante usa e getta, per non toccare l'id=1 usato dal carrello");
+
+		VarianteProdottoReq req = new VarianteProdottoReq();
+		req.setIdProdotto(1);
+		req.setGusto("Vaniglia");
+		req.setPrezzo(new BigDecimal("25.00"));
+
+		mockMvc.perform(post("/rest/varianteProdotto/create")
+				.header("Authorization", adminToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(req)))
+				.andExpect(status().isOk());
+
+		mockMvc.perform(delete("/rest/varianteProdotto/delete/2")
+				.header("Authorization", adminToken))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.msg").exists());
 	}
 
 }

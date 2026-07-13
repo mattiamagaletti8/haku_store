@@ -1,6 +1,8 @@
 package com.betacom.jpa.coupon;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -150,6 +152,82 @@ public class CouponTest {
 		mockMvc.perform(get("/rest/coupon/list")
 				.header("Authorization", adminToken))
 				.andExpect(status().isOk());
+	}
+
+	@Test
+	@Order(6)
+	public void getByIdCouponTest() throws Exception {
+		log.debug("getByIdCouponTest");
+
+		mockMvc.perform(get("/rest/coupon/getById")
+				.param("id", "1")
+				.header("Authorization", adminToken))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	@Order(7)
+	public void getByIdCouponTestError() throws Exception {
+		log.debug("getByIdCouponTestError - id inesistente");
+
+		mockMvc.perform(get("/rest/coupon/getById")
+				.param("id", "9999")
+				.header("Authorization", adminToken))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.msg").exists());
+	}
+
+	@Test
+	@Order(8)
+	public void createUpdateEDeleteCouponUsaEGettaTest() throws Exception {
+		log.debug("createUpdateEDeleteCouponUsaEGettaTest - non tocca WELCOME10 (id=1), usato da CarrelloOrdineTest");
+
+		CouponReq creaReq = new CouponReq();
+		creaReq.setCodice("TEMP5");
+		creaReq.setTipologia("FISSO");
+		creaReq.setValore(new BigDecimal("5.00"));
+		creaReq.setDataInizio(LocalDateTime.of(2020, 1, 1, 0, 0));
+		creaReq.setDataFine(LocalDateTime.of(2030, 1, 1, 0, 0));
+
+		mockMvc.perform(post("/rest/coupon/create")
+				.header("Authorization", adminToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(creaReq)))
+				.andExpect(status().isOk());
+
+		CouponReq updateReq = new CouponReq();
+		updateReq.setId(2);
+		updateReq.setIsAttivo(false);
+
+		mockMvc.perform(patch("/rest/coupon/update")
+				.header("Authorization", adminToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(updateReq)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.msg").exists());
+
+		mockMvc.perform(delete("/rest/coupon/delete/2")
+				.header("Authorization", adminToken))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.msg").exists());
+	}
+
+	@Test
+	@Order(9)
+	public void createCouponTestUnauthorized() throws Exception {
+		log.debug("createCouponTestUnauthorized - nessun token");
+
+		CouponReq req = new CouponReq();
+		req.setCodice("NOAUTH");
+		req.setTipologia("FISSO");
+		req.setValore(new BigDecimal("1.00"));
+		req.setDataInizio(LocalDateTime.of(2020, 1, 1, 0, 0));
+		req.setDataFine(LocalDateTime.of(2030, 1, 1, 0, 0));
+
+		mockMvc.perform(post("/rest/coupon/create")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(req)))
+				.andExpect(status().isUnauthorized());
 	}
 
 }
