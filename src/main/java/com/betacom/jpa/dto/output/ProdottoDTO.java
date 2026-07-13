@@ -1,0 +1,25 @@
+package com.betacom.jpa.dto.output;
+
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class ProdottoDTO {
+	private Integer id;
+	private String nome;
+	private String descrizione;
+	private String marca;
+	private CategoriaDTO categoria;
+	private List<VarianteProdottoDTO> varianti;
+}
