@@ -24,7 +24,6 @@ public class CarrelloMap {
 
 		return CarrelloDTO.builder()
 				.id(c.getIdCarrello())
-				.stato(c.getStato().toString())
 				.dataCreazione(c.getDataCreazione())
 				.righe(righe)
 				.coupon(c.getCoupon() == null ? null : CouponMap.buildCouponDTO(c.getCoupon()))

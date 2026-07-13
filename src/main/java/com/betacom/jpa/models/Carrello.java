@@ -6,12 +6,8 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.betacom.jpa.enums.StatoCarrello;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -57,10 +53,6 @@ public class Carrello {
 
 	@Column(name = "data_creazione", nullable = false)
 	private LocalDateTime dataCreazione;
-
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private StatoCarrello stato;
 
 	@OneToMany(mappedBy = "carrello", fetch = FetchType.EAGER)
 	private List<DettaglioCarrello> righe;

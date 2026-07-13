@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.betacom.jpa.dto.input.OrdineReq;
 import com.betacom.jpa.dto.output.OrdineDTO;
-import com.betacom.jpa.enums.StatoCarrello;
 import com.betacom.jpa.enums.StatoOrdine;
 import com.betacom.jpa.enums.StatoPagamento;
 import com.betacom.jpa.exceptions.ApiException;
@@ -127,7 +126,6 @@ public class OrdineImpl implements IOrdineServices {
 		repDetCar.deleteAll(righeCarrello);
 		car.getRighe().clear();
 		car.setCoupon(null);
-		car.setStato(StatoCarrello.ATTIVO);
 
 		return OrdineMap.buildOrdineDTO(ordine);
 	}

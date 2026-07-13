@@ -19,7 +19,6 @@ import lombok.ToString;
 @ToString
 public class CarrelloDTO {
 	private Integer id;
-	private String stato;
 	private LocalDateTime dataCreazione;
 	private List<DettaglioCarrelloDTO> righe;
 	private CouponDTO coupon;

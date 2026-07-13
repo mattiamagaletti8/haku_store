@@ -3,7 +3,6 @@ create table if not exists carrello (
     id_coupon integer,
     id_utente integer not null unique,
     data_creazione timestamp(6) not null,
-    stato varchar(255) not null check ((stato in ('ATTIVO','CONVERTITO','ABBANDONATO'))),
     primary key (id_carrello)
 );
 

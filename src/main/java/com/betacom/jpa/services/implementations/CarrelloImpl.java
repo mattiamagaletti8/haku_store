@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.betacom.jpa.dto.input.DettaglioCarrelloReq;
 import com.betacom.jpa.dto.output.CarrelloDTO;
-import com.betacom.jpa.enums.StatoCarrello;
 import com.betacom.jpa.exceptions.ApiException;
 import com.betacom.jpa.mapping.CarrelloMap;
 import com.betacom.jpa.models.Carrello;
@@ -49,13 +48,8 @@ public class CarrelloImpl implements ICarrelloServices {
 			car = new Carrello();
 			car.setUtente(ut);
 			car.setDataCreazione(LocalDateTime.now());
-			car.setStato(StatoCarrello.ATTIVO);
 			car.setRighe(new ArrayList<>());
 			repCar.save(car);
-		} else if (car.getStato() != StatoCarrello.ATTIVO) {
-			// Il carrello e' 1:1 con l'utente: non se ne puo' creare uno nuovo dopo il
-			// checkout, quindi lo stesso record viene riattivato per una nuova sessione di shopping.
-			car.setStato(StatoCarrello.ATTIVO);
 		}
 
 		return car;
