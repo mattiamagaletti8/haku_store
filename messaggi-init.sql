@@ -1,0 +1,83 @@
+-- Esegui prima questo, se la tabella messaggi_sistema esiste gia' con code varchar(20):
+ALTER TABLE messaggi_sistema ALTER COLUMN code TYPE varchar(50);
+
+INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
+('IT', 'auth.badcredentials', 'Email o password non validi.'),
+('IT', 'auth.forbidden', 'Non hai i permessi per eseguire questa operazione.'),
+('IT', 'auth.unauthorized', 'Devi effettuare il login per accedere a questa risorsa.'),
+('IT', 'auth.no.email', 'Inserisci l''email.'),
+('IT', 'auth.no.password', 'Inserisci la password.'),
+
+('IT', 'utente.ntfnd', 'Utente non trovato.'),
+('IT', 'utente.forbidden', 'Non puoi modificare i dati di un altro utente.'),
+('IT', 'utente.email.exists', 'Esiste gia'' un utente con questa email.'),
+('IT', 'utente.email.invalid', 'L''indirizzo email non e'' valido.'),
+('IT', 'utente.no.id', 'ID utente mancante.'),
+('IT', 'utente.no.nome', 'Inserisci il nome.'),
+('IT', 'utente.no.cognome', 'Inserisci il cognome.'),
+('IT', 'utente.no.email', 'Inserisci l''email.'),
+('IT', 'utente.no.password', 'Inserisci la password.'),
+('IT', 'utente.password.short', 'La password deve contenere almeno 8 caratteri.'),
+
+('IT', 'indirizzo.ntfnd', 'Indirizzo non trovato.'),
+('IT', 'indirizzo.forbidden', 'Non puoi modificare un indirizzo che non ti appartiene.'),
+('IT', 'indirizzo.no.id', 'ID indirizzo mancante.'),
+('IT', 'indirizzo.no.via', 'Inserisci la via.'),
+('IT', 'indirizzo.no.citta', 'Inserisci la citta''.'),
+('IT', 'indirizzo.no.cap', 'Inserisci il CAP.'),
+
+('IT', 'categoria.ntfnd', 'Categoria non trovata.'),
+('IT', 'categoria.nome.exist', 'Esiste gia'' una categoria con questo nome.'),
+('IT', 'categoria.has.prodotti', 'Impossibile eliminare la categoria: sono presenti prodotti collegati.'),
+('IT', 'categoria.no.id', 'ID categoria mancante.'),
+('IT', 'categoria.no.nome', 'Inserisci il nome della categoria.'),
+
+('IT', 'prodotto.ntfnd', 'Prodotto non trovato.'),
+('IT', 'prodotto.no.id', 'ID prodotto mancante.'),
+('IT', 'prodotto.no.categoria', 'Seleziona la categoria del prodotto.'),
+('IT', 'prodotto.no.nome', 'Inserisci il nome del prodotto.'),
+('IT', 'prodotto.no.marca', 'Inserisci la marca del prodotto.'),
+
+('IT', 'variante.ntfnd', 'Variante prodotto non trovata.'),
+('IT', 'variante.stock.insufficient', 'Quantita'' non disponibile in magazzino.'),
+('IT', 'variante.stock.conflict', 'Il prodotto e'' stato acquistato da un altro utente proprio ora: riprova il checkout.'),
+('IT', 'variante.no.id', 'ID variante mancante.'),
+('IT', 'variante.no.prodotto', 'Seleziona il prodotto.'),
+('IT', 'variante.no.prezzo', 'Inserisci il prezzo.'),
+('IT', 'variante.prezzo.invalid', 'Il prezzo non puo'' essere negativo.'),
+('IT', 'variante.quantita.invalid', 'La quantita'' disponibile non puo'' essere negativa.'),
+
+('IT', 'recensione.ntfnd', 'Recensione non trovata.'),
+('IT', 'recensione.forbidden', 'Non puoi modificare una recensione che non e'' tua.'),
+('IT', 'recensione.no.id', 'ID recensione mancante.'),
+('IT', 'recensione.no.prodotto', 'Seleziona il prodotto da recensire.'),
+('IT', 'recensione.no.voto', 'Inserisci un voto.'),
+('IT', 'recensione.voto.invalid', 'Il voto deve essere compreso tra 1 e 5.'),
+
+('IT', 'coupon.ntfnd', 'Coupon non trovato.'),
+('IT', 'coupon.codice.exist', 'Esiste gia'' un coupon con questo codice.'),
+('IT', 'coupon.not.active', 'Il coupon non e'' attivo.'),
+('IT', 'coupon.not.started', 'Il coupon non e'' ancora valido.'),
+('IT', 'coupon.expired', 'Il coupon e'' scaduto.'),
+('IT', 'coupon.dates.invalid', 'La data di fine deve essere successiva alla data di inizio.'),
+('IT', 'coupon.no.id', 'ID coupon mancante.'),
+('IT', 'coupon.no.codice', 'Inserisci il codice del coupon.'),
+('IT', 'coupon.no.tipologia', 'Seleziona il tipo di coupon (percentuale o fisso).'),
+('IT', 'coupon.no.valore', 'Inserisci il valore dello sconto.'),
+('IT', 'coupon.valore.invalid', 'Il valore dello sconto deve essere maggiore di zero.'),
+('IT', 'coupon.no.data.inizio', 'Inserisci la data di inizio validita''.'),
+('IT', 'coupon.no.data.fine', 'Inserisci la data di fine validita''.'),
+
+('IT', 'carrello.empty', 'Il carrello e'' vuoto.'),
+('IT', 'carrello.no.variante', 'Seleziona una variante del prodotto.'),
+('IT', 'carrello.no.quantita', 'Inserisci la quantita''.'),
+('IT', 'carrello.quantita.invalid', 'La quantita'' deve essere almeno 1.'),
+('IT', 'carrello.no.codice.coupon', 'Inserisci il codice del coupon.'),
+('IT', 'dettaglio.ntfnd', 'Articolo del carrello non trovato.'),
+
+('IT', 'ordine.ntfnd', 'Ordine non trovato.'),
+('IT', 'ordine.forbidden', 'Non puoi visualizzare un ordine che non ti appartiene.'),
+('IT', 'ordine.no.id', 'ID ordine mancante.'),
+('IT', 'ordine.no.indirizzo', 'Seleziona l''indirizzo di spedizione.'),
+('IT', 'ordine.no.metodo.pagamento', 'Seleziona il metodo di pagamento.')
+ON CONFLICT (lang, code) DO UPDATE SET messagio = EXCLUDED.messagio;
