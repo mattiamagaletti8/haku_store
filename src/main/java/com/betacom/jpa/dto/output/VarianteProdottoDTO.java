@@ -18,6 +18,7 @@ import lombok.ToString;
 public class VarianteProdottoDTO {
 	private Integer id;
 	private Integer idProdotto;
+	private String nomeProdotto;
 	private String gusto;
 	private String formato;
 	private String colore;

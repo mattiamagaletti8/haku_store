@@ -34,6 +34,11 @@ public class VarianteProdottoImpl implements IVarianteProdottoServices {
 		Prodotto p = repP.findById(req.getIdProdotto())
 				.orElseThrow(() -> new ApiException("prodotto.ntfnd"));
 
+		if (repV.existsByProdottoIdProdottoAndGustoAndFormatoAndColore(
+				req.getIdProdotto(), req.getGusto(), req.getFormato(), req.getColore())) {
+			throw new ApiException("variante.exists");
+		}
+
 		VarianteProdotto v = new VarianteProdotto();
 		v.setProdotto(p);
 		v.setGusto(req.getGusto());

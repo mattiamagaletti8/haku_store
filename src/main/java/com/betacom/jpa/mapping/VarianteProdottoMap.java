@@ -19,6 +19,7 @@ public class VarianteProdottoMap {
 		return VarianteProdottoDTO.builder()
 				.id(v.getIdVariante())
 				.idProdotto(v.getProdotto() == null ? null : v.getProdotto().getIdProdotto())
+				.nomeProdotto(v.getProdotto() == null ? null : v.getProdotto().getNome())
 				.gusto(v.getGusto())
 				.formato(v.getFormato())
 				.colore(v.getColore())

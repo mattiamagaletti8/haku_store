@@ -17,4 +17,6 @@ public interface IProdottoRepository extends JpaRepository<Prodotto, Integer> {
 			@Param("marca") String marca,
 			@Param("nome") String nome
 			);
+
+	boolean existsByNomeIgnoreCaseAndMarcaIgnoreCase(String nome, String marca);
 }

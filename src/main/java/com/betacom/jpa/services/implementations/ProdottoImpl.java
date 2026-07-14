@@ -34,6 +34,10 @@ public class ProdottoImpl implements IProdottoServices {
 		Categoria cat = repC.findById(req.getIdCategoria())
 				.orElseThrow(() -> new ApiException("categoria.ntfnd"));
 
+		if (repP.existsByNomeIgnoreCaseAndMarcaIgnoreCase(req.getNome(), req.getMarca())) {
+			throw new ApiException("prodotto.exists");
+		}
+
 		Prodotto p = new Prodotto();
 		p.setCategoria(cat);
 		p.setNome(req.getNome());

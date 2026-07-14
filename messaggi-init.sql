@@ -33,12 +33,14 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'categoria.no.nome', 'Inserisci il nome della categoria.'),
 
 ('IT', 'prodotto.ntfnd', 'Prodotto non trovato.'),
+('IT', 'prodotto.exists', 'Esiste gia'' un prodotto con questo nome per questa marca.'),
 ('IT', 'prodotto.no.id', 'ID prodotto mancante.'),
 ('IT', 'prodotto.no.categoria', 'Seleziona la categoria del prodotto.'),
 ('IT', 'prodotto.no.nome', 'Inserisci il nome del prodotto.'),
 ('IT', 'prodotto.no.marca', 'Inserisci la marca del prodotto.'),
 
 ('IT', 'variante.ntfnd', 'Variante prodotto non trovata.'),
+('IT', 'variante.exists', 'Esiste gia'' una variante con questi stessi attributi per questo prodotto.'),
 ('IT', 'variante.stock.insufficient', 'Quantita'' non disponibile in magazzino.'),
 ('IT', 'variante.stock.conflict', 'Il prodotto e'' stato acquistato da un altro utente proprio ora: riprova il checkout.'),
 ('IT', 'variante.no.id', 'ID variante mancante.'),
