@@ -10,4 +10,6 @@ import com.betacom.jpa.models.VarianteProdotto;
 @Repository
 public interface IVarianteProdottoRepository extends JpaRepository<VarianteProdotto, Integer> {
 	List<VarianteProdotto> findByProdottoIdProdotto(Integer idProdotto);
+
+	boolean existsByProdottoIdProdottoAndGustoAndFormatoAndColore(Integer idProdotto, String gusto, String formato, String colore);
 }
