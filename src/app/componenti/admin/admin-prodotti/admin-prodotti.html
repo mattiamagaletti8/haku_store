@@ -1,3 +1,6 @@
+<!-- ============================================================================ -->
+<!-- PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto) -->
+<!-- ============================================================================ -->
 <h3 class="mb-16">Prodotti</h3>
 
 @if (erroreMsg()) {
@@ -22,6 +25,10 @@
                 <td>{{ v.gusto }} {{ v.formato }} {{ v.colore }}</td>
                 <td>{{ v.prezzo | currency: 'EUR' }}</td>
                 <td>
+                  <!-- (change) invece di (input): scatta solo quando l'utente conferma il valore
+                       (esce dal campo o preme invio), non ad ogni singola cifra digitata.
+                       $any($event.target).value e' necessario perche' TypeScript non conosce
+                       il tipo esatto dell'elemento DOM che ha generato l'evento -->
                   <input
                     type="number"
                     min="0"
@@ -35,6 +42,9 @@
           </tbody>
         </table>
 
+        <!-- @let (Angular 18+, evoluzione del Control Flow visto in teoria cap. 16): definisce
+             una variabile locale nel template, calcolata una volta sola e riusata piu' volte sotto,
+             evitando di richiamare attributiCategoria(...) ripetutamente per ogni @if -->
         @let attributi = attributiCategoria(p.categoria?.nome);
         <form class="form-riga" [formGroup]="nuovaVarianteForm" (ngSubmit)="creaVariante(p.id)">
           @if (attributi.gusto) {

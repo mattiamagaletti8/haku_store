@@ -4,6 +4,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CouponServices } from '../../../services/coupon-services';
 import { CouponDTO } from '../../../models/models';
 
+// ============================================================================
+// PROPRIETARIO: Pier — Carrello (Carrello / DettaglioCarrello / Coupon)
+// ============================================================================
 @Component({
   selector: 'app-admin-coupon',
   imports: [ReactiveFormsModule, CurrencyPipe, DatePipe],
@@ -50,10 +53,13 @@ export class AdminCoupon implements OnInit {
         this.nuovoForm.reset({ tipologia: 'PERCENTUALE' });
         this.carica();
       },
+      // Corrisponde a "coupon.dates.invalid" se dataFine non e' dopo dataInizio,
+      // o "coupon.codice.exist" se il codice e' gia' usato (vedi CouponImpl.create nel backend)
       error: (err) => this.erroreMsg.set(err.error?.msg ?? 'Errore'),
     });
   }
 
+  // Aggiornamento parziale (solo isAttivo): non tocca codice/valore/date del coupon
   attivaDisattiva(c: CouponDTO): void {
     this.couponS.update({ id: c.id, isAttivo: !c.isAttivo }).subscribe({
       next: () => this.carica(),

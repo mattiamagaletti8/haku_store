@@ -3,11 +3,16 @@ import { Injectable, inject } from '@angular/core';
 import { API_BASE_URL } from '../core/api-config';
 import { RecensioneDTO, ResponseDTO } from '../models/models';
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Utente, Recensioni & Sicurezza
+// ============================================================================
 @Injectable({ providedIn: 'root' })
 export class RecensioneServices {
   private http = inject(HttpClient);
   private url = API_BASE_URL + '/recensione/';
 
+  // Endpoint pubblico (nessun token richiesto): visibile anche a chi non e' loggato,
+  // come da SecurityConfig del backend (GET /rest/recensione/list e' in permitAll)
   listByProdotto(idProdotto: number) {
     return this.http.get<RecensioneDTO[]>(this.url + 'list', { params: { idProdotto } });
   }

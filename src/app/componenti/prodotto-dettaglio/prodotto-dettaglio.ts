@@ -9,6 +9,11 @@ import { RecensioneServices } from '../../services/recensione-services';
 import { ProdottoDTO, RecensioneDTO, VarianteProdottoDTO } from '../../models/models';
 import { generaImmagineProdotto } from '../../utils/immagine-prodotto';
 
+// ============================================================================
+// PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
+// ============================================================================
+// Pagina di dettaglio prodotto: incrocia 3 moduli diversi (Prodotto di Mattia,
+// Recensione di Sarah, Carrello di Pier) esattamente come nel backend
 @Component({
   selector: 'app-prodotto-dettaglio',
   imports: [ReactiveFormsModule, CurrencyPipe, DatePipe],
@@ -18,6 +23,8 @@ import { generaImmagineProdotto } from '../../utils/immagine-prodotto';
 export class ProdottoDettaglio implements OnInit {
   private route = inject(ActivatedRoute);
   private prodottoS = inject(ProdottoServices);
+  // Collegamento verso il modulo di Sarah (recensioni) e di Pier (carrello): il componente
+  // di dettaglio prodotto orchestra tutti e tre, ma i service restano ciascuno nel proprio dominio
   private recensioneS = inject(RecensioneServices);
   private carrelloS = inject(CarrelloServices);
   auth = inject(AuthServices);
@@ -39,6 +46,9 @@ export class ProdottoDettaglio implements OnInit {
   });
 
   ngOnInit(): void {
+    // route.paramMap e' un Observable (teoria cap. 21/24): si iscrive per reagire anche
+    // se l'utente naviga da un prodotto a un altro senza distruggere il componente
+    // (es. da /prodotto/1 a /prodotto/2 tramite un link), non solo al primo caricamento
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.idProdotto = Number(params.get('id'));
       this.caricaProdotto();
@@ -50,6 +60,7 @@ export class ProdottoDettaglio implements OnInit {
     this.prodottoS.getById(this.idProdotto).subscribe({
       next: (resp) => {
         this.prodotto.set(resp);
+        // Preseleziona la prima variante DISPONIBILE (stock > 0), altrimenti la prima in assoluto
         const disponibile = resp.varianti.find((v) => v.quantitaDisponibile > 0);
         this.varianteSelezionata.set(disponibile ?? resp.varianti[0] ?? null);
       },
@@ -63,6 +74,7 @@ export class ProdottoDettaglio implements OnInit {
   }
 
   selezionaVariante(v: VarianteProdottoDTO): void {
+    // Non si puo' selezionare una variante esaurita
     if (v.quantitaDisponibile <= 0) return;
     this.varianteSelezionata.set(v);
     this.quantitaForm.patchValue({ quantita: 1 });
@@ -72,6 +84,8 @@ export class ProdottoDettaglio implements OnInit {
     const variante = this.varianteSelezionata();
     if (!variante || variante.quantitaDisponibile <= 0) return;
 
+    // Doppio controllo lato client: non permettere di chiedere piu' pezzi di quelli
+    // disponibili (il backend comunque rivalida tutto al checkout, questo e' solo UX)
     const quantita = Math.min(this.quantitaForm.value.quantita ?? 1, variante.quantitaDisponibile);
 
     this.messaggioCarrello.set(null);

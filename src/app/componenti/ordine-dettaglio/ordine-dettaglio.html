@@ -1,3 +1,6 @@
+<!-- ============================================================================ -->
+<!-- PROPRIETARIO: Valerio — Ordini (Ordine / DettaglioOrdine / checkout) -->
+<!-- ============================================================================ -->
 @if (ordine(); as o) {
   <h2 class="section-title">Ordine #{{ o.id }}</h2>
   <p class="light">{{ o.dataOrdine | date: 'dd/MM/yyyy HH:mm' }}</p>
@@ -7,6 +10,8 @@
     <span class="muted" style="margin-left:8px">{{ o.metodoPagamento }}</span>
   </p>
 
+  <!-- Indirizzo STORICIZZATO sull'ordine (campi piatti, non un riferimento a Indirizzo):
+       resta invariato anche se l'utente modifica o cancella l'indirizzo originale in seguito -->
   <h3 class="mt-24 mb-16">Spedizione</h3>
   <p class="light">{{ o.spedizioneVia }}, {{ o.spedizioneCitta }} ({{ o.spedizioneCap }}) {{ o.spedizioneProvincia }} - {{ o.spedizioneNazione }}</p>
 
@@ -27,6 +32,8 @@
             <strong>{{ r.variante.nomeProdotto }}</strong>
             <span class="muted"> — {{ r.variante.gusto }} {{ r.variante.formato }} {{ r.variante.colore }}</span>
           </td>
+          <!-- prezzoUnitario e' CONGELATO al momento del checkout: anche se il prezzo
+               della variante cambia oggi, qui resta quello pagato realmente -->
           <td>{{ r.prezzoUnitario | currency: 'EUR' }}</td>
           <td>{{ r.quantita }}</td>
           <td>{{ r.subtotale | currency: 'EUR' }}</td>

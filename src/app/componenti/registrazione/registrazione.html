@@ -1,3 +1,6 @@
+<!-- ============================================================================ -->
+<!-- PROPRIETARIO: Sarah — Utente, Recensioni & Sicurezza -->
+<!-- ============================================================================ -->
 <div class="scheda-registrazione card">
   <div class="section-label">Unisciti a noi</div>
   <h2 class="section-title">Crea un account</h2>
@@ -23,6 +26,8 @@
       <input type="password" formControlName="password" placeholder="minimo 8 caratteri" />
     </div>
 
+    <!-- Nessun Validators.required qui: il telefono e' facoltativo, esattamente come
+         nel backend (UtenteReq.telefono non ha nessuna annotazione di validazione) -->
     <div class="campo">
       <label>Telefono (opzionale)</label>
       <input formControlName="telefono" />

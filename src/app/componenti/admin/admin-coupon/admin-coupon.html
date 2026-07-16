@@ -1,3 +1,6 @@
+<!-- ============================================================================ -->
+<!-- PROPRIETARIO: Pier — Carrello (Carrello / DettaglioCarrello / Coupon) -->
+<!-- ============================================================================ -->
 <h3 class="mb-16">Coupon</h3>
 
 @if (erroreMsg()) {
@@ -20,6 +23,8 @@
       <tr>
         <td>{{ c.codice }}</td>
         <td>{{ c.tipologia }}</td>
+        <!-- Espressione ternaria dentro l'interpolazione: se PERCENTUALE mostra "10%",
+             altrimenti usa la pipe "currency" per un valore fisso in euro -->
         <td>{{ c.tipologia === 'PERCENTUALE' ? c.valore + '%' : (c.valore | currency: 'EUR') }}</td>
         <td>{{ c.dataInizio | date: 'dd/MM/yyyy' }} - {{ c.dataFine | date: 'dd/MM/yyyy' }}</td>
         <td><span class="badge-stato">{{ c.isAttivo ? 'Sì' : 'No' }}</span></td>

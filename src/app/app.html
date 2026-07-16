@@ -1,3 +1,6 @@
+<!-- ============================================================================ -->
+<!-- PROPRIETARIO: Infrastruttura condivisa (non appartiene a una sola persona) -->
+<!-- ============================================================================ -->
 <div class="topbar">
   🚀 Spedizione gratuita sopra i 49€ &nbsp;·&nbsp; Nuovi arrivi ogni settimana &nbsp;·&nbsp; Programma fedeltà: guadagna punti ad ogni ordine
 </div>
@@ -9,6 +12,8 @@
     </a>
 
     <ul class="nav-links">
+      <!-- routerLinkActive (teoria cap. 21): aggiunge la classe "active" al link
+           corrispondente alla rotta corrente, senza logica manuale nel componente -->
       <li><a routerLink="/catalogo" routerLinkActive="active">Catalogo</a></li>
       <li><a routerLink="/about" routerLinkActive="active">About</a></li>
       @if (auth.isAdmin()) {
@@ -35,6 +40,8 @@
   </div>
 </nav>
 
+<!-- <router-outlet> (teoria cap. 21): il "buco" nel layout dove Angular inserisce
+     il componente della rotta attiva — home, prodotto-dettaglio, carrello, ecc. -->
 <main class="container page">
   <router-outlet></router-outlet>
 </main>

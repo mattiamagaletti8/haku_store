@@ -3,6 +3,12 @@ import { Injectable, inject } from '@angular/core';
 import { API_BASE_URL } from '../core/api-config';
 import { CouponDTO, ResponseDTO } from '../models/models';
 
+// ============================================================================
+// PROPRIETARIO: Pier — Carrello (Carrello / DettaglioCarrello / Coupon)
+// ============================================================================
+// Tutti gli endpoint di CouponController nel backend richiedono ADMIN
+// (@PreAuthorize a livello di classe): questo service e' usato solo dal pannello admin,
+// mai dal carrello del cliente (che invece applica un coupon per codice via CarrelloServices)
 @Injectable({ providedIn: 'root' })
 export class CouponServices {
   private http = inject(HttpClient);

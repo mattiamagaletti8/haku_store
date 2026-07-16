@@ -1,3 +1,6 @@
+<!-- ============================================================================ -->
+<!-- PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto) -->
+<!-- ============================================================================ -->
 <h3 class="mb-16">Categorie</h3>
 
 @if (erroreMsg()) {
@@ -8,6 +11,8 @@
   <tbody>
     @for (c of categorie(); track c.id) {
       <tr>
+        <!-- @if/@else (teoria cap. 16): la stessa riga di tabella mostra o il form di modifica
+             o la vista normale, a seconda che questa specifica categoria sia "in editing" -->
         @if (inModifica() === c.id) {
           <td>
             <form class="form-riga" style="margin-top:0" [formGroup]="modificaForm" (ngSubmit)="salvaModifica(c.id)">

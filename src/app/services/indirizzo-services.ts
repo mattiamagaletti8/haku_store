@@ -3,11 +3,16 @@ import { Injectable, inject } from '@angular/core';
 import { API_BASE_URL } from '../core/api-config';
 import { IndirizzoDTO, ResponseDTO } from '../models/models';
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Utente, Recensioni & Sicurezza
+// ============================================================================
 @Injectable({ providedIn: 'root' })
 export class IndirizzoServices {
   private http = inject(HttpClient);
   private url = API_BASE_URL + '/indirizzo/';
 
+  // Nessun idUtente passato qui: il backend lo ricava sempre dal token JWT (mai dal
+  // client), esattamente come spiegato nel backend per IndirizzoController/IndirizzoImpl
   list() {
     return this.http.get<IndirizzoDTO[]>(this.url + 'list');
   }

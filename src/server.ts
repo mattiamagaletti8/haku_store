@@ -7,6 +7,13 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 
+// ============================================================================
+// PROPRIETARIO: Infrastruttura condivisa (non appartiene a una sola persona)
+// ============================================================================
+// Il server Node/Express che serve l'app in produzione: file statici compilati (JS/CSS)
+// piu' il motore SSR di Angular per generare l'HTML iniziale di ogni richiesta.
+// Generato automaticamente da "ng new" con SSR abilitato, non modificato per Hakustore
+// (il backend REST vero e proprio e' quello Spring Boot separato, su un'altra porta).
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();

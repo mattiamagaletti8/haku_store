@@ -1,3 +1,9 @@
+<!-- ============================================================================ -->
+<!-- PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto) -->
+<!-- ============================================================================ -->
+<!-- "@if (prodotto(); as p)" (teoria cap. 16): valuta il signal UNA volta e lo salva
+     nella variabile locale "p" per tutto il blocco, evitando di richiamare prodotto()
+     ripetutamente — utile anche perche' finche' e' null (dati non ancora arrivati) va al ramo @else -->
 @if (prodotto(); as p) {
   <div class="product-img product-img-dettaglio">
     <img [src]="immagineDi(p)" [alt]="p.nome" />
@@ -9,6 +15,8 @@
 
   <h3 class="mt-24 mb-16">Varianti</h3>
   <div class="griglia-varianti">
+    <!-- [class.X] (property binding su una singola classe CSS, variante di ngClass
+         visto in teoria cap. 15-16): applica "selezionata"/"esaurita" in base a una condizione -->
     @for (v of p.varianti; track v.id) {
       <div
         class="scheda-variante"
@@ -24,6 +32,8 @@
     }
   </div>
 
+  <!-- auth.isLogged() (dal service di Sarah): mostra il form di acquisto solo se autenticato,
+       coerente col fatto che il backend richiede comunque il login per /rest/carrello/items -->
   @if (auth.isLogged()) {
     <form class="form-riga" [formGroup]="quantitaForm" (ngSubmit)="aggiungiAlCarrello()">
       <div class="campo campo-quantita">
@@ -50,6 +60,7 @@
         <p class="mt-8"><strong>{{ r.titolo }}</strong></p>
       }
       <p class="light">{{ r.commento }}</p>
+      <!-- pipe "date" (teoria cap. 17) con formato personalizzato -->
       <p class="data-recensione muted">{{ r.dataRecensione | date: 'dd/MM/yyyy' }}</p>
     </div>
   } @empty {

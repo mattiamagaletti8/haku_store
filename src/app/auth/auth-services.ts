@@ -5,25 +5,48 @@ import { tap } from 'rxjs';
 import { API_BASE_URL } from '../core/api-config';
 import { AuthResponseDTO, UtenteDTO } from '../models/models';
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Utente, Recensioni & Sicurezza
+// ============================================================================
+// Il "cervello" dell'autenticazione lato frontend: gestisce login/register/logout,
+// salva il JWT ricevuto dal backend e tiene lo stato reattivo di "chi e' loggato".
+// E' l'equivalente pratico della teoria del capitolo 38 (JWT: header.payload.signature,
+// flusso di login) applicata dal lato client invece che dal server.
+
 const TOKEN_KEY = 'hakustore_token';
 const TOKEN_EXP_KEY = 'hakustore_token_exp';
 const USER_KEY = 'hakustore_user';
 
+// @Injectable({ providedIn: 'root' }): questo service e' un SINGLETON in tutta l'app
+// (teoria cap. 20 — Services e Dependency Injection). Angular ne crea una sola istanza
+// e la inietta ovunque venga richiesta nel costruttore/inject() di altri componenti/service.
 @Injectable({ providedIn: 'root' })
 export class AuthServices {
+  // inject(HttpClient) e' la forma "a funzione" della Dependency Injection (equivalente
+  // a "constructor(private http: HttpClient) {}" visto in teoria, ma utilizzabile anche
+  // fuori da un costruttore, es. nei guard/interceptor a funzione qui sotto)
   private http = inject(HttpClient);
   private url = API_BASE_URL + '/auth/';
   // in SSR (rendering lato server) non esiste il localStorage del browser:
   // tutte le letture/scritture vanno protette con questo controllo
   private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  // stato reattivo dell'utente loggato (null se nessuno e' loggato)
+  // signal (teoria cap. 26): un "contenitore" di stato reattivo. Si legge chiamandolo
+  // come una funzione — currentUser() — e ogni componente che lo legge nel template
+  // si aggiorna automaticamente da solo quando il valore cambia, senza bisogno di
+  // ngOnChanges o di ricontrolli manuali.
   currentUser = signal<UtenteDTO | null>(this.leggiUtenteSalvato());
+  // computed (teoria cap. 26): un signal "derivato" che si ricalcola da solo ogni volta
+  // che i signal che legge al suo interno (currentUser, e indirettamente il token) cambiano
   isLogged = computed(() => this.currentUser() !== null && !this.tokenScaduto());
   isAdmin = computed(() => this.currentUser()?.ruolo === 'ADMIN');
 
+  // this.http.post restituisce sempre un Observable (teoria cap. 23/24), mai il dato diretto:
+  // chi chiama login() deve fare .subscribe() (o async pipe) per ottenere davvero la risposta
   login(email: string, password: string) {
     return this.http.post<AuthResponseDTO>(this.url + 'login', { email, password })
+      // .pipe(tap(...)) (teoria cap. 24, operatori RxJS): tap esegue un effetto collaterale
+      // (salvare il token) SENZA modificare il valore che scorre nell'Observable
       .pipe(tap((resp) => this.salvaSessione(resp)));
   }
 
@@ -41,11 +64,16 @@ export class AuthServices {
     this.currentUser.set(null);
   }
 
+  // Letto da authInterceptor.ts ad ogni richiesta HTTP in uscita, per allegare
+  // l'header Authorization: Bearer <token> (teoria cap. 38-39)
   getToken(): string | null {
     if (!this.isBrowser || this.tokenScaduto()) return null;
     return localStorage.getItem(TOKEN_KEY);
   }
 
+  // Salva il token JWT, la sua scadenza e i dati utente ricevuti dal backend dopo
+  // login/register — sul frontend il token e' un dato opaco: non viene mai decodificato
+  // o validato qui, ci pensa solo il backend a verificarne la firma
   private salvaSessione(resp: AuthResponseDTO): void {
     if (this.isBrowser) {
       const scadenza = Date.now() + resp.expiresIn * 1000;
@@ -63,6 +91,8 @@ export class AuthServices {
     return Date.now() > Number(scadenza);
   }
 
+  // Ripristina la sessione salvata quando l'app viene ricaricata (F5): senza questo,
+  // ogni refresh della pagina disconnetterebbe l'utente anche se il token e' ancora valido
   private leggiUtenteSalvato(): UtenteDTO | null {
     if (!this.isBrowser) return null;
     const raw = localStorage.getItem(USER_KEY);

@@ -3,6 +3,11 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { OrdineServices } from '../../../services/ordine-services';
 import { OrdineDTO } from '../../../models/models';
 
+// ============================================================================
+// PROPRIETARIO: Valerio — Ordini (Ordine / DettaglioOrdine / checkout)
+// ============================================================================
+// Pannello admin: qui l'ADMIN vede TUTTI gli ordini (non solo i propri) e ne cambia
+// stato logistico e stato pagamento, i due assi indipendenti spiegati nel backend
 @Component({
   selector: 'app-admin-ordini',
   imports: [CurrencyPipe, DatePipe],
@@ -14,6 +19,8 @@ export class AdminOrdini implements OnInit {
 
   ordini = signal<OrdineDTO[]>([]);
 
+  // Valori degli enum StatoOrdine/StatoPagamento del backend, ripetuti qui per popolare
+  // le due select — se il backend aggiungesse un nuovo stato andrebbe aggiornato anche qui
   statiOrdine = ['IN_ATTESA', 'ELABORATO', 'SPEDITO', 'ANNULLATO'];
   statiPagamento = ['DA_PAGARE', 'APPROVATO', 'FALLITO'];
 

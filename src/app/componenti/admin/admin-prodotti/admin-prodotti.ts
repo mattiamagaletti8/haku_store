@@ -6,6 +6,11 @@ import { ProdottoServices } from '../../../services/prodotto-services';
 import { VarianteServices } from '../../../services/variante-services';
 import { CategoriaDTO, ProdottoDTO, VarianteProdottoDTO } from '../../../models/models';
 
+// ============================================================================
+// PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
+// ============================================================================
+// Il pannello admin piu' complesso del catalogo: gestisce prodotti E le loro varianti
+// insieme (tabella espandibile), incrociando 3 service diversi (Categoria/Prodotto/Variante)
 @Component({
   selector: 'app-admin-prodotti',
   imports: [ReactiveFormsModule, CurrencyPipe],
@@ -20,6 +25,7 @@ export class AdminProdotti implements OnInit {
   categorie = signal<CategoriaDTO[]>([]);
   prodotti = signal<ProdottoDTO[]>([]);
   erroreMsg = signal<string | null>(null);
+  // Id del prodotto attualmente "aperto" nella tabella (mostra le sue varianti) — null = nessuno espanso
   prodottoEspanso = signal<number | null>(null);
 
   nuovoProdottoForm = new FormGroup({
@@ -56,6 +62,8 @@ export class AdminProdotti implements OnInit {
         this.nuovoProdottoForm.reset();
         this.carica();
       },
+      // Corrisponde all'errore "prodotto.exists" lanciato da ProdottoImpl.create nel backend
+      // se esiste gia' un prodotto con lo stesso nome+marca
       error: (err) => this.erroreMsg.set(err.error?.msg ?? 'Errore'),
     });
   }
@@ -68,6 +76,7 @@ export class AdminProdotti implements OnInit {
     });
   }
 
+  // Apri/chiudi (toggle): se clicco sul prodotto gia' espanso, lo richiudo
   espandi(idProdotto: number): void {
     this.prodottoEspanso.set(this.prodottoEspanso() === idProdotto ? null : idProdotto);
     this.nuovaVarianteForm.reset({ quantitaDisponibile: 0 });
@@ -117,6 +126,9 @@ export class AdminProdotti implements OnInit {
     });
   }
 
+  // Aggiornamento rapido dello stock direttamente dalla tabella, senza aprire un form
+  // di modifica completo: chiama VarianteServices.update passando SOLO quantitaDisponibile
+  // (aggiornamento parziale, gli altri campi della variante restano invariati)
   aggiornaQuantita(v: VarianteProdottoDTO, quantita: number): void {
     if (quantita < 0) return;
     this.erroreMsg.set(null);

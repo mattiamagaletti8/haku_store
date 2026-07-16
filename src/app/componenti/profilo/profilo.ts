@@ -5,21 +5,29 @@ import { IndirizzoServices } from '../../services/indirizzo-services';
 import { UtenteServices } from '../../services/utente-services';
 import { IndirizzoDTO } from '../../models/models';
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Utente, Recensioni & Sicurezza
+// ============================================================================
 @Component({
   selector: 'app-profilo',
   imports: [ReactiveFormsModule],
   templateUrl: './profilo.html',
   styleUrl: './profilo.css',
 })
+// "implements OnInit" attiva il lifecycle hook ngOnInit (teoria cap. 19): qui, e non nel
+// costruttore, vanno le chiamate HTTP iniziali e la lettura dei dati dell'utente loggato
 export class Profilo implements OnInit {
   private utenteS = inject(UtenteServices);
   private indirizzoS = inject(IndirizzoServices);
+  // Non "private": il template deve poterlo leggere direttamente (auth.currentUser())
   auth = inject(AuthServices);
 
   indirizzi = signal<IndirizzoDTO[]>([]);
   messaggioDati = signal<string | null>(null);
   modificaIndirizzoId = signal<number | null>(null);
 
+  // Form dei dati anagrafici: nessun Validators.required qui perche' e' un aggiornamento
+  // parziale (mirroring del pattern "update parziale" gia' visto in UtenteImpl.update nel backend)
   datiForm = new FormGroup({
     nome: new FormControl(''),
     cognome: new FormControl(''),
@@ -34,15 +42,19 @@ export class Profilo implements OnInit {
     nazione: new FormControl('Italia'),
   });
 
+  // ngOnInit (teoria cap. 19): eseguito una sola volta, subito dopo la creazione del componente
   ngOnInit(): void {
     const utente = this.auth.currentUser();
     if (utente) {
+      // patchValue aggiorna solo i campi indicati, senza toccare gli altri controlli del form
       this.datiForm.patchValue({ nome: utente.nome, cognome: utente.cognome, telefono: utente.telefono });
     }
     this.caricaIndirizzi();
   }
 
   caricaIndirizzi(): void {
+    // .subscribe() (teoria cap. 23-24): senza questa chiamata l'Observable resterebbe
+    // "freddo" e la richiesta HTTP non partirebbe mai
     this.indirizzoS.list().subscribe({
       next: (resp) => this.indirizzi.set(resp),
     });
@@ -55,6 +67,8 @@ export class Profilo implements OnInit {
     this.utenteS.update({ id: utente.idUtente, ...this.datiForm.value } as any).subscribe({
       next: () => {
         this.messaggioDati.set('Dati aggiornati');
+        // Aggiorna anche il signal currentUser (in AuthServices) cosi' il resto dell'app
+        // (es. la navbar) mostra subito i nuovi dati, senza dover ricaricare la pagina
         this.auth.currentUser.set({ ...utente, ...this.datiForm.value } as any);
       },
       error: (err) => this.messaggioDati.set(err.error?.msg ?? 'Errore'),
@@ -65,6 +79,8 @@ export class Profilo implements OnInit {
     this.indirizzoS.create(this.nuovoIndirizzoForm.value as any).subscribe({
       next: () => {
         this.nuovoIndirizzoForm.reset({ nazione: 'Italia' });
+        // Ricarica la lista dal server invece di aggiungere l'elemento manualmente
+        // all'array locale: piu' semplice e sempre coerente con cio' che ha davvero il backend
         this.caricaIndirizzi();
       },
     });

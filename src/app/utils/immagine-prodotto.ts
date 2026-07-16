@@ -1,3 +1,6 @@
+// ============================================================================
+// PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
+// ============================================================================
 // Lo schema non prevede un campo immagine per prodotto e non abbiamo un generatore
 // di foto reali: disegniamo quindi una sagoma SVG coerente con il tipo di prodotto
 // (barattolo, flacone, manubrio, capo di abbigliamento...) invece di una foto vera.

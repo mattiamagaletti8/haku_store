@@ -3,11 +3,16 @@ import { Injectable, inject } from '@angular/core';
 import { API_BASE_URL } from '../core/api-config';
 import { CategoriaDTO, ResponseDTO } from '../models/models';
 
+// ============================================================================
+// PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
+// ============================================================================
 @Injectable({ providedIn: 'root' })
 export class CategoriaServices {
   private http = inject(HttpClient);
   private url = API_BASE_URL + '/categoria/';
 
+  // Nessun token richiesto per la lettura: corrisponde alle GET pubbliche
+  // (permitAll in SecurityConfig) del backend
   list() {
     return this.http.get<CategoriaDTO[]>(this.url + 'list');
   }
@@ -16,6 +21,8 @@ export class CategoriaServices {
     return this.http.get<CategoriaDTO>(this.url + 'getById', { params: { id } });
   }
 
+  // create/update/delete richiedono ADMIN lato backend (@PreAuthorize): se un utente
+  // normale li chiamasse, il backend risponderebbe 403 anche se il frontend permettesse la chiamata
   create(body: { nome: string }) {
     return this.http.post<ResponseDTO>(this.url + 'create', body);
   }
