@@ -27,7 +27,13 @@ import com.betacom.jpa.security.UtenteDetailsService;
 
 import lombok.RequiredArgsConstructor;
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
+// ============================================================================
+// Il punto dove tutta la sicurezza viene assemblata in una SecurityFilterChain unica
 @RequiredArgsConstructor
+// Abilita @PreAuthorize sui metodi dei controller (senza questa annotazione,
+// @PreAuthorize("hasRole('ADMIN')") sparso per il codice non avrebbe alcun effetto)
 @EnableMethodSecurity
 @EnableWebSecurity
 @Configuration
@@ -38,6 +44,8 @@ public class SecurityConfig {
 	private final ApiAuthEntryPoint apiAuthEntryPoint;
 	private final ApiAccessDeniedHandler apiAccessDeniedHandler;
 
+	// Configurazione CORS "vecchio stile" via WebMvcConfigurer: permette le chiamate
+	// dal frontend Angular in sviluppo (localhost:4200)
 	@Bean
 	WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
@@ -53,6 +61,8 @@ public class SecurityConfig {
 		};
 	}
 
+	// Stessa configurazione CORS, ma nella forma richiesta dalla SecurityFilterChain sottostante
+	// (le due configurazioni coesistono perche' servono a due livelli diversi dello stack Spring)
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
@@ -66,6 +76,7 @@ public class SecurityConfig {
 		return source;
 	}
 
+	// Bean usato per hashare le password in UtenteImpl.create/update e per verificarle in AuthImpl.login
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -76,6 +87,8 @@ public class SecurityConfig {
 		return config.getAuthenticationManager();
 	}
 
+	// Collega UtenteDetailsService (come sapere cercare un utente) e PasswordEncoder (come verificarne
+	// la password): il pezzo che permette a Spring di sapere COME autenticare un utente
 	@Bean
 	DaoAuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(utenteDetailsService);
@@ -86,13 +99,20 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
+			// CSRF disabilitato: non serve per un'API stateless consumata da un frontend separato
+			// (il rischio CSRF esiste per le sessioni basate su cookie, non per i JWT nell'header)
 			.csrf(csrf -> csrf.disable())
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+			// STATELESS: nessuna sessione server-side, coerente con un'autenticazione JWT
+			// (ogni richiesta si autentica da sola tramite il token, il server non ricorda nulla tra una richiesta e l'altra)
 			.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			// I due handler custom di Sarah per 401 (non autenticato) e 403 (autenticato ma ruolo sbagliato)
 			.exceptionHandling(e -> e
 					.authenticationEntryPoint(apiAuthEntryPoint)
 					.accessDeniedHandler(apiAccessDeniedHandler)
 					)
+			// Regole di accesso, valutate in ordine: auth/swagger sempre pubblici, poi le GET pubbliche
+			// del catalogo/recensioni (modulo di Mattia e Sarah), tutto il resto richiede autenticazione
 			.authorizeHttpRequests(auth -> auth
 					.requestMatchers("/rest/auth/**").permitAll()
 					.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
@@ -100,6 +120,8 @@ public class SecurityConfig {
 					.requestMatchers(HttpMethod.GET, "/rest/recensione/list").permitAll()
 					.anyRequest().authenticated()
 					)
+			// JwtAuthFilter inserito PRIMA del filtro standard di Spring: cosi' il SecurityContext
+			// e' gia' popolato quando la richiesta arriva ai controller
 			.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();

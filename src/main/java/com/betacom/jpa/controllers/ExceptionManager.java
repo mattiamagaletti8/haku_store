@@ -14,9 +14,16 @@ import com.betacom.jpa.services.interfaces.IMessaggioServices;
 
 import lombok.RequiredArgsConstructor;
 
+// ============================================================================
+// PROPRIETARIO: Infrastruttura condivisa (non appartiene a una sola persona)
+// ============================================================================
+// Non un controller REST, ma un consigliere globale (@RestControllerAdvice): intercetta
+// le eccezioni lanciate da TUTTI i controller del backend e le traduce in risposte JSON coerenti,
+// tutte nella stessa forma ResponseDTO{msg} usata anche dagli endpoint di successo
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class ExceptionManager {
+	// Collegamento verso il sistema i18n: ogni messaggio restituito passa da qui, mai testo grezzo
 	private final IMessaggioServices msgS;
 
 	/**
@@ -34,6 +41,8 @@ public class ExceptionManager {
 						);
 	}
 
+	// Stesso principio del precedente, ma per gli errori di autenticazione intercettati
+	// a livello di controller invece che dal filtro JWT
 	@ExceptionHandler(AuthenticationException.class)
 	public ResponseEntity<ResponseDTO> handleAuthentication(AuthenticationException e) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -43,6 +52,9 @@ public class ExceptionManager {
 						);
 	}
 
+	// Catch-all: intercetta ogni ApiException lanciata da qualunque service (categoria.ntfnd,
+	// variante.stock.insufficient, coupon.expired...) e la traduce in 400 con il messaggio tradotto.
+	// e.getMessage() e' proprio il CODICE passato al costruttore di ApiException, non testo libero
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ResponseDTO> handleException(Exception e){
 		return ResponseEntity.badRequest()
@@ -51,7 +63,9 @@ public class ExceptionManager {
 						.build()
 						);
 	}
-	
+
+	// Gestisce gli errori di @Valid/@Validated (es. campi @NotNull mancanti): prende il PRIMO
+	// errore di campo trovato, non l'elenco completo, per semplicita' lato client
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ResponseDTO> handleValidationException(MethodArgumentNotValidException e) {
 		  String msg = e.getBindingResult()
@@ -66,7 +80,7 @@ public class ExceptionManager {
 							.msg(msgS.get(msg))
 							.build()
 							);
-		  
+
 	}
-	
+
 }

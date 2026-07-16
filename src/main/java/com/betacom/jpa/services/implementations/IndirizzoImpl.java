@@ -19,12 +19,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
+// ============================================================================
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class IndirizzoImpl implements IIndirizzoServices {
 
 	private final IIndirizzoRepository repI;
+	// Serve per collegare il nuovo indirizzo all'utente giusto (verificandone l'esistenza)
 	private final IUtenteRepository repU;
 
 	@Transactional
@@ -35,11 +39,14 @@ public class IndirizzoImpl implements IIndirizzoServices {
 				.orElseThrow(() -> new ApiException("utente.ntfnd"));
 
 		Indirizzo ind = new Indirizzo();
+		// idUtente arriva come parametro separato (dal principal), MAI da req: e' cosi' che si impedisce
+		// di creare un indirizzo intestato a un altro utente
 		ind.setUtente(ut);
 		ind.setVia(req.getVia());
 		ind.setCitta(req.getCitta());
 		ind.setCap(req.getCap());
 		ind.setProvincia(req.getProvincia());
+		// Default "Italia" se non specificata
 		ind.setNazione(req.getNazione() == null ? "Italia" : req.getNazione());
 
 		repI.save(ind);
@@ -52,6 +59,7 @@ public class IndirizzoImpl implements IIndirizzoServices {
 		Indirizzo ind = repI.findById(req.getId())
 				.orElseThrow(() -> new ApiException("indirizzo.ntfnd"));
 
+		// Ownership manuale: solo il proprietario dell'indirizzo o un ADMIN possono modificarlo
 		if (!isAdmin && !ind.getUtente().getIdUtente().equals(callerId))
 			throw new ApiException("indirizzo.forbidden");
 

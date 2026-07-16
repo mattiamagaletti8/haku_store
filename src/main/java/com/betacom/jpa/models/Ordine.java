@@ -24,6 +24,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+// ============================================================================
+// PROPRIETARIO: Valerio — Modulo Ordini (Ordine / DettaglioOrdine / checkout)
+// ============================================================================
 @Setter
 @Getter
 @ToString
@@ -36,6 +39,9 @@ public class Ordine {
 	@Column(name = "id_ordine")
 	private Integer idOrdine;
 
+	// Collegamento verso l'Utente che ha effettuato l'ordine. Nessun @OnDelete(CASCADE) qui:
+	// a differenza di Carrello, un Ordine e' un documento di audit e sopravvive anche se
+	// l'utente venisse "eliminato" (la FK di default e' RESTRICT: impedirebbe comunque la cancellazione).
 	@ManyToOne
 	@JoinColumn(
 			name = "id_utente",
@@ -47,6 +53,8 @@ public class Ordine {
 	@Column(name = "data_ordine", nullable = false)
 	private LocalDateTime dataOrdine;
 
+	// Questi 3 totali, a differenza di quelli calcolati al volo in CarrelloMap, SONO colonne vere:
+	// vengono scritti una volta al momento del checkout e restano congelati per sempre (storico ordine)
 	@Column(name = "totale_prodotti", precision = 10, scale = 2, nullable = false)
 	private BigDecimal totaleProdotti;
 
@@ -56,6 +64,8 @@ public class Ordine {
 	@Column(name = "totale_pagato", precision = 10, scale = 2, nullable = false)
 	private BigDecimal totalePagato;
 
+	// Solo il CODICE del coupon usato (non una FK verso Coupon): se il coupon viene modificato o
+	// cancellato in futuro, questo ordine storico non cambia e non si rompe
 	@Column(name = "codice_coupon_usato", length = 50)
 	private String codiceCouponUsato;
 
@@ -63,6 +73,8 @@ public class Ordine {
 	@Column(nullable = false)
 	private StatoOrdine stato;
 
+	// Indirizzo di spedizione storicizzato come campi piatti (non una FK verso Indirizzo):
+	// stesso motivo del coupon, l'ordine resta valido anche se l'indirizzo originale viene cancellato
 	@Column(name = "spedizione_via", length = 100, nullable = false)
 	private String spedizioneVia;
 
@@ -85,6 +97,8 @@ public class Ordine {
 	@Column(name = "stato_pagamento", nullable = false)
 	private StatoPagamento statoPagamento;
 
+	// Le righe dell'ordine (prodotto+quantita'+prezzo congelato): EAGER perche' un ordine si legge
+	// sempre insieme al suo contenuto, non ha senso caricarlo vuoto
 	@OneToMany(mappedBy = "ordine", fetch = FetchType.EAGER)
 	private List<DettaglioOrdine> righe;
 

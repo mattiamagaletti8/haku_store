@@ -25,6 +25,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+// ============================================================================
+// PROPRIETARIO: Pier — Modulo Carrello (Carrello / DettaglioCarrello / Coupon)
+// ============================================================================
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -32,8 +35,12 @@ public class CarrelloImpl implements ICarrelloServices {
 
 	private final ICarrelloRepository repCar;
 	private final IDettaglioCarrelloRepository repDet;
+	// Serve solo nel ramo "il carrello non esiste ancora", per collegare il nuovo carrello all'utente giusto
 	private final IUtenteRepository repU;
+	// Serve per verificare che la variante richiesta in addItem esista davvero
 	private final IVarianteProdottoRepository repVar;
+	// Collegamento verso il modulo di Pier stesso (Coupon): la validazione del coupon non e' duplicata qui,
+	// viene delegata a ICouponServices.validateAndGet
 	private final ICouponServices couponS;
 
 	@Transactional
@@ -42,6 +49,8 @@ public class CarrelloImpl implements ICarrelloServices {
 		log.debug("getOrCreateForUtente {}", idUtente);
 		Carrello car = repCar.findByUtenteIdUtente(idUtente).orElse(null);
 
+		// Se l'utente non ha ancora un carrello, lo crea al volo: non esiste un endpoint dedicato
+		// "crea carrello", il primo accesso lo genera automaticamente
 		if (car == null) {
 			Utente ut = repU.findById(idUtente)
 					.orElseThrow(() -> new ApiException("utente.ntfnd"));
@@ -69,15 +78,18 @@ public class CarrelloImpl implements ICarrelloServices {
 		VarianteProdotto var = repVar.findById(req.getIdVariante())
 				.orElseThrow(() -> new ApiException("variante.ntfnd"));
 
+		// Cerca se questa variante e' gia' una riga del carrello (rispecchia il vincolo UNIQUE della tabella)
 		DettaglioCarrello riga = repDet.findByCarrelloIdCarrelloAndVarianteIdVariante(car.getIdCarrello(), var.getIdVariante())
 				.orElse(null);
 
 		if (riga == null) {
+			// Prima volta che questa variante entra nel carrello: nuova riga
 			riga = new DettaglioCarrello();
 			riga.setCarrello(car);
 			riga.setVariante(var);
 			riga.setQuantita(req.getQuantita());
 		} else {
+			// Gia' presente: incrementa la quantita' invece di creare una riga duplicata
 			riga.setQuantita(riga.getQuantita() + req.getQuantita());
 		}
 
@@ -92,6 +104,8 @@ public class CarrelloImpl implements ICarrelloServices {
 		DettaglioCarrello riga = repDet.findByCarrelloIdCarrelloAndVarianteIdVariante(car.getIdCarrello(), idVariante)
 				.orElseThrow(() -> new ApiException("dettaglio.ntfnd"));
 
+		// Qui la quantita' viene SOSTITUITA (non sommata come in addItem): serve per il caso
+		// "l'utente cambia la quantita' direttamente nel carrello" (es. da 3 a 1)
 		riga.setQuantita(quantita);
 	}
 
@@ -111,6 +125,8 @@ public class CarrelloImpl implements ICarrelloServices {
 	public void applyCoupon(Integer idUtente, String codice) throws Exception {
 		log.debug("applyCoupon {} / {}", idUtente, codice);
 		Carrello car = getOrCreateForUtente(idUtente);
+		// Delega interamente la validita' del coupon a ICouponServices: se non valido, lancia
+		// direttamente l'eccezione appropriata (scaduto/non attivo/non ancora iniziato/non trovato)
 		Coupon coupon = couponS.validateAndGet(codice);
 		car.setCoupon(coupon);
 	}
@@ -128,6 +144,8 @@ public class CarrelloImpl implements ICarrelloServices {
 	public void clear(Integer idUtente) throws Exception {
 		log.debug("clear {}", idUtente);
 		Carrello car = getOrCreateForUtente(idUtente);
+		// Cancella fisicamente tutte le righe dal database, poi svuota anche la lista in memoria
+		// (altrimenti Hibernate potrebbe non accorgersi subito della modifica nella stessa transazione)
 		repDet.deleteAll(car.getRighe());
 		car.getRighe().clear();
 		car.setCoupon(null);

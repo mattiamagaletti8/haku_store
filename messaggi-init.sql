@@ -42,7 +42,6 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'variante.ntfnd', 'Variante prodotto non trovata.'),
 ('IT', 'variante.exists', 'Esiste gia'' una variante con questi stessi attributi per questo prodotto.'),
 ('IT', 'variante.stock.insufficient', 'Quantita'' non disponibile in magazzino.'),
-('IT', 'variante.stock.conflict', 'Il prodotto e'' stato acquistato da un altro utente proprio ora: riprova il checkout.'),
 ('IT', 'variante.no.id', 'ID variante mancante.'),
 ('IT', 'variante.no.prodotto', 'Seleziona il prodotto.'),
 ('IT', 'variante.no.prezzo', 'Inserisci il prezzo.'),

@@ -6,6 +6,9 @@ import com.betacom.jpa.dto.input.CouponReq;
 import com.betacom.jpa.dto.output.CouponDTO;
 import com.betacom.jpa.models.Coupon;
 
+// ============================================================================
+// PROPRIETARIO: Pier — Modulo Carrello (Carrello / DettaglioCarrello / Coupon)
+// ============================================================================
 public interface ICouponServices {
 	void create(CouponReq req) throws Exception;
 
@@ -19,7 +22,8 @@ public interface ICouponServices {
 
 	/**
 	 * Unica fonte di verita' per la validita' di un coupon: esistenza, attivo, finestra data.
-	 * Usato sia da CarrelloImpl.applyCoupon che da OrdineImpl.checkout.
+	 * Usato sia da CarrelloImpl.applyCoupon che da OrdineImpl.checkout — cosi' un coupon che scade
+	 * mentre il carrello resta aperto viene rifiutato anche al momento del checkout, non solo quando si applica.
 	 */
 	Coupon validateAndGet(String codice) throws Exception;
 }

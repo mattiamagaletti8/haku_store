@@ -19,12 +19,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+// ============================================================================
+// PROPRIETARIO: Mattia — Modulo Catalogo (Categoria / Prodotto / VarianteProdotto)
+// ============================================================================
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class VarianteProdottoImpl implements IVarianteProdottoServices {
 
 	private final IVarianteProdottoRepository repV;
+	// Serve per verificare che il prodotto indicato esista prima di agganciarci una nuova variante
 	private final IProdottoRepository repP;
 
 	@Transactional
@@ -34,6 +38,8 @@ public class VarianteProdottoImpl implements IVarianteProdottoServices {
 		Prodotto p = repP.findById(req.getIdProdotto())
 				.orElseThrow(() -> new ApiException("prodotto.ntfnd"));
 
+		// Controllo duplicati sulla combinazione esatta prodotto+gusto+formato+colore:
+		// evita due varianti indistinguibili per lo stesso prodotto
 		if (repV.existsByProdottoIdProdottoAndGustoAndFormatoAndColore(
 				req.getIdProdotto(), req.getGusto(), req.getFormato(), req.getColore())) {
 			throw new ApiException("variante.exists");
@@ -45,6 +51,7 @@ public class VarianteProdottoImpl implements IVarianteProdottoServices {
 		v.setFormato(req.getFormato());
 		v.setColore(req.getColore());
 		v.setPrezzo(req.getPrezzo());
+		// Se la quantita' non e' stata passata, parte da 0 (nessuno stock finche' non lo si aggiorna esplicitamente)
 		v.setQuantitaDisponibile(req.getQuantitaDisponibile() == null ? 0 : req.getQuantitaDisponibile());
 
 		repV.save(v);
@@ -57,6 +64,8 @@ public class VarianteProdottoImpl implements IVarianteProdottoServices {
 		VarianteProdotto v = repV.findById(req.getId())
 				.orElseThrow(() -> new ApiException("variante.ntfnd"));
 
+		// Aggiornamento parziale campo per campo: e' cosi' che passa anche il caso d'uso
+		// "aggiorna solo la quantita' disponibile" richiesto per l'admin (nessun altro campo viene toccato)
 		Optional.ofNullable(req.getGusto()).ifPresent(v::setGusto);
 		Optional.ofNullable(req.getFormato()).ifPresent(v::setFormato);
 		Optional.ofNullable(req.getColore()).ifPresent(v::setColore);

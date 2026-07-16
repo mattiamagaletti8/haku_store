@@ -22,12 +22,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
+// ============================================================================
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class RecensioneImpl implements IRecensioneServices {
 
 	private final IRecensioneRepository repR;
+	// Collegamento verso il modulo di Mattia: serve per verificare che il prodotto esista
 	private final IProdottoRepository repP;
 	private final IUtenteRepository repU;
 
@@ -42,6 +46,8 @@ public class RecensioneImpl implements IRecensioneServices {
 
 		Recensione r = new Recensione();
 		r.setProdotto(p);
+		// idUtente arriva dal principal (parametro separato), mai da req: nessuno puo' scrivere
+		// una recensione a nome di qualcun altro
 		r.setUtente(ut);
 		r.setVoto(req.getVoto());
 		r.setTitolo(req.getTitolo());
@@ -58,6 +64,7 @@ public class RecensioneImpl implements IRecensioneServices {
 		Recensione r = repR.findById(req.getId())
 				.orElseThrow(() -> new ApiException("recensione.ntfnd"));
 
+		// Solo l'autore della recensione o un ADMIN possono modificarla
 		if (!isAdmin && !r.getUtente().getIdUtente().equals(callerId))
 			throw new ApiException("recensione.forbidden");
 

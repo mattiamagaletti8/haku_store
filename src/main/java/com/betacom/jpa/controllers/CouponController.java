@@ -21,8 +21,14 @@ import com.betacom.jpa.services.interfaces.ICouponServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+// ============================================================================
+// PROPRIETARIO: Pier — Modulo Carrello (Carrello / DettaglioCarrello / Coupon)
+// ============================================================================
 @Slf4j
 @RequiredArgsConstructor
+// @PreAuthorize a livello di CLASSE (non sui singoli metodi): TUTTI gli endpoint di questo controller
+// richiedono ADMIN, a differenza di Categoria/Prodotto dove le sole GET restano pubbliche —
+// i coupon sono un dato sensibile lato business, mai esposti in lista al cliente
 @PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping("/rest/coupon")

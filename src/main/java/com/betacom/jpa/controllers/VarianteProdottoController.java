@@ -21,6 +21,9 @@ import com.betacom.jpa.services.interfaces.IVarianteProdottoServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+// ============================================================================
+// PROPRIETARIO: Mattia — Modulo Catalogo (Categoria / Prodotto / VarianteProdotto)
+// ============================================================================
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -28,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class VarianteProdottoController {
 	private final IVarianteProdottoServices varS;
 
+	// GET pubblico: lista delle varianti di UN prodotto specifico (obbligatorio passare idProdotto)
 	@GetMapping("/list")
 	public ResponseEntity<Object> list(@RequestParam(required = true) Integer idProdotto) throws Exception {
 		return ResponseEntity.ok(varS.listByProdotto(idProdotto));
@@ -48,6 +52,9 @@ public class VarianteProdottoController {
 				.build());
 	}
 
+	// Stesso endpoint "update" viene usato sia per modifiche complete sia per il caso
+	// "aggiorna solo la quantita' disponibile" dal pannello admin: il pattern di update parziale
+	// nel service fa si' che passare solo quantitaDisponibile nel body lasci intatti gli altri campi
 	@PreAuthorize("hasRole('ADMIN')")
 	@PatchMapping("update")
 	public ResponseEntity<ResponseDTO> update(

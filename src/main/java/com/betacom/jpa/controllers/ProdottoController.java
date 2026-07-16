@@ -21,6 +21,9 @@ import com.betacom.jpa.services.interfaces.IProdottoServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+// ============================================================================
+// PROPRIETARIO: Mattia — Modulo Catalogo (Categoria / Prodotto / VarianteProdotto)
+// ============================================================================
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -28,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ProdottoController {
 	private final IProdottoServices prodS;
 
+	// GET pubblico con 3 filtri opzionali (tutti @RequestParam(required = false)):
+	// se il frontend non passa nulla, restituisce l'intero catalogo
 	@GetMapping("/list")
 	public ResponseEntity<Object> list(
 			@RequestParam(required = false) Integer idCategoria,

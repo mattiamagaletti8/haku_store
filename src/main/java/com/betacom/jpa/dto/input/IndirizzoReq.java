@@ -6,6 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
+// ============================================================================
+// Nota: nessun campo idUtente qui — chi possiede l'indirizzo si stabilisce sempre
+// lato server dal principal autenticato, mai da un valore passato dal client
 @Setter
 @Getter
 @ToString
@@ -25,7 +30,9 @@ public class IndirizzoReq {
 	@NotBlank(groups = ValidationGroups.Create.class, message = "indirizzo.no.cap")
 	private String cap;
 
+	// Facoltativa anche in creazione: dipende dal paese
 	private String provincia;
 
+	// Facoltativa: se non passata, il service la imposta di default a "Italia" (vedi IndirizzoImpl.create)
 	private String nazione;
 }

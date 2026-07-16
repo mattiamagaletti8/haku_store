@@ -16,6 +16,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
+// ============================================================================
+// Il filtro che gira su OGNI richiesta HTTP, prima ancora che arrivi a un controller:
+// registrato in SecurityConfig con addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 @RequiredArgsConstructor
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -32,6 +37,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			@NonNull HttpServletResponse response,
 			@NonNull FilterChain filterChain) throws ServletException, IOException {
 
+		// Se manca l'header o non inizia con "Bearer ", la richiesta prosegue NON autenticata
+		// (non e' un errore qui: potrebbe essere un endpoint pubblico come /rest/categoria/list)
 		String header = request.getHeader(HEADER);
 		if (header == null || !header.startsWith(PREFIX)) {
 			filterChain.doFilter(request, response);
@@ -41,18 +48,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		String token = header.substring(PREFIX.length());
 		String email;
 		try {
+			// Estrae l'email dal token, verificandone la firma nel processo
 			email = jwtService.extractEmail(token);
 		} catch (Exception e) {
+			// Token corrotto o scaduto: stesso comportamento del caso "nessun header",
+			// la richiesta prosegue non autenticata (sara' poi ApiAuthEntryPoint a rispondere 401
+			// se l'endpoint richiedeva autenticazione)
 			filterChain.doFilter(request, response);
 			return;
 		}
 
+		// Solo se c'e' un'email valida E non c'e' gia' un'autenticazione nel contesto
 		if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = utenteDetailsService.loadUserByUsername(email);
+			// isTokenValid ricontrolla firma+scadenza+corrispondenza email: solo se tutto torna,
+			// l'utente viene "riconosciuto" per il resto della richiesta
 			if (jwtService.isTokenValid(token, userDetails)) {
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				// Da questo punto in poi, @AuthenticationPrincipal nei controller e @PreAuthorize
+				// funzionano perche' il SecurityContext e' stato popolato qui
 				SecurityContextHolder.getContext().setAuthentication(authToken);
 			}
 		}

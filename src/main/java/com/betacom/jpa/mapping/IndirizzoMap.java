@@ -5,6 +5,9 @@ import java.util.List;
 import com.betacom.jpa.dto.output.IndirizzoDTO;
 import com.betacom.jpa.models.Indirizzo;
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
+// ============================================================================
 public class IndirizzoMap {
 
 	public static List<IndirizzoDTO> buildIndirizzoDTOList(List<Indirizzo> lI) {

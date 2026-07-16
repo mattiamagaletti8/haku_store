@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
+// ============================================================================
 @Getter
 @Setter
 @Builder
@@ -19,6 +22,8 @@ public class RecensioneDTO {
 	private Integer id;
 	private Integer idProdotto;
 	private Integer idUtente;
+	// nome/cognome dell'autore appiattiti qui (non uno UtenteDTO annidato): la lista recensioni
+	// e' pubblica, mostrare solo nome e cognome evita di esporre email/telefono dell'autore
 	private String nomeUtente;
 	private String cognomeUtente;
 	private Integer voto;

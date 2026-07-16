@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+// ============================================================================
+// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
+// ============================================================================
+// Nessun campo "password" qui: la password hashata non deve MAI uscire dal backend,
+// nemmeno mascherata — semplicemente non esiste nel contratto di risposta
 @Getter
 @Setter
 @Builder
