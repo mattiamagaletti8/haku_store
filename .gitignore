@@ -37,3 +37,7 @@ define.sql
 drop.sql
 jpa.log
 *.log
+*.log.*.gz
+
+# Dump di dati reali (password hashate, email personali): mai su GitHub
+hakustore-dati-completi.sql
