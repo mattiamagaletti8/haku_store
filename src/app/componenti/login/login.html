@@ -1,0 +1,25 @@
+<div class="scheda-login card">
+  <div class="section-label">Bentornato</div>
+  <h2 class="section-title">Accedi</h2>
+
+  <form class="form form-wide" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="campo">
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="nome@esempio.it" />
+    </div>
+
+    <div class="campo">
+      <label>Password</label>
+      <input type="password" formControlName="password" placeholder="••••••••" />
+    </div>
+
+    @if (erroreMsg()) {
+      <p class="errore">{{ erroreMsg() }}</p>
+    }
+
+    <button class="btn btn-primary btn-block" type="submit" [disabled]="loginForm.invalid">
+      Accedi
+    </button>
+    <a class="mt-16 light" routerLink="/registrati">Non hai un account? <span class="lime">Registrati</span></a>
+  </form>
+</div>

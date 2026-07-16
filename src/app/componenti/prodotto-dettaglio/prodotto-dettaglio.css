@@ -1,0 +1,47 @@
+.product-img-dettaglio {
+  height: 280px;
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.griglia-varianti {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.scheda-variante {
+  cursor: pointer;
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 16px;
+  transition: border-color 0.15s;
+}
+
+.scheda-variante.selezionata {
+  border-color: var(--lime);
+}
+
+.scheda-variante.esaurita {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.disponibilita {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.campo-quantita {
+  max-width: 100px;
+}
+
+.scheda-recensione {
+  margin-bottom: 8px;
+}
+
+.data-recensione {
+  font-size: 0.8rem;
+  margin-top: 8px;
+}

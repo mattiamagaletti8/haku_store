@@ -1,0 +1,81 @@
+@if (prodotto(); as p) {
+  <div class="product-img product-img-dettaglio">
+    <img [src]="immagineDi(p)" [alt]="p.nome" />
+  </div>
+
+  <div class="section-label">{{ p.marca }} · {{ p.categoria?.nome }}</div>
+  <h1 class="section-title">{{ p.nome }}</h1>
+  <p class="light" style="max-width:560px">{{ p.descrizione }}</p>
+
+  <h3 class="mt-24 mb-16">Varianti</h3>
+  <div class="griglia-varianti">
+    @for (v of p.varianti; track v.id) {
+      <div
+        class="scheda-variante"
+        [class.selezionata]="varianteSelezionata()?.id === v.id"
+        [class.esaurita]="v.quantitaDisponibile <= 0"
+        (click)="selezionaVariante(v)">
+        <p>{{ v.gusto }} {{ v.formato }} {{ v.colore }}</p>
+        <p class="product-price">{{ v.prezzo | currency: 'EUR' }}</p>
+        <p class="disponibilita">
+          {{ v.quantitaDisponibile > 0 ? v.quantitaDisponibile + ' disponibili' : 'Esaurito' }}
+        </p>
+      </div>
+    }
+  </div>
+
+  @if (auth.isLogged()) {
+    <form class="form-riga" [formGroup]="quantitaForm" (ngSubmit)="aggiungiAlCarrello()">
+      <div class="campo campo-quantita">
+        <label>Quantità</label>
+        <input type="number" min="1" [max]="varianteSelezionata()?.quantitaDisponibile ?? 1" formControlName="quantita" />
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="!varianteSelezionata() || varianteSelezionata()!.quantitaDisponibile <= 0">
+        {{ varianteSelezionata() && varianteSelezionata()!.quantitaDisponibile <= 0 ? 'Esaurito' : 'Aggiungi al carrello' }}
+      </button>
+    </form>
+  } @else {
+    <p class="muted mt-16">Accedi per aggiungere questo prodotto al carrello.</p>
+  }
+
+  @if (messaggioCarrello()) {
+    <p class="messaggio-ok mt-16">{{ messaggioCarrello() }}</p>
+  }
+
+  <h3 class="mt-24 mb-16">Recensioni</h3>
+  @for (r of recensioni(); track r.id) {
+    <div class="scheda-recensione card">
+      <p><strong>{{ r.nomeUtente }} {{ r.cognomeUtente }}</strong> <span class="lime">— voto {{ r.voto }}/5</span></p>
+      @if (r.titolo) {
+        <p class="mt-8"><strong>{{ r.titolo }}</strong></p>
+      }
+      <p class="light">{{ r.commento }}</p>
+      <p class="data-recensione muted">{{ r.dataRecensione | date: 'dd/MM/yyyy' }}</p>
+    </div>
+  } @empty {
+    <p class="muted">Nessuna recensione per questo prodotto.</p>
+  }
+
+  @if (auth.isLogged()) {
+    <h4 class="mt-24 mb-16">Lascia una recensione</h4>
+    <form class="form form-wide" [formGroup]="recensioneForm" (ngSubmit)="inviaRecensione()">
+      <div class="form-riga">
+        <div class="campo" style="max-width:100px">
+          <label>Voto (1-5)</label>
+          <input type="number" min="1" max="5" formControlName="voto" />
+        </div>
+        <div class="campo" style="flex:2">
+          <label>Titolo</label>
+          <input formControlName="titolo" />
+        </div>
+      </div>
+      <div class="campo">
+        <label>Commento</label>
+        <input formControlName="commento" />
+      </div>
+      <button class="btn btn-outline" type="submit" [disabled]="recensioneForm.invalid">Invia recensione</button>
+    </form>
+  }
+} @else {
+  <p class="muted">Caricamento...</p>
+}

@@ -1,0 +1,75 @@
+<h3 class="mb-16">Prodotti</h3>
+
+@if (erroreMsg()) {
+  <p class="errore">{{ erroreMsg() }}</p>
+}
+
+@for (p of prodotti(); track p.id) {
+  <div class="riga-prodotto">
+    <div class="flex-between">
+      <div class="intestazione-prodotto" (click)="espandi(p.id)">
+        <strong>{{ p.nome }}</strong> <span class="muted">— {{ p.marca }} ({{ p.categoria?.nome }}) — {{ p.varianti.length }} varianti</span>
+      </div>
+      <button class="btn-text btn-danger" (click)="eliminaProdotto(p.id)">Elimina prodotto</button>
+    </div>
+
+    @if (prodottoEspanso() === p.id) {
+      <div class="dettaglio-varianti">
+        <table class="tabella">
+          <tbody>
+            @for (v of p.varianti; track v.id) {
+              <tr>
+                <td>{{ v.gusto }} {{ v.formato }} {{ v.colore }}</td>
+                <td>{{ v.prezzo | currency: 'EUR' }}</td>
+                <td>
+                  <input
+                    type="number"
+                    min="0"
+                    [value]="v.quantitaDisponibile"
+                    (change)="aggiornaQuantita(v, +$any($event.target).value)"
+                    class="input-quantita" /> pz
+                </td>
+                <td><button class="btn-text btn-danger" (click)="eliminaVariante(v.id)">Elimina</button></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        @let attributi = attributiCategoria(p.categoria?.nome);
+        <form class="form-riga" [formGroup]="nuovaVarianteForm" (ngSubmit)="creaVariante(p.id)">
+          @if (attributi.gusto) {
+            <div class="campo" style="margin-bottom:0"><label>Gusto</label><input formControlName="gusto" /></div>
+          }
+          @if (attributi.formato) {
+            <div class="campo" style="margin-bottom:0"><label>{{ attributi.labelFormato }}</label><input formControlName="formato" /></div>
+          }
+          @if (attributi.colore) {
+            <div class="campo" style="margin-bottom:0"><label>{{ attributi.labelColore }}</label><input formControlName="colore" /></div>
+          }
+          <div class="campo" style="margin-bottom:0"><label>Prezzo</label><input type="number" formControlName="prezzo" /></div>
+          <div class="campo" style="margin-bottom:0"><label>Quantità</label><input type="number" formControlName="quantitaDisponibile" /></div>
+          <button class="btn btn-primary" type="submit" [disabled]="nuovaVarianteForm.invalid">
+            Aggiungi variante
+          </button>
+        </form>
+      </div>
+    }
+  </div>
+}
+
+<h4 class="mt-24 mb-16">Nuovo prodotto</h4>
+<form class="form-riga" [formGroup]="nuovoProdottoForm" (ngSubmit)="creaProdotto()">
+  <div class="campo" style="margin-bottom:0">
+    <label>Categoria</label>
+    <select formControlName="idCategoria">
+      <option [value]="null" disabled>Seleziona...</option>
+      @for (c of categorie(); track c.id) {
+        <option [value]="c.id">{{ c.nome }}</option>
+      }
+    </select>
+  </div>
+  <div class="campo" style="margin-bottom:0"><label>Nome</label><input formControlName="nome" /></div>
+  <div class="campo" style="margin-bottom:0"><label>Marca</label><input formControlName="marca" /></div>
+  <div class="campo" style="margin-bottom:0"><label>Descrizione</label><input formControlName="descrizione" /></div>
+  <button class="btn btn-primary" type="submit" [disabled]="nuovoProdottoForm.invalid">Crea</button>
+</form>
