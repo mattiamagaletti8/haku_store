@@ -9,6 +9,7 @@ import com.betacom.jpa.catalogo.CatalogoTest;
 import com.betacom.jpa.coupon.CouponTest;
 import com.betacom.jpa.recensione.RecensioneTest;
 
+// Proprietario: Pier e Valerio
 @Suite
 @SelectClasses({
 	AuthTest.class,

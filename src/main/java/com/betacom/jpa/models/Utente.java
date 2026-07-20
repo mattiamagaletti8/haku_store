@@ -19,9 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
+// Proprietario: Sarah
 @Setter
 @Getter
 @ToString
@@ -40,31 +38,22 @@ public class Utente {
 	@Column(length = 50, nullable = false)
 	private String cognome;
 
-	// L'email e' il "login": unique=true e' cio' che rende possibile autenticarsi con essa
-	// (vedi UtenteDetailsService.loadUserByUsername, che cerca proprio per email)
 	@Column(length = 100, nullable = false, unique = true)
 	private String email;
 
-	// Mai la password in chiaro: viene sempre hashata con BCrypt PRIMA di arrivare qui (vedi UtenteImpl/AuthImpl)
 	@Column(nullable = false)
 	private String password;
 
 	@Column(length = 20)
 	private String telefono;
 
-	// EnumType.STRING per leggibilita' nel DB ("CLIENTE"/"ADMIN" invece di 0/1) —
-	// e' il campo che UtentePrincipal.isAdmin() legge per decidere i permessi
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Roles ruolo;
 
-	// Tutte e 4 le relazioni verso i moduli degli altri sono LAZY: il profilo utente da solo
-	// non deve mai trascinarsi dietro l'intero storico ordini/recensioni ogni volta che viene letto
 	@OneToMany(mappedBy = "utente", fetch = FetchType.LAZY)
 	private List<Indirizzo> indirizzi;
 
-	// mappedBy="utente": il lato proprietario della relazione 1:1 e' Carrello (che ha la colonna id_utente),
-	// qui c'e' solo il riferimento di lettura inverso
 	@OneToOne(mappedBy = "utente", fetch = FetchType.LAZY)
 	private Carrello carrello;
 

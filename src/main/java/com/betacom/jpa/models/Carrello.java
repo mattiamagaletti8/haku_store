@@ -22,9 +22,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-// ============================================================================
-// PROPRIETARIO: Pier — Modulo Carrello (Carrello / DettaglioCarrello / Coupon)
-// ============================================================================
+// Proprietario: Pier
 @Setter
 @Getter
 @ToString
@@ -37,8 +35,6 @@ public class Carrello {
 	@Column(name = "id_carrello")
 	private Integer idCarrello;
 
-	// Relazione 1:1 con Utente: unique=true sulla colonna id_utente e' quello che impone davvero
-	// il vincolo "un solo carrello per utente" a livello di database (non solo lato Java)
 	@OneToOne
 	@JoinColumn(
 			name = "id_utente",
@@ -46,12 +42,9 @@ public class Carrello {
 			unique = true,
 			foreignKey = @ForeignKey(name = "fk_carrello_utente")
 			)
-	// Se l'utente viene cancellato, il suo carrello viene cancellato a cascata dal database
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Utente utente;
 
-	// Collegamento verso il Coupon applicato (facoltativo: niente @JoinColumn(nullable=false),
-	// un carrello puo' benissimo non avere sconti attivi)
 	@ManyToOne
 	@JoinColumn(
 			name = "id_coupon",
@@ -62,8 +55,6 @@ public class Carrello {
 	@Column(name = "data_creazione", nullable = false)
 	private LocalDateTime dataCreazione;
 
-	// Le righe del carrello (prodotto+quantita'): EAGER perche' ogni volta che si legge il carrello
-	// servono subito per calcolare i totali (vedi CarrelloMap)
 	@OneToMany(mappedBy = "carrello", fetch = FetchType.EAGER)
 	private List<DettaglioCarrello> righe;
 

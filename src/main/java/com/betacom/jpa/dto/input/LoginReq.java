@@ -6,11 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
-// Classe separata da UtenteReq apposta: il login e' un'unica operazione che non condivide
-// gruppi di validazione con nient'altro, non serve il pattern ValidationGroups qui
+// Proprietario: Sarah
 @Setter
 @Getter
 @ToString

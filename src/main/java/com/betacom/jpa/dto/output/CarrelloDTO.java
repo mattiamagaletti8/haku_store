@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-// ============================================================================
-// PROPRIETARIO: Pier — Modulo Carrello (Carrello / DettaglioCarrello / Coupon)
-// ============================================================================
+// Proprietario: Pier
 @Getter
 @Setter
 @Builder
@@ -25,8 +23,6 @@ public class CarrelloDTO {
 	private LocalDateTime dataCreazione;
 	private List<DettaglioCarrelloDTO> righe;
 	private CouponDTO coupon;
-	// Questi 3 totali NON sono colonne della tabella carrello: non esistono a livello di database,
-	// sono calcolati al volo in CarrelloMap ogni volta che il carrello viene letto
 	private BigDecimal totaleProdotti;
 	private BigDecimal valoreSconto;
 	private BigDecimal totalePagato;

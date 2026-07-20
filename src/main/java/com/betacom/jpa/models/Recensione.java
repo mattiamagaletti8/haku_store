@@ -18,9 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
+// Proprietario: Sarah
 @Setter
 @Getter
 @ToString
@@ -33,33 +31,27 @@ public class Recensione {
 	@Column(name = "id_recensione")
 	private Integer idRecensione;
 
-	// Collegamento verso il Prodotto recensito
 	@ManyToOne
 	@JoinColumn(
 			name = "id_prodotto",
 			nullable = false,
 			foreignKey = @ForeignKey(name = "fk_recensione_prodotto")
 			)
-	// Se il prodotto viene cancellato, tutte le sue recensioni vengono cancellate a cascata
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Prodotto prodotto;
 
-	// Collegamento verso l'autore. L'idUtente non viene mai accettato dal client (vedi RecensioneImpl.create):
-	// deriva sempre dal principal autenticato
 	@ManyToOne
 	@JoinColumn(
 			name = "id_utente",
 			nullable = false,
 			foreignKey = @ForeignKey(name = "fk_recensione_utente")
 			)
-	// Se l'utente viene cancellato, le sue recensioni vengono cancellate a cascata
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Utente utente;
 
 	@Column(nullable = false)
 	private Integer voto;
 
-	// Facoltativo: una recensione puo' avere solo il voto, senza titolo
 	@Column(length = 100)
 	private String titolo;
 

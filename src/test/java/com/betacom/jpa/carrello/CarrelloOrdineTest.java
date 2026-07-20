@@ -49,11 +49,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Flusso completo cliente: registrazione -> indirizzo -> carrello -> coupon -> checkout.
- * Presuppone che CatalogoTest (variante id=1) e CouponTest (codice WELCOME10) siano
- * gia' stati eseguiti nella stessa suite (vedi SuiteClass, contesto Spring condiviso).
- */
+// Proprietario: Pier e Valerio
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -182,8 +178,6 @@ public class CarrelloOrdineTest {
 
 		assertNotNull(dto.getCoupon());
 		assertFalse(dto.getRighe().isEmpty());
-		// il prezzo della variante e' stato aggiornato a 27.90 in CatalogoTest.updateVarianteTest:
-		// 2 x 27.90 = 55.80, sconto 10% = 5.58
 		assertEquals(0, dto.getValoreSconto().compareTo(new BigDecimal("5.58")));
 		log.debug("carrello: {}", dto);
 	}
@@ -244,9 +238,6 @@ public class CarrelloOrdineTest {
 		assertFalse(lista.isEmpty());
 		lista.forEach(o -> log.debug(o.toString()));
 	}
-
-	// ── CARRELLO: il carrello e' 1:1 con l'utente e resta ATTIVO dopo il checkout, quindi
-	//    e' riusabile per esercitare update/remove/coupon/clear senza un nuovo checkout ──
 
 	@Test
 	@Order(10)
@@ -380,8 +371,6 @@ public class CarrelloOrdineTest {
 		assertTrue(dto.getRighe().isEmpty());
 	}
 
-	// ── STOCK INSUFFICIENTE AL CHECKOUT ──────────────────────────────────────────────
-
 	@Test
 	@Order(16)
 	public void checkoutTestErrorStockInsufficiente() throws Exception {
@@ -421,8 +410,6 @@ public class CarrelloOrdineTest {
 				.header("Authorization", clienteToken))
 				.andExpect(status().isOk());
 	}
-
-	// ── ORDINE: viste/azioni riservate ad ADMIN, e accesso negato tra utenti diversi ────
 
 	@Test
 	@Order(17)
@@ -516,8 +503,6 @@ public class CarrelloOrdineTest {
 		return "Bearer " + dto.getToken();
 	}
 
-	// ── UTENTE: self-service e viste ADMIN ───────────────────────────────────────────
-
 	@Test
 	@Order(19)
 	public void meUtenteTest() throws Exception {
@@ -569,8 +554,6 @@ public class CarrelloOrdineTest {
 				.header("Authorization", clienteToken))
 				.andExpect(status().isForbidden());
 	}
-
-	// ── INDIRIZZO: getById/update/delete ─────────────────────────────────────────────
 
 	@Test
 	@Order(23)

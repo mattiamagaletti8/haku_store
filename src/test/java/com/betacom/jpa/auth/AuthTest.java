@@ -24,6 +24,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
+// Proprietario: Pier e Valerio
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc

@@ -22,11 +22,7 @@ import com.betacom.jpa.services.interfaces.IUtenteServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
-// Nota: nessun endpoint "create" qui — la creazione di un utente passa sempre da
-// AuthController.register, non da questo controller
+// Proprietario: Sarah
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -34,15 +30,12 @@ import lombok.extern.slf4j.Slf4j;
 public class UtenteController {
 	private final IUtenteServices utS;
 
-	// Solo ADMIN: la lista di tutti gli utenti registrati e' un dato sensibile
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/list")
 	public ResponseEntity<Object> list() throws Exception {
 		return ResponseEntity.ok(utS.list());
 	}
 
-	// Scorciatoia comoda per il frontend: "il mio profilo", senza dover conoscere il proprio id.
-	// isAdmin=false qui e' voluto: forza sempre il confronto ownership contro se stessi
 	@GetMapping("/me")
 	public ResponseEntity<Object> me(@AuthenticationPrincipal UtentePrincipal principal) throws Exception {
 		return ResponseEntity.ok(utS.getById(principal.getIdUtente(), principal.getIdUtente(), false));
@@ -55,8 +48,6 @@ public class UtenteController {
 		return ResponseEntity.ok(utS.getById(id, principal.getIdUtente(), principal.isAdmin()));
 	}
 
-	// Nessun @PreAuthorize: chiunque autenticato puo' chiamarlo, ma il service verifica
-	// internamente che stia modificando solo se stesso (a meno di essere ADMIN)
 	@PatchMapping("update")
 	public ResponseEntity<ResponseDTO> update(
 			@RequestBody(required = true) @Validated(ValidationGroups.Update.class) UtenteReq req,

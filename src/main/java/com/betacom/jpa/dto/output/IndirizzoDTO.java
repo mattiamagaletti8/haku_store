@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
-// Nessun riferimento all'utente proprietario: quando si legge la lista indirizzi di un utente,
-// e' gia' implicito di chi sono, non serve ripeterlo in ogni elemento
+// Proprietario: Sarah
 @Getter
 @Setter
 @Builder

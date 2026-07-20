@@ -22,9 +22,7 @@ import com.betacom.jpa.services.interfaces.ICarrelloServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// ============================================================================
-// PROPRIETARIO: Pier — Modulo Carrello (Carrello / DettaglioCarrello / Coupon)
-// ============================================================================
+// Proprietario: Pier
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -32,12 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 public class CarrelloController {
 	private final ICarrelloServices carS;
 
-	// Nessun @PreAuthorize esplicito: basta essere autenticati (niente ruolo ADMIN richiesto),
-	// il collegamento @AuthenticationPrincipal e' cio' che rende impossibile leggere il carrello di un altro
 	@GetMapping
 	public ResponseEntity<Object> getCarrello(@AuthenticationPrincipal UtentePrincipal principal) throws Exception {
-		// principal.getIdUtente() viene SEMPRE dal token JWT verificato, mai da un parametro passato dal client:
-		// e' cosi' che si impedisce a un utente di leggere il carrello di un altro
 		return ResponseEntity.ok(carS.getCarrello(principal.getIdUtente()));
 	}
 
@@ -71,8 +65,6 @@ public class CarrelloController {
 				.build());
 	}
 
-	// Gruppo di validazione dedicato "Coupon" (non Create/Update): questo endpoint riusa CarrelloReq
-	// solo per il campo codiceCoupon, senza bisogno di una classe Req a se stante
 	@PostMapping("coupon")
 	public ResponseEntity<ResponseDTO> applyCoupon(
 			@RequestBody(required = true) @Validated(ValidationGroups.Coupon.class) CarrelloReq req,

@@ -31,9 +31,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Presuppone che CatalogoTest (prodotto id=1) sia gia' stato eseguito nella stessa suite.
- */
+// Proprietario: Pier e Valerio
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
