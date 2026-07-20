@@ -6,9 +6,7 @@ import java.util.List;
 import com.betacom.jpa.dto.output.DettaglioCarrelloDTO;
 import com.betacom.jpa.models.DettaglioCarrello;
 
-// ============================================================================
-// PROPRIETARIO: Pier — Modulo Carrello (Carrello / DettaglioCarrello / Coupon)
-// ============================================================================
+// Proprietario: Pier
 public class DettaglioCarrelloMap {
 
 	public static List<DettaglioCarrelloDTO> buildDettaglioCarrelloDTOList(List<DettaglioCarrello> lD) {
@@ -18,8 +16,6 @@ public class DettaglioCarrelloMap {
 	}
 
 	public static DettaglioCarrelloDTO buildDettaglioCarrelloDTO(DettaglioCarrello d) {
-		// Subtotale = prezzo CORRENTE della variante * quantita' — non congelato, cambia se il prezzo cambia
-		// (diverso da DettaglioOrdine, dove il prezzo viene invece congelato al momento del checkout)
 		BigDecimal subtotale = d.getVariante().getPrezzo().multiply(BigDecimal.valueOf(d.getQuantita()));
 		return DettaglioCarrelloDTO.builder()
 				.id(d.getIdDettaglio())

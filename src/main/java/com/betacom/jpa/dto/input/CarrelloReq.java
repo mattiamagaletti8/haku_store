@@ -6,11 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-// ============================================================================
-// PROPRIETARIO: Pier — Modulo Carrello (Carrello / DettaglioCarrello / Coupon)
-// ============================================================================
-// Usato solo per l'endpoint "applica coupon al carrello": un unico campo, un gruppo dedicato (Coupon)
-// cosi' non serve una classe Req separata solo per questa singola operazione
+// Proprietario: Pier
 @Setter
 @Getter
 @ToString

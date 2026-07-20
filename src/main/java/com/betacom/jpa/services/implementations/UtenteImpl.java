@@ -19,16 +19,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
+// Proprietario: Sarah
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class UtenteImpl implements IUtenteServices {
 
 	private final IUtenteRepository utR;
-	// Collegamento verso l'infrastruttura di sicurezza: il bean BCryptPasswordEncoder definito in SecurityConfig
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
@@ -42,10 +39,8 @@ public class UtenteImpl implements IUtenteServices {
 		ut.setNome(req.getNome());
 		ut.setCognome(req.getCognome());
 		ut.setEmail(req.getEmail());
-		// La password non viene MAI salvata in chiaro: passwordEncoder.encode la trasforma in hash BCrypt
 		ut.setPassword(passwordEncoder.encode(req.getPassword()));
 		ut.setTelefono(req.getTelefono());
-		// Ruolo forzato a CLIENTE: req.getRuolo() viene ignorato qui, nessuno puo' auto-registrarsi come ADMIN
 		ut.setRuolo(Roles.CLIENTE);
 
 		utR.save(ut);
@@ -59,7 +54,6 @@ public class UtenteImpl implements IUtenteServices {
 		Utente ut = utR.findById(req.getId())
 				.orElseThrow(() -> new ApiException("utente.ntfnd"));
 
-		// Controllo di ownership manuale: un cliente puo' modificare solo il proprio profilo
 		if (!isAdmin && !ut.getIdUtente().equals(callerId))
 			throw new ApiException("utente.forbidden");
 
@@ -72,11 +66,8 @@ public class UtenteImpl implements IUtenteServices {
 		Optional.ofNullable(req.getNome()).ifPresent(ut::setNome);
 		Optional.ofNullable(req.getCognome()).ifPresent(ut::setCognome);
 		Optional.ofNullable(req.getTelefono()).ifPresent(ut::setTelefono);
-		// Se la password viene cambiata, viene ri-hashata da zero, mai salvata in chiaro
 		Optional.ofNullable(req.getPassword()).ifPresent(pwd -> ut.setPassword(passwordEncoder.encode(pwd)));
 
-		// Il campo ruolo viene onorato SOLO se il chiamante e' gia' ADMIN: un cliente che passa
-		// "ruolo": "ADMIN" nel proprio update viene semplicemente ignorato
 		if (isAdmin)
 			Optional.ofNullable(req.getRuolo()).ifPresent(r -> ut.setRuolo(Roles.valueOf(r)));
 	}
@@ -115,8 +106,6 @@ public class UtenteImpl implements IUtenteServices {
 	@Override
 	public Utente getEntityByEmail(String email) throws Exception {
 		log.debug("getEntityByEmail {}", email);
-		// Restituisce l'entity GREZZA (password hash inclusa): usata da AuthImpl.login per il confronto
-		// password e da UtenteDetailsService per costruire il principal — mai passata a un DTO output
 		return utR.findByEmail(email)
 				.orElseThrow(() -> new ApiException("auth.badcredentials"));
 	}

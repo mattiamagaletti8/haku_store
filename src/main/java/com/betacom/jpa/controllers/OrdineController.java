@@ -21,9 +21,7 @@ import com.betacom.jpa.services.interfaces.IOrdineServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// ============================================================================
-// PROPRIETARIO: Valerio — Modulo Ordini (Ordine / DettaglioOrdine / checkout)
-// ============================================================================
+// Proprietario: Valerio
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -31,20 +29,13 @@ import lombok.extern.slf4j.Slf4j;
 public class OrdineController {
 	private final IOrdineServices ordS;
 
-	// Nessun @PreAuthorize: basta essere autenticati. Il gruppo di validazione "Checkout" attiva
-	// solo le regole idIndirizzo/metodoPagamento obbligatori, definite in OrdineReq
 	@PostMapping("checkout")
 	public ResponseEntity<Object> checkout(
 			@RequestBody(required = true) @Validated(ValidationGroups.Checkout.class) OrdineReq req,
 			@AuthenticationPrincipal UtentePrincipal principal) throws Exception {
-		// idUtente sempre dal principal autenticato, mai dal body: e' cosi' che nessuno puo'
-		// fare checkout "per conto di" un altro utente
 		return ResponseEntity.ok(ordS.checkout(principal.getIdUtente(), req));
 	}
 
-	// GET con filtri opzionali: il comportamento cambia in base al ruolo (vedi OrdineImpl.list),
-	// ma il controller si limita a passare sia l'id del chiamante sia se e' admin, lasciando
-	// la decisione "quali ordini mostrare davvero" al service
 	@GetMapping("/list")
 	public ResponseEntity<Object> list(
 			@RequestParam(required = false) Integer idUtente,
@@ -61,8 +52,6 @@ public class OrdineController {
 		return ResponseEntity.ok(ordS.getById(id, principal.getIdUtente(), principal.isAdmin()));
 	}
 
-	// Solo ADMIN: cambia lo stato logistico. Gruppo di validazione "OrdineStato" (non Update):
-	// richiede solo l'id, tutti gli altri campi di OrdineReq restano facoltativi
 	@PreAuthorize("hasRole('ADMIN')")
 	@PatchMapping("updateStato")
 	public ResponseEntity<ResponseDTO> updateStato(

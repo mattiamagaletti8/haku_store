@@ -22,11 +22,7 @@ import com.betacom.jpa.services.interfaces.IIndirizzoServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
-// Nessun @PreAuthorize su questi endpoint: basta essere autenticati, ma ogni operazione
-// e' comunque filtrata per proprietario (vedi principal.getIdUtente() passato ovunque)
+// Proprietario: Sarah
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -50,8 +46,6 @@ public class IndirizzoController {
 	public ResponseEntity<ResponseDTO> create(
 			@RequestBody(required = true) @Validated(ValidationGroups.Create.class) IndirizzoReq req,
 			@AuthenticationPrincipal UtentePrincipal principal) throws Exception {
-		// principal.getIdUtente() passato separatamente dal body: e' cosi' che il proprietario
-		// dell'indirizzo si stabilisce SEMPRE lato server, mai leggendolo dalla richiesta
 		indS.create(req, principal.getIdUtente());
 		return ResponseEntity.ok(ResponseDTO.builder()
 				.msg("created...")

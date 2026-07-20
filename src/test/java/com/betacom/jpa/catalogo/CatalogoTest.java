@@ -40,11 +40,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Esercita categoria -> prodotto -> variante (in quest'ordine, dato che sono in cascata).
- * L'utente ADMIN non puo' essere creato via API (per scelta, va promosso a mano via SQL in
- * produzione): qui lo si promuove direttamente via repository, solo per i test.
- */
+// Proprietario: Pier e Valerio
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc

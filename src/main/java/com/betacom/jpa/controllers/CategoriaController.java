@@ -21,40 +21,29 @@ import com.betacom.jpa.services.interfaces.ICategoriaServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// ============================================================================
-// PROPRIETARIO: Mattia — Modulo Catalogo (Categoria / Prodotto / VarianteProdotto)
-// ============================================================================
+// Proprietario: Mattia
 @Slf4j
 @RequiredArgsConstructor
-// Fa si' che ogni metodo restituisca direttamente JSON (niente viste HTML)
 @RestController
-// Prefisso comune a tutti gli endpoint di questa classe: /rest/categoria/...
 @RequestMapping("/rest/categoria")
 public class CategoriaController {
-	// Il controller non parla mai direttamente col database: passa sempre dal servizio
 	private final ICategoriaServices catS;
 
-	// GET pubblico (nessun controllo di ruolo): chiunque puo' vedere il catalogo, anche senza login
 	@GetMapping("/list")
 	public ResponseEntity<Object> list() throws Exception {
 		return ResponseEntity.ok(catS.list());
 	}
 
-	// GET pubblico per singola categoria, tramite query param ?id=...
 	@GetMapping("getById")
 	public ResponseEntity<Object> getById(@RequestParam(required = true) Integer id) throws Exception {
 		return ResponseEntity.ok(catS.getById(id));
 	}
 
-	// Solo utenti con ruolo ADMIN possono chiamare questo endpoint (controllato ANCHE prima che il metodo parta)
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("create")
 	public ResponseEntity<ResponseDTO> create(
-			// @Validated(ValidationGroups.Create.class): applica solo le regole di validazione del gruppo "Create"
-			// definite dentro CategoriaReq (qui: nome obbligatorio)
 			@RequestBody(required = true) @Validated(ValidationGroups.Create.class) CategoriaReq req) throws Exception {
 		catS.create(req);
-		// Ogni endpoint di mutazione risponde con lo stesso identico formato {"msg": "..."}
 		return ResponseEntity.ok(ResponseDTO.builder()
 				.msg("created...")
 				.build());
@@ -63,7 +52,6 @@ public class CategoriaController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PatchMapping("update")
 	public ResponseEntity<ResponseDTO> update(
-			// Qui invece il gruppo e' "Update": stesso CategoriaReq, regole di validazione diverse (id obbligatorio)
 			@RequestBody(required = true) @Validated(ValidationGroups.Update.class) CategoriaReq req) throws Exception {
 		catS.update(req);
 		return ResponseEntity.ok(ResponseDTO.builder()

@@ -14,17 +14,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
+// Proprietario: Sara e Mattia
 @Service
 public class JwtService {
 
-	// Letto da application.properties (jwt.secret=${jwt_secret}, nessun default: va fornito via env var)
 	@Value("${jwt.secret}")
 	private String secret;
 
-	// jwt.expiration-ms=${jwt_expiration_ms:3600000} — default 1 ora se non specificato
 	@Value("${jwt.expiration-ms}")
 	private long expirationMs;
 
@@ -33,16 +29,11 @@ public class JwtService {
 		Date expiration = new Date(now.getTime() + expirationMs);
 
 		return Jwts.builder()
-				// subject = email: e' cosi' che extractEmail/isTokenValid identificano l'utente dal token
 				.subject(principal.getUsername())
-				// I claim idUtente/ruolo evitano una query al database ogni volta che servono
-				// (es. UtentePrincipal.isAdmin() legge il ruolo direttamente dal token, non dal DB)
 				.claim("idUtente", principal.getIdUtente())
 				.claim("ruolo", principal.getRuolo().name())
 				.issuedAt(now)
 				.expiration(expiration)
-				// Firma il token con la chiave HMAC derivata dal secret: senza questa firma,
-				// nessuno potrebbe fidarsi che il token non sia stato alterato
 				.signWith(getSigningKey())
 				.compact();
 	}
@@ -57,8 +48,6 @@ public class JwtService {
 
 	public boolean isTokenValid(String token, UserDetails userDetails) {
 		String email = extractEmail(token);
-		// Entrambe le condizioni devono essere vere: l'email nel token corrisponde all'utente
-		// caricato E il token non e' scaduto
 		return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
 	}
 
@@ -67,8 +56,6 @@ public class JwtService {
 	}
 
 	private <T> T extractClaim(String token, Function<Claims, T> resolver) {
-		// parseSignedClaims verifica la firma nel processo stesso: se il token e' stato alterato
-		// o firmato con una chiave diversa, questa chiamata lancia eccezione prima di restituire nulla
 		Claims claims = Jwts.parser()
 				.verifyWith(getSigningKey())
 				.build()
@@ -78,8 +65,6 @@ public class JwtService {
 	}
 
 	private SecretKey getSigningKey() {
-		// La STESSA identica chiave firma ogni token generato e verifica ogni token ricevuto:
-		// se il secret cambiasse, tutti i token gia' emessi diventerebbero invalidi
 		return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 	}
 }

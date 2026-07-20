@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-// ============================================================================
-// PROPRIETARIO: Mattia — Modulo Catalogo (Categoria / Prodotto / VarianteProdotto)
-// ============================================================================
+// Proprietario: Mattia
 @Getter
 @Setter
 @Builder
@@ -23,9 +21,6 @@ public class ProdottoDTO {
 	private String nome;
 	private String descrizione;
 	private String marca;
-	// Categoria annidata gia' convertita in DTO (non l'id grezzo): il frontend riceve subito il nome
-	// della categoria senza dover fare una seconda chiamata
 	private CategoriaDTO categoria;
-	// Lista delle varianti, gia' convertite: prezzo/stock/gusto per ogni combinazione disponibile
 	private List<VarianteProdottoDTO> varianti;
 }

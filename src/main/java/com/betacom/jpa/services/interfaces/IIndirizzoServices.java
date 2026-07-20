@@ -5,11 +5,8 @@ import java.util.List;
 import com.betacom.jpa.dto.input.IndirizzoReq;
 import com.betacom.jpa.dto.output.IndirizzoDTO;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
+// Proprietario: Sarah
 public interface IIndirizzoServices {
-	// idUtente separato da req: arriva sempre dal principal autenticato nel controller, mai dal body
 	void create(IndirizzoReq req, Integer idUtente) throws Exception;
 
 	void update(IndirizzoReq req, Integer callerId, boolean isAdmin) throws Exception;

@@ -22,9 +22,7 @@ import com.betacom.jpa.services.interfaces.IRecensioneServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// ============================================================================
-// PROPRIETARIO: Sarah — Modulo Utente, Recensioni & Sicurezza
-// ============================================================================
+// Proprietario: Sarah
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -32,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 public class RecensioneController {
 	private final IRecensioneServices recS;
 
-	// L'UNICO endpoint pubblico di questo controller: la lettura delle recensioni non richiede login
 	@GetMapping("/list")
 	public ResponseEntity<Object> list(@RequestParam(required = true) Integer idProdotto) throws Exception {
 		return ResponseEntity.ok(recS.listByProdotto(idProdotto));
