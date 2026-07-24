@@ -28,31 +28,24 @@ html { scroll-behavior: smooth; }
 }
 .hero-mini { animation: fadeInUp 0.6s ease both; }
 
+/* sfondo a vignette (immagine fornita dall'utente: griglia di pannelli vuoti, senza
+   personaggi/testo). "background-blend-mode: multiply" invece di opacity: con
+   opacity, le linee nere si sbiadiscono verso il crema di sfondo (sembra beige);
+   con multiply invece il nero resta nero/grigio scuro (nero moltiplicato per
+   qualsiasi colore resta nero), solo il bianco del pannello si fonde col crema */
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: url('/sfondo-vignette.png');
+  background-repeat: repeat;
+  background-size: 480px auto;
+  background-attachment: fixed;
+  background-blend-mode: multiply;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
-  position: relative;
-}
-/* sfondo a vignette (immagine fornita dall'utente: griglia di pannelli vuoti, senza
-   personaggi/testo), molto tenue e scurito. E' un ::before separato (non l'immagine
-   di sfondo diretta di body) cosi' opacity/filter dimmerano SOLO lo sfondo e non il
-   contenuto reale della pagina; position:fixed cosi' resta fermo durante lo scroll */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-image: url('/sfondo-vignette.png');
-  background-repeat: repeat;
-  background-size: 480px auto;
-  opacity: 0.08;
-  filter: brightness(0.6);
-  pointer-events: none;
 }
 
 a { text-decoration: none; color: inherit; }
