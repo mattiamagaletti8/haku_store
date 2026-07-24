@@ -53,11 +53,15 @@
 .hero-title-mascotte::before {
   content: '';
   position: absolute;
+  /* left:100% + translateX(-50%): il centro dell'immagine cade esattamente sul
+     confine tra "i" e la parola successiva ("tuoi"), non sopra la "i" da sola */
   bottom: 100%;
-  left: 50%;
+  left: 100%;
   transform: translateX(-50%) rotate(-6deg);
-  width: 64px;
-  height: 48px;
+  /* altezza maggiore: cosi' il bordo superiore arriva all'incirca all'altezza
+     della riga sopra ("Graffia"), non solo appena sopra la riga della "i" */
+  width: 116px;
+  height: 88px;
   background-image: url('/hakustore-logo.png');
   background-size: 100% 154%;
   background-position: top center;
