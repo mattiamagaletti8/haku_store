@@ -28,18 +28,8 @@ html { scroll-behavior: smooth; }
 }
 .hero-mini { animation: fadeInUp 0.6s ease both; }
 
-/* sfondo a vignette (immagine fornita dall'utente: griglia di pannelli vuoti, senza
-   personaggi/testo). "background-blend-mode: multiply" invece di opacity: con
-   opacity, le linee nere si sbiadiscono verso il crema di sfondo (sembra beige);
-   con multiply invece il nero resta nero/grigio scuro (nero moltiplicato per
-   qualsiasi colore resta nero), solo il bianco del pannello si fonde col crema */
 body {
-  background-color: var(--bg);
-  background-image: url('/sfondo-vignette.png');
-  background-repeat: repeat;
-  background-size: 480px auto;
-  background-attachment: fixed;
-  background-blend-mode: multiply;
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 15px;
