@@ -246,7 +246,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
   opacity: 0.06;
   pointer-events: none;
 }
-.hero-mini > * { position: relative; }
+.hero-mini > * { position: relative; z-index: 1; }
 .hero-tag {
   display: inline-flex;
   align-items: center;
