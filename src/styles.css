@@ -28,21 +28,31 @@ html { scroll-behavior: smooth; }
 }
 .hero-mini { animation: fadeInUp 0.6s ease both; }
 
-/* sfondo a vignette in bianco e nero: solo i riquadri dei pannelli (bordo nero,
-   dimensioni diverse, come una griglia di pagina manga), senza puntini/colori/
-   contenuto dentro. Fisso dietro tutto il sito, "fixed" cosi' non scorre col contenuto */
 body {
-  background-color: var(--bg);
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="160"><g stroke="black" stroke-width="2.5" fill="none" opacity="0.22"><rect x="1.5" y="1.5" width="95" height="70"/><rect x="101" y="1.5" width="60" height="45"/><rect x="166" y="1.5" width="53" height="70"/><rect x="1.5" y="76" width="53" height="83"/><rect x="60" y="52" width="106" height="107"/><rect x="166" y="76" width="53" height="83"/></g></svg>');
-  background-repeat: repeat;
-  background-size: 220px 160px;
-  background-attachment: fixed;
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  position: relative;
+}
+/* sfondo a vignette (immagine fornita dall'utente: griglia di pannelli vuoti, senza
+   personaggi/testo), molto tenue e scurito. E' un ::before separato (non l'immagine
+   di sfondo diretta di body) cosi' opacity/filter dimmerano SOLO lo sfondo e non il
+   contenuto reale della pagina; position:fixed cosi' resta fermo durante lo scroll */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url('/sfondo-vignette.png');
+  background-repeat: repeat;
+  background-size: 480px auto;
+  opacity: 0.08;
+  filter: brightness(0.6);
+  pointer-events: none;
 }
 
 a { text-decoration: none; color: inherit; }
