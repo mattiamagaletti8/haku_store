@@ -1,1 +1,15 @@
 /* stili condivisi in styles.css (.hero-mini, .product-card, .form-riga) */
+
+/* solo l'hero della home: testo centrato e molto piu' grande, per fare da vera apertura */
+.hero-home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.hero-home .hero-title {
+  font-size: clamp(48px, 8vw, 88px);
+}
+.hero-home .hero-sub {
+  max-width: 560px;
+}
