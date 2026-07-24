@@ -25,6 +25,19 @@ export class ProdottoServices {
     return this.http.get<ProdottoDTO>(this.url + 'getById', { params: { id } });
   }
 
+  // Le 3 sezioni della home: piu' venduti, ultimi aggiunti, tornati disponibili dopo l'esaurimento
+  inEvidenza() {
+    return this.http.get<ProdottoDTO[]>(this.url + 'inEvidenza');
+  }
+
+  novita() {
+    return this.http.get<ProdottoDTO[]>(this.url + 'novita');
+  }
+
+  nuovamenteDisponibili() {
+    return this.http.get<ProdottoDTO[]>(this.url + 'nuovamenteDisponibili');
+  }
+
   create(body: { idCategoria: number; nome: string; marca: string; descrizione?: string }) {
     return this.http.post<ResponseDTO>(this.url + 'create', body);
   }

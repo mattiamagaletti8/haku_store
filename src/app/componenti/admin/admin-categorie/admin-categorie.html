@@ -13,6 +13,20 @@
       <tr>
         <!-- @if/@else (teoria cap. 16): la stessa riga di tabella mostra o il form di modifica
              o la vista normale, a seconda che questa specifica categoria sia "in editing" -->
+        <td>
+          <!-- anteprima dell'immagine attuale, o un segnaposto se non ancora caricata -->
+          @if (c.immagine) {
+            <img [src]="apiOrigin + c.immagine" alt="{{ c.nome }}" style="width:48px;height:48px;object-fit:cover;border-radius:4px;">
+          } @else {
+            <span class="errore" style="font-size:12px;">nessuna immagine</span>
+          }
+        </td>
+        <td>
+          <button class="btn-text" type="button" [disabled]="caricamentoImmagine() === c.id" (click)="fileInput.click()">
+            {{ caricamentoImmagine() === c.id ? 'Caricamento...' : 'Carica immagine' }}
+          </button>
+          <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileSelected($event, c)">
+        </td>
         @if (inModifica() === c.id) {
           <td>
             <form class="form-riga" style="margin-top:0" [formGroup]="modificaForm" (ngSubmit)="salvaModifica(c.id)">

@@ -1,11 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { ProdottoServices } from '../../services/prodotto-services';
 import { CategoriaServices } from '../../services/categoria-services';
 import { CategoriaDTO, ProdottoDTO } from '../../models/models';
-import { generaImmagineProdotto } from '../../utils/immagine-prodotto';
+import { ProdottoCard } from '../prodotto-card/prodotto-card';
 
 // ============================================================================
 // PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
@@ -13,9 +11,7 @@ import { generaImmagineProdotto } from '../../utils/immagine-prodotto';
 // Home/catalogo: la pagina pubblica principale, nessun guard, visibile anche senza login
 @Component({
   selector: 'app-home',
-  // CurrencyPipe (teoria cap. 17, Pipes native) importato esplicitamente perche'
-  // e' un componente standalone: ogni pipe/direttiva usata nel template va dichiarata qui
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe],
+  imports: [ReactiveFormsModule, ProdottoCard],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -25,6 +21,11 @@ export class Home implements OnInit {
 
   prodotti = signal<ProdottoDTO[]>([]);
   categorie = signal<CategoriaDTO[]>([]);
+
+  // Le 3 vetrine della home, indipendenti dal catalogo filtrato sotto
+  prodottiInEvidenza = signal<ProdottoDTO[]>([]);
+  prodottiNovita = signal<ProdottoDTO[]>([]);
+  prodottiNuovamenteDisponibili = signal<ProdottoDTO[]>([]);
 
   filtriForm: FormGroup = new FormGroup({
     nome: new FormControl(null),
@@ -36,6 +37,9 @@ export class Home implements OnInit {
   ngOnInit(): void {
     this.categoriaS.list().subscribe({ next: (resp) => this.categorie.set(resp) });
     this.carica();
+    this.prodottoS.inEvidenza().subscribe({ next: (resp) => this.prodottiInEvidenza.set(resp) });
+    this.prodottoS.novita().subscribe({ next: (resp) => this.prodottiNovita.set(resp) });
+    this.prodottoS.nuovamenteDisponibili().subscribe({ next: (resp) => this.prodottiNuovamenteDisponibili.set(resp) });
   }
 
   // Chiamata sia al primo caricamento sia ogni volta che i filtri cambiano
@@ -64,9 +68,5 @@ export class Home implements OnInit {
   prezzoMinimo(p: ProdottoDTO): number | null {
     if (!p.varianti?.length) return null;
     return Math.min(...p.varianti.map((v) => v.prezzo));
-  }
-
-  immagineDi(p: ProdottoDTO): string {
-    return generaImmagineProdotto(p.nome, p.marca, p.categoria?.nome ?? '');
   }
 }

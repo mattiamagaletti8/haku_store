@@ -41,3 +41,23 @@
   <div class="campo"><label>Provincia</label><input formControlName="provincia" /></div>
   <button class="btn btn-outline" type="submit" [disabled]="nuovoIndirizzoForm.invalid">Aggiungi</button>
 </form>
+
+<div class="scheda-elimina-account card mt-24">
+  <h3 class="mb-16">Elimina account</h3>
+  @if (!confermaEliminazioneAccount()) {
+    <p class="light mb-16">
+      Elimina definitivamente il tuo account Hakustore, insieme a indirizzi, carrello, recensioni e storico ordini.
+      L'operazione non si può annullare.
+    </p>
+    <button class="btn-text btn-danger" (click)="confermaEliminazioneAccount.set(true)">Elimina il mio account</button>
+  } @else {
+    <p class="errore mb-16">
+      Sei sicuro? Tutti i tuoi dati verranno cancellati per sempre e non potrai più accedere con questo account.
+    </p>
+    @if (erroreEliminazioneAccount()) {
+      <p class="errore mb-16">{{ erroreEliminazioneAccount() }}</p>
+    }
+    <button class="btn btn-danger" (click)="eliminaAccount()">Sì, elimina definitivamente</button>
+    <button class="btn-text" (click)="confermaEliminazioneAccount.set(false)">Annulla</button>
+  }
+</div>

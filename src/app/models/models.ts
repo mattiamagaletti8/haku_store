@@ -31,6 +31,9 @@ export interface ResponseDTO {
 export interface CategoriaDTO {
   id: number;
   nome: string;
+  // path relativo (es. "/immagini/categorie/categoria_3.jpeg"), null se non ancora caricata:
+  // va sempre concatenato con API_ORIGIN per ottenere un URL utilizzabile in un <img>
+  immagine?: string | null;
 }
 
 export interface VarianteProdottoDTO {
@@ -42,6 +45,8 @@ export interface VarianteProdottoDTO {
   colore?: string;
   prezzo: number;
   quantitaDisponibile: number;
+  // path relativo (es. "/immagini/varianti/variante_5.png"), null se non ancora caricata
+  immagine?: string | null;
 }
 
 export interface ProdottoDTO {
@@ -49,6 +54,9 @@ export interface ProdottoDTO {
   nome: string;
   descrizione?: string;
   marca: string;
+  // path relativo (es. "/immagini/prodotti/prodotto_3.png"), null se non ancora caricata:
+  // va sempre concatenato con API_ORIGIN per ottenere un URL utilizzabile in un <img>
+  immagine?: string | null;
   categoria: CategoriaDTO;
   varianti: VarianteProdottoDTO[];
 }

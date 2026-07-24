@@ -18,11 +18,11 @@ export class Carrello implements OnInit {
   // Non "private": il template legge direttamente carrelloS.carrello() (il signal condiviso)
   carrelloS = inject(CarrelloServices);
 
-  erroreCoupon = signal<string | null>(null);
+  erroreCoupon = signal<string | null>(null); // se il backend rifiuta un coupon, mostra il messaggio di errore qui
 
   couponForm = new FormGroup({
     codice: new FormControl(''),
-  });
+  });// FormGroup per il campo "codice" del coupon, legato al template con formControlName="codice"
 
   ngOnInit(): void {
     this.carrelloS.ricarica();

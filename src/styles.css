@@ -3,8 +3,10 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --lime:         #C9A227;  /* oro del logo: sfondi bottoni/badge/topbar */
-  --celeste-deep: #8A6D1A;  /* oro scuro/bronzo: testo/accenti su sfondo chiaro */
+  /* palette allineata al vero logo (gattino palestrato): papillon/scritta ciano, contorni
+     navy, sfondo crema — prima qui c'era un oro che nel logo non esiste proprio */
+  --lime:         #2EC4D6;  /* ciano del papillon/scritta: sfondi bottoni/badge/topbar */
+  --celeste-deep: #12707D;  /* ciano scuro: testo/accenti leggibili su sfondo chiaro */
   --bg:      #FAF3E4;       /* crema del logo */
   --card:    #FFFFFF;
   --border:  #E6DEC8;
@@ -18,6 +20,13 @@
 }
 
 html { scroll-behavior: smooth; }
+
+/* ─── ANIMAZIONI ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-mini { animation: fadeInUp 0.6s ease both; }
 
 body {
   background: var(--bg);
@@ -76,8 +85,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
   white-space: nowrap;
 }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-primary { background: var(--lime); color: var(--ink); }
-.btn-primary:hover:not(:disabled) { filter: brightness(0.92); transform: translateY(-1px); }
+.btn-primary { background: var(--lime); color: var(--ink); box-shadow: 0 2px 10px rgba(46, 196, 214, 0.28); }
+.btn-primary:hover:not(:disabled) { filter: brightness(0.94); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(46, 196, 214, 0.4); }
 .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--light); }
 .btn-outline:hover:not(:disabled) { border-color: var(--celeste-deep); color: var(--celeste-deep); }
 .btn-text {
@@ -95,6 +104,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
 .btn-text:hover { color: var(--ink); }
 .btn-danger { color: var(--danger); }
 .btn-danger:hover { color: #ff8080; }
+/* variante piena (non solo testo), per azioni distruttive importanti come l'eliminazione account */
+.btn.btn-danger { background: var(--danger); color: var(--white); }
+.btn.btn-danger:hover:not(:disabled) { filter: brightness(0.9); transform: translateY(-1px); }
 .btn-sm { padding: 8px 16px; font-size: 11px; }
 .btn-block { width: 100%; }
 
@@ -165,6 +177,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
   background: var(--card);
   border: 1px solid var(--border);
   padding: 24px;
+  box-shadow: 0 1px 3px rgba(27, 51, 80, 0.06);
 }
 
 /* ─── TABELLA ─── */
@@ -208,8 +221,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(201,162,39,0.12);
-  border: 1px solid rgba(201,162,39,0.35);
+  background: rgba(46,196,214,0.12);
+  border: 1px solid rgba(46,196,214,0.35);
   padding: 5px 14px;
   font-size: 11px;
   font-weight: 600;
@@ -242,11 +255,15 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
   background: var(--card);
   border: 1px solid var(--border);
   display: block;
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   position: relative;
   overflow: hidden;
 }
-.product-card:hover { border-color: rgba(201,162,39,0.4); transform: translateY(-3px); }
+.product-card:hover {
+  border-color: rgba(46, 196, 214, 0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 28px rgba(27, 51, 80, 0.14);
+}
 .product-badge {
   position: absolute;
   top: 12px; left: 12px;
@@ -260,15 +277,36 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
   padding: 3px 9px;
 }
 .product-img {
-  height: 180px;
+  position: relative;
   background-color: #F3E9D3;
   overflow: hidden;
 }
 .product-img img {
+  /* niente altezza fissa e niente object-fit: il riquadro si adatta esattamente
+     alle proporzioni vere dell'immagine (larghezza piena, altezza proporzionale),
+     cosi' non c'e' ne' ritaglio ne' bordo vuoto ai lati */
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
+  transition: transform 0.4s ease;
+}
+.product-card:hover .product-img img { transform: scale(1.06); }
+/* Foto della categoria, sovrapposta come bollino sopra l'immagine generata del prodotto
+   (vedi immagine-prodotto.ts: un SVG mostrato via <img> non puo' caricare immagini esterne
+   al suo interno, quindi questa e' una <img> HTML separata, posizionata sopra).
+   Selettore ".product-img .badge-categoria" (2 classi) invece di ".badge-categoria" da solo:
+   serve piu' specificita' di ".product-img img" qui sopra (1 classe + 1 elemento), altrimenti
+   quella regola vince e il bollino si allarga al 100% coprendo tutta la card. */
+.product-img .badge-categoria {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--lime);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 .product-info { padding: 16px; }
 .product-brand {

@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthServices } from '../../auth/auth-services';
 import { IndirizzoServices } from '../../services/indirizzo-services';
 import { UtenteServices } from '../../services/utente-services';
@@ -19,12 +20,18 @@ import { IndirizzoDTO } from '../../models/models';
 export class Profilo implements OnInit {
   private utenteS = inject(UtenteServices);
   private indirizzoS = inject(IndirizzoServices);
+  private router = inject(Router);
   // Non "private": il template deve poterlo leggere direttamente (auth.currentUser())
   auth = inject(AuthServices);
 
   indirizzi = signal<IndirizzoDTO[]>([]);
   messaggioDati = signal<string | null>(null);
   modificaIndirizzoId = signal<number | null>(null);
+
+  // Due passaggi per l'eliminazione account: il primo click mostra solo l'avviso,
+  // il secondo (esplicito, "Sì, elimina") esegue davvero la richiesta al backend
+  confermaEliminazioneAccount = signal(false);
+  erroreEliminazioneAccount = signal<string | null>(null);
 
   // Form dei dati anagrafici: nessun Validators.required qui perche' e' un aggiornamento
   // parziale (mirroring del pattern "update parziale" gia' visto in UtenteImpl.update nel backend)
@@ -89,6 +96,23 @@ export class Profilo implements OnInit {
   eliminaIndirizzo(id: number): void {
     this.indirizzoS.delete(id).subscribe({
       next: () => this.caricaIndirizzi(),
+    });
+  }
+
+  // Cancella per sempre l'account (e, in cascata sul backend, carrello/indirizzi/recensioni/ordini):
+  // dopo la conferma, se il backend risponde bene si fa logout e si torna al catalogo,
+  // dato che l'utente non esiste piu' e non avrebbe piu' senso restare su una pagina protetta
+  eliminaAccount(): void {
+    const utente = this.auth.currentUser();
+    if (!utente) return;
+
+    this.erroreEliminazioneAccount.set(null);
+    this.utenteS.delete(utente.idUtente).subscribe({
+      next: () => {
+        this.auth.logout();
+        this.router.navigateByUrl('/catalogo');
+      },
+      error: (err) => this.erroreEliminazioneAccount.set(err.error?.msg ?? 'Errore'),
     });
   }
 }

@@ -1,14 +1,17 @@
 // ============================================================================
 // PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
 // ============================================================================
-// Lo schema non prevede un campo immagine per prodotto e non abbiamo un generatore
-// di foto reali: disegniamo quindi una sagoma SVG coerente con il tipo di prodotto
-// (barattolo, flacone, manubrio, capo di abbigliamento...) invece di una foto vera.
-// La scelta di forma/colore e' deterministica (stesso nome+marca+categoria => stessa
-// immagine sempre), cosi' il catalogo resta coerente ad ogni ricarica.
+// Lo schema non prevede un campo immagine per prodotto: disegniamo quindi una sagoma
+// SVG coerente con il tipo di prodotto (barattolo, flacone, manubrio, capo di
+// abbigliamento...) invece di una foto vera. La scelta di forma/colore e' deterministica
+// (stesso nome+marca+categoria => stessa immagine sempre), cosi' il catalogo resta
+// coerente ad ogni ricarica. La Categoria invece un'immagine ce l'ha (upload da
+// Admin -> Categorie): quando presente, il bollino "H" viene omesso (haCategoriaImmagine)
+// e il chiamante sovrappone la vera foto con un <img> HTML (vedi .badge-categoria nel
+// template) — un SVG in <img src="data:..."> non puo' caricare immagini esterne al suo interno.
 
 const PALETTE_CONTENITORE = ['#1B3350', '#8A6D1A', '#5B4632', '#3F5A46', '#6B3B3B', '#33506B'];
-const ORO = '#C9A227';
+const ACCENTO = '#2EC4D6'; // ciano del logo (papillon/scritta), non piu' oro
 const CREMA = '#FBF4E3';
 const NAVY = '#1B3350';
 
@@ -40,21 +43,27 @@ function formaProdotto(nome: string, categoria: string): Forma {
   return 'scatola';
 }
 
-// piccolo marchio circolare (richiama il logo: anello dorato su fondo navy) messo
-// in un angolo, come "bollino" di fabbrica
-function marchioSvg(): string {
+// piccolo marchio circolare in un angolo, come "bollino" di fabbrica. Quando la
+// categoria del prodotto ha una foto propria, il bollino qui viene omesso del tutto:
+// un <img> HTML vero viene sovrapposto sopra da fuori (vedi .badge-categoria nel
+// template), perche' un SVG mostrato via <img src="data:..."> NON puo' caricare
+// immagini esterne al suo interno (i browser lo bloccano per sicurezza: si vedrebbe
+// solo l'icona di "immagine non trovata", non la foto vera).
+function marchioSvg(nascondiMarchio: boolean): string {
+  if (nascondiMarchio) return '';
+
   return `
     <g transform="translate(352,254)" opacity="0.9">
-      <circle r="26" fill="${NAVY}" stroke="${ORO}" stroke-width="3" />
+      <circle r="26" fill="${NAVY}" stroke="${ACCENTO}" stroke-width="3" />
       <text x="0" y="8" font-family="Barlow Condensed, sans-serif" font-size="24" font-weight="800"
-            fill="${ORO}" text-anchor="middle">H</text>
+            fill="${ACCENTO}" text-anchor="middle">H</text>
     </g>`;
 }
 
 function formaBarattolo(colore: string, testo: string): string {
   return `
     <rect x="140" y="118" width="120" height="130" rx="10" fill="${colore}" />
-    <rect x="128" y="92" width="144" height="30" rx="8" fill="${ORO}" />
+    <rect x="128" y="92" width="144" height="30" rx="8" fill="${ACCENTO}" />
     <rect x="150" y="168" width="100" height="46" rx="4" fill="${CREMA}" opacity="0.95" />
     <text x="200" y="198" font-family="Barlow Condensed, sans-serif" font-size="30" font-weight="800"
           fill="${NAVY}" text-anchor="middle">${testo}</text>`;
@@ -63,7 +72,7 @@ function formaBarattolo(colore: string, testo: string): string {
 function formaFlacone(colore: string, testo: string): string {
   return `
     <rect x="162" y="100" width="76" height="150" rx="16" fill="${colore}" opacity="0.92" />
-    <rect x="172" y="70" width="56" height="34" rx="6" fill="${ORO}" />
+    <rect x="172" y="70" width="56" height="34" rx="6" fill="${ACCENTO}" />
     <rect x="174" y="150" width="52" height="60" rx="4" fill="${CREMA}" opacity="0.95" />
     <text x="200" y="187" font-family="Barlow Condensed, sans-serif" font-size="20" font-weight="800"
           fill="${NAVY}" text-anchor="middle">${testo}</text>`;
@@ -89,13 +98,18 @@ function formaMaglia(colore: string, testo: string): string {
 function formaScatola(colore: string, testo: string): string {
   return `
     <rect x="130" y="120" width="140" height="110" rx="6" fill="${colore}" />
-    <rect x="130" y="120" width="140" height="26" fill="${ORO}" opacity="0.85" />
-    <rect x="192" y="120" width="16" height="110" fill="${ORO}" opacity="0.85" />
+    <rect x="130" y="120" width="140" height="26" fill="${ACCENTO}" opacity="0.85" />
+    <rect x="192" y="120" width="16" height="110" fill="${ACCENTO}" opacity="0.85" />
     <text x="200" y="200" font-family="Barlow Condensed, sans-serif" font-size="24" font-weight="800"
           fill="${CREMA}" text-anchor="middle">${testo}</text>`;
 }
 
-export function generaImmagineProdotto(nome: string, marca: string, categoria = ''): string {
+export function generaImmagineProdotto(
+  nome: string,
+  marca: string,
+  categoria = '',
+  haCategoriaImmagine = false,
+): string {
   const seme = hashStringa(`${marca}::${nome}::${categoria}`);
   const colore = PALETTE_CONTENITORE[seme % PALETTE_CONTENITORE.length];
   const testo = iniziali(nome);
@@ -120,7 +134,7 @@ export function generaImmagineProdotto(nome: string, marca: string, categoria = 
   </defs>
   <rect width="400" height="300" fill="url(#sfondo)" />
   ${disegno}
-  ${marchioSvg()}
+  ${marchioSvg(haCategoriaImmagine)}
   <text x="200" y="272" font-family="Inter, sans-serif" font-size="14" font-weight="600"
         letter-spacing="3" fill="${NAVY}" text-anchor="middle" opacity="0.75">${marca.toUpperCase()}</text>
 </svg>`.trim();
