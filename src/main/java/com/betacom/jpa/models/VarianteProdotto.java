@@ -1,6 +1,7 @@
 package com.betacom.jpa.models;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -54,5 +55,13 @@ public class VarianteProdotto {
 
 	@Column(length = 50)
 	private String colore;
+
+	@Column(length = 255)
+	private String immagine;
+
+	// valorizzato quando la quantita' torna positiva dopo essere stata esaurita: usato
+	// dalla sezione "Nuovamente disponibile" della home (null se non e' mai stata riesaurita/rifornita)
+	@Column(name = "data_rifornimento")
+	private LocalDateTime dataRifornimento;
 
 }

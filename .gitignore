@@ -38,3 +38,7 @@ drop.sql
 jpa.log
 *.log
 *.log.*.gz
+
+# Immagini caricate a runtime (es. foto categorie), non sono sorgente
+uploads/*
+!uploads/**/.gitkeep

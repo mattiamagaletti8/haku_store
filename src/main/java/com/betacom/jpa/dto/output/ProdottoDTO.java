@@ -21,6 +21,7 @@ public class ProdottoDTO {
 	private String nome;
 	private String descrizione;
 	private String marca;
+	private String immagine;
 	private CategoriaDTO categoria;
 	private List<VarianteProdottoDTO> varianti;
 }

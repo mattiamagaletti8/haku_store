@@ -17,4 +17,5 @@ import lombok.ToString;
 public class CategoriaDTO {
 	private Integer id;
 	private String nome;
+	private String immagine;
 }

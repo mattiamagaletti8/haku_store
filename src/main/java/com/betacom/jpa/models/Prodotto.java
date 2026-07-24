@@ -1,5 +1,6 @@
 package com.betacom.jpa.models;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -46,6 +47,13 @@ public class Prodotto {
 
 	@Column(length = 80, nullable = false)
 	private String marca;
+
+	@Column(length = 255)
+	private String immagine;
+
+	// usata per la sezione "Novita'" della home: gli ultimi prodotti aggiunti dall'admin
+	@Column(name = "data_creazione", nullable = false)
+	private LocalDateTime dataCreazione;
 
 	@OneToMany(mappedBy = "prodotto", fetch = FetchType.EAGER)
 	private List<VarianteProdotto> varianti;

@@ -1,9 +1,19 @@
 package com.betacom.jpa.services.implementations;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.betacom.jpa.dto.input.ProdottoReq;
 import com.betacom.jpa.dto.output.ProdottoDTO;
@@ -12,7 +22,9 @@ import com.betacom.jpa.mapping.ProdottoMap;
 import com.betacom.jpa.models.Categoria;
 import com.betacom.jpa.models.Prodotto;
 import com.betacom.jpa.repositories.ICategoriaRepository;
+import com.betacom.jpa.repositories.IDettaglioOrdineRepository;
 import com.betacom.jpa.repositories.IProdottoRepository;
+import com.betacom.jpa.repositories.IVarianteProdottoRepository;
 import com.betacom.jpa.services.interfaces.IProdottoServices;
 
 import jakarta.transaction.Transactional;
@@ -25,8 +37,20 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ProdottoImpl implements IProdottoServices {
 
+	// estensioni accettate per l'immagine di un prodotto
+	private static final Set<String> ESTENSIONI_VALIDE = Set.of("jpg", "jpeg", "png", "gif", "webp");
+
+	// quanti prodotti mostrare al massimo in ciascuna sezione della home (in evidenza/novita'/nuovamente disponibili)
+	private static final int LIMITE_SEZIONE_HOME = 8;
+
 	private final IProdottoRepository repP;
 	private final ICategoriaRepository repC;
+	private final IDettaglioOrdineRepository repDO;
+	private final IVarianteProdottoRepository repV;
+
+	// cartella su disco dove vengono salvate le immagini, configurata in application.properties
+	@Value("${upload.dir.prodotti}")
+	private String uploadDir;
 
 	@Transactional
 	@Override
@@ -44,6 +68,7 @@ public class ProdottoImpl implements IProdottoServices {
 		p.setNome(req.getNome());
 		p.setDescrizione(req.getDescrizione());
 		p.setMarca(req.getMarca());
+		p.setDataCreazione(LocalDateTime.now());
 
 		repP.save(p);
 	}
@@ -72,6 +97,7 @@ public class ProdottoImpl implements IProdottoServices {
 		log.debug("delete {}", id);
 		Prodotto p = repP.findById(id)
 				.orElseThrow(() -> new ApiException("prodotto.ntfnd"));
+		eliminaFileImmagine(p.getImmagine());
 		repP.delete(p);
 	}
 
@@ -88,6 +114,92 @@ public class ProdottoImpl implements IProdottoServices {
 		Prodotto p = repP.findById(id)
 				.orElseThrow(() -> new ApiException("prodotto.ntfnd"));
 		return ProdottoMap.buildProdottoDTO(p);
+	}
+
+	@Transactional
+	@Override
+	public String uploadImmagine(Integer id, MultipartFile file) throws Exception {
+		log.debug("uploadImmagine {} {}", id, file != null ? file.getOriginalFilename() : null);
+		Prodotto p = repP.findById(id)
+				.orElseThrow(() -> new ApiException("prodotto.ntfnd"));
+
+		if (file == null || file.isEmpty())
+			throw new ApiException("prodotto.immagine.mancante");
+
+		String nomeOriginale = file.getOriginalFilename();
+		int puntoIdx = (nomeOriginale != null) ? nomeOriginale.lastIndexOf('.') : -1;
+		String estensione = (puntoIdx >= 0) ? nomeOriginale.substring(puntoIdx + 1).toLowerCase() : "";
+
+		if (!ESTENSIONI_VALIDE.contains(estensione))
+			throw new ApiException("prodotto.immagine.formato.invalido");
+
+		eliminaFileImmagine(p.getImmagine());
+
+		String nuovoNomeFile = "prodotto_" + id + "." + estensione;
+
+		try {
+			Path cartella = Path.of(uploadDir);
+			Files.createDirectories(cartella);
+			file.transferTo(cartella.resolve(nuovoNomeFile));
+		} catch (IOException e) {
+			throw new ApiException("prodotto.immagine.errore.salvataggio");
+		}
+
+		p.setImmagine(nuovoNomeFile);
+		return nuovoNomeFile;
+	}
+
+	private void eliminaFileImmagine(String filename) {
+		if (filename == null)
+			return;
+		try {
+			Files.deleteIfExists(Path.of(uploadDir).resolve(filename));
+		} catch (IOException e) {
+			log.warn("impossibile eliminare il vecchio file immagine {}", filename, e);
+		}
+	}
+
+	@Override
+	public List<ProdottoDTO> selectInEvidenza() throws Exception {
+		log.debug("selectInEvidenza");
+		// ogni riga e' [idProdotto, quantitaTotaleVenduta], gia' ordinata dal piu' venduto
+		List<Integer> idOrdinati = repDO.selectProdottiPiuVenduti().stream()
+				.map(riga -> (Integer) riga[0])
+				.limit(LIMITE_SEZIONE_HOME)
+				.toList();
+		return prodottiOrdinatiComeIds(idOrdinati);
+	}
+
+	@Override
+	public List<ProdottoDTO> selectNovita() throws Exception {
+		log.debug("selectNovita");
+		List<Prodotto> lP = repP.selectNovita().stream().limit(LIMITE_SEZIONE_HOME).toList();
+		return ProdottoMap.buildProdottoDTOList(lP);
+	}
+
+	@Override
+	public List<ProdottoDTO> selectNuovamenteDisponibili() throws Exception {
+		log.debug("selectNuovamenteDisponibili");
+		// piu' varianti dello stesso prodotto possono essere state rifornite: si tiene solo
+		// il primo incontro (il piu' recente, dato l'ordine della query) per non ripetere il prodotto
+		List<Integer> idOrdinati = repV.selectNuovamenteDisponibili().stream()
+				.map(v -> v.getProdotto().getIdProdotto())
+				.distinct()
+				.limit(LIMITE_SEZIONE_HOME)
+				.toList();
+		return prodottiOrdinatiComeIds(idOrdinati);
+	}
+
+	// repP.findAllById non garantisce l'ordine di ritorno: qui si rimappano i risultati
+	// per rispettare l'ordine di "idOrdinati" (che rappresenta gia' un ranking)
+	private List<ProdottoDTO> prodottiOrdinatiComeIds(List<Integer> idOrdinati) {
+		Map<Integer, Prodotto> mappaPerId = repP.findAllById(idOrdinati).stream()
+				.collect(Collectors.toMap(Prodotto::getIdProdotto, p -> p));
+		return idOrdinati.stream()
+				.map(mappaPerId::get)
+				.filter(Objects::nonNull)
+				.map(ProdottoMap::buildProdottoDTO)
+				.toList();
 	}
 
 }

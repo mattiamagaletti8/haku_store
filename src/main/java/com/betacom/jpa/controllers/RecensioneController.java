@@ -30,11 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 public class RecensioneController {
 	private final IRecensioneServices recS;
 
+	// GET /rest/recensione/list?idProdotto=... — pubblico, nessun login richiesto (vedi SecurityConfig)
 	@GetMapping("/list")
 	public ResponseEntity<Object> list(@RequestParam(required = true) Integer idProdotto) throws Exception {
 		return ResponseEntity.ok(recS.listByProdotto(idProdotto));
 	}
 
+	// POST /rest/recensione/create — utente autenticato: la recensione viene sempre creata a nome di chi chiama
 	@PostMapping("create")
 	public ResponseEntity<ResponseDTO> create(
 			@RequestBody(required = true) @Validated(ValidationGroups.Create.class) RecensioneReq req,
@@ -45,6 +47,7 @@ public class RecensioneController {
 				.build());
 	}
 
+	// PATCH /rest/recensione/update — solo l'autore o un ADMIN (controllo fatto nel service)
 	@PatchMapping("update")
 	public ResponseEntity<ResponseDTO> update(
 			@RequestBody(required = true) @Validated(ValidationGroups.Update.class) RecensioneReq req,
@@ -55,6 +58,7 @@ public class RecensioneController {
 				.build());
 	}
 
+	// DELETE /rest/recensione/delete/{id} — solo l'autore o un ADMIN
 	@DeleteMapping("delete/{id}")
 	public ResponseEntity<ResponseDTO> delete(
 			@PathVariable(required = true) Integer id,
