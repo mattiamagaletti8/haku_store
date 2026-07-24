@@ -42,6 +42,27 @@
 .hero-home .hero-title {
   font-size: clamp(48px, 8vw, 88px);
 }
+/* la mascotte appoggiata sopra la "i" di "i tuoi limiti": e' lo stesso file del logo,
+   ma ingrandito e tagliato via background-position/size cosi' si vede solo il gatto
+   nel cerchio, senza la scritta "HAKU STORE" sotto (che nel file occupa circa il 35%
+   in basso dell'immagine, quadrata 1:1) */
+.hero-title-mascotte {
+  position: relative;
+  display: inline-block;
+}
+.hero-title-mascotte::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) rotate(-6deg);
+  width: 64px;
+  height: 48px;
+  background-image: url('/hakustore-logo.png');
+  background-size: 100% 154%;
+  background-position: top center;
+  background-repeat: no-repeat;
+}
 .hero-home .hero-sub {
   max-width: 560px;
 }
