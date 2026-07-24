@@ -30,6 +30,9 @@ public class Categoria {
 	@Column(length = 100, nullable = false, unique = true)
 	private String nome;
 
+	@Column(length = 255)
+	private String immagine;
+
 	@OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
 	private List<Prodotto> prodotti;
 

@@ -31,6 +31,9 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'categoria.has.prodotti', 'Impossibile eliminare la categoria: sono presenti prodotti collegati.'),
 ('IT', 'categoria.no.id', 'ID categoria mancante.'),
 ('IT', 'categoria.no.nome', 'Inserisci il nome della categoria.'),
+('IT', 'categoria.immagine.mancante', 'Seleziona un file immagine da caricare.'),
+('IT', 'categoria.immagine.formato.invalido', 'Formato immagine non supportato (usa jpg, png, gif o webp).'),
+('IT', 'categoria.immagine.errore.salvataggio', 'Errore durante il salvataggio dell''immagine.'),
 
 ('IT', 'prodotto.ntfnd', 'Prodotto non trovato.'),
 ('IT', 'prodotto.exists', 'Esiste gia'' un prodotto con questo nome per questa marca.'),
@@ -38,6 +41,9 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'prodotto.no.categoria', 'Seleziona la categoria del prodotto.'),
 ('IT', 'prodotto.no.nome', 'Inserisci il nome del prodotto.'),
 ('IT', 'prodotto.no.marca', 'Inserisci la marca del prodotto.'),
+('IT', 'prodotto.immagine.mancante', 'Seleziona un file immagine da caricare.'),
+('IT', 'prodotto.immagine.formato.invalido', 'Formato immagine non supportato (usa jpg, png, gif o webp).'),
+('IT', 'prodotto.immagine.errore.salvataggio', 'Errore durante il salvataggio dell''immagine.'),
 
 ('IT', 'variante.ntfnd', 'Variante prodotto non trovata.'),
 ('IT', 'variante.exists', 'Esiste gia'' una variante con questi stessi attributi per questo prodotto.'),
@@ -47,6 +53,9 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'variante.no.prezzo', 'Inserisci il prezzo.'),
 ('IT', 'variante.prezzo.invalid', 'Il prezzo non puo'' essere negativo.'),
 ('IT', 'variante.quantita.invalid', 'La quantita'' disponibile non puo'' essere negativa.'),
+('IT', 'variante.immagine.mancante', 'Seleziona un file immagine da caricare.'),
+('IT', 'variante.immagine.formato.invalido', 'Formato immagine non supportato (usa jpg, png, gif o webp).'),
+('IT', 'variante.immagine.errore.salvataggio', 'Errore durante il salvataggio dell''immagine.'),
 
 ('IT', 'recensione.ntfnd', 'Recensione non trovata.'),
 ('IT', 'recensione.forbidden', 'Non puoi modificare una recensione che non e'' tua.'),
@@ -80,5 +89,11 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'ordine.forbidden', 'Non puoi visualizzare un ordine che non ti appartiene.'),
 ('IT', 'ordine.no.id', 'ID ordine mancante.'),
 ('IT', 'ordine.no.indirizzo', 'Seleziona l''indirizzo di spedizione.'),
-('IT', 'ordine.no.metodo.pagamento', 'Seleziona il metodo di pagamento.')
+('IT', 'ordine.no.metodo.pagamento', 'Seleziona il metodo di pagamento.'),
+
+('IT', 'logo.mancante', 'Seleziona un file immagine da caricare.'),
+('IT', 'logo.formato.invalido', 'Formato immagine non supportato (usa jpg, png, gif, webp o svg).'),
+('IT', 'logo.errore.salvataggio', 'Errore durante il salvataggio del logo.'),
+
+('IT', 'upload.tipo.invalido', 'Tipo di upload non riconosciuto.')
 ON CONFLICT (lang, code) DO UPDATE SET messagio = EXCLUDED.messagio;

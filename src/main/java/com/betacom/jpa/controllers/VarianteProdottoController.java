@@ -18,27 +18,29 @@ import com.betacom.jpa.dto.input.VarianteProdottoReq;
 import com.betacom.jpa.dto.output.ResponseDTO;
 import com.betacom.jpa.services.interfaces.IVarianteProdottoServices;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
+import lombok.RequiredArgsConstructor; 
+import lombok.extern.slf4j.Slf4j;      
 // Proprietario: Mattia
 @Slf4j
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/rest/varianteProdotto")
+@RestController                                
+@RequestMapping("/rest/varianteProdotto")     
 public class VarianteProdottoController {
 	private final IVarianteProdottoServices varS;
 
+	// GET /rest/varianteProdotto/list?idProdotto=... - restituisce tutte le varianti di un prodotto, accessibile a chiunque
 	@GetMapping("/list")
 	public ResponseEntity<Object> list(@RequestParam(required = true) Integer idProdotto) throws Exception {
 		return ResponseEntity.ok(varS.listByProdotto(idProdotto));
 	}
 
+	// GET /rest/varianteProdotto/getById?id=... - restituisce una variante, accessibile a chiunque
 	@GetMapping("getById")
 	public ResponseEntity<Object> getById(@RequestParam(required = true) Integer id) throws Exception {
 		return ResponseEntity.ok(varS.getById(id));
 	}
 
+	// POST /rest/varianteProdotto/create - crea una variante, solo per utenti ADMIN
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("create")
 	public ResponseEntity<ResponseDTO> create(
@@ -49,6 +51,7 @@ public class VarianteProdottoController {
 				.build());
 	}
 
+	// PATCH /rest/varianteProdotto/update - modifica una variante, solo per utenti ADMIN
 	@PreAuthorize("hasRole('ADMIN')")
 	@PatchMapping("update")
 	public ResponseEntity<ResponseDTO> update(
@@ -59,6 +62,7 @@ public class VarianteProdottoController {
 				.build());
 	}
 
+	// DELETE /rest/varianteProdotto/delete/{id} - elimina una variante, solo per utenti ADMIN
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("delete/{id}")
 	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true) Integer id) throws Exception {

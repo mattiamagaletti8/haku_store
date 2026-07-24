@@ -25,4 +25,5 @@ public class VarianteProdottoDTO {
 	private String colore;
 	private BigDecimal prezzo;
 	private Integer quantitaDisponibile;
+	private String immagine;
 }
