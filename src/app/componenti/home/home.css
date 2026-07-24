@@ -7,6 +7,9 @@
   align-items: center;
   text-align: center;
   position: relative;
+  /* annulla lo spazio tra la navbar e l'hero (padding di .page + altri margini):
+     cosi' l'hero (e i raggi dietro al titolo) tocca davvero il bordo della navbar */
+  margin-top: -66px;
 }
 /* raggi di sole dietro al titolo: linee che si alternano a raggiera dal centro,
    sfumate ai bordi con una maschera radiale cosi' non creano un rettangolo netto.
@@ -15,15 +18,20 @@
 .hero-home::after {
   content: '';
   position: absolute;
-  inset: -20% -10%;
+  /* top:0 e non un inset negativo: cosi' il pattern parte esattamente dal bordo
+     superiore della sezione, che e' anche il limite della navbar sopra */
+  top: 0;
+  left: -10%;
+  right: -10%;
+  bottom: 0;
   z-index: 0;
   background-image: repeating-conic-gradient(
-    from 0deg at 50% 45%,
+    from 0deg at 50% 0%,
     rgba(46, 196, 214, 0.28) 0deg 4deg,
     transparent 4deg 16deg
   );
-  -webkit-mask-image: radial-gradient(circle at 50% 45%, black 0%, transparent 70%);
-  mask-image: radial-gradient(circle at 50% 45%, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 90% at 50% 0%, black 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 90% at 50% 0%, black 55%, transparent 100%);
   pointer-events: none;
 }
 .hero-home .hero-title {
