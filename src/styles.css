@@ -28,14 +28,14 @@ html { scroll-behavior: smooth; }
 }
 .hero-mini { animation: fadeInUp 0.6s ease both; }
 
-/* sfondo a "vignette" (pannelli da fumetto vuoti, niente illustrazioni/testo) fisso
-   dietro tutto il sito: molto tenue cosi' le card/il testo sopra restano leggibili
-   anche nelle pagine dense (checkout, admin). "fixed" cosi' non scorre col contenuto */
+/* sfondo a vignette in bianco e nero: solo i riquadri dei pannelli (bordo nero,
+   dimensioni diverse, come una griglia di pagina manga), senza puntini/colori/
+   contenuto dentro. Fisso dietro tutto il sito, "fixed" cosi' non scorre col contenuto */
 body {
   background-color: var(--bg);
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="140"><g stroke="%231B3350" stroke-width="2" fill="none" opacity="0.16"><rect x="1" y="1" width="90" height="60"/><rect x="95" y="1" width="104" height="38"/><rect x="95" y="43" width="50" height="96"/><rect x="149" y="43" width="50" height="60"/><rect x="1" y="65" width="60" height="74"/><rect x="65" y="65" width="26" height="74"/><rect x="149" y="107" width="50" height="32"/></g><circle cx="20" cy="20" r="1.4" fill="%231B3350" opacity="0.13"/><circle cx="30" cy="25" r="1.4" fill="%231B3350" opacity="0.13"/><circle cx="20" cy="30" r="1.4" fill="%231B3350" opacity="0.13"/><circle cx="30" cy="35" r="1.4" fill="%231B3350" opacity="0.13"/><circle cx="10" cy="25" r="1.4" fill="%231B3350" opacity="0.13"/><rect x="160" y="10" width="22" height="16" fill="%232EC4D6" opacity="0.14"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="160"><g stroke="black" stroke-width="2.5" fill="none" opacity="0.22"><rect x="1.5" y="1.5" width="95" height="70"/><rect x="101" y="1.5" width="60" height="45"/><rect x="166" y="1.5" width="53" height="70"/><rect x="1.5" y="76" width="53" height="83"/><rect x="60" y="52" width="106" height="107"/><rect x="166" y="76" width="53" height="83"/></g></svg>');
   background-repeat: repeat;
-  background-size: 200px 140px;
+  background-size: 220px 160px;
   background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-body);
