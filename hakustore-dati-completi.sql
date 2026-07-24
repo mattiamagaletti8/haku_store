@@ -62,7 +62,6 @@ INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (2, 1, 'Omega 3', 'ottimo per la salute cardiovascolare', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (3, 1, 'Creatina', 'Integratore per palestra', 'Hakustore', 'prodotto_3.jpeg', '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (4, 1, 'Vitamine', 'diversi tipi', 'Prozis', NULL, '2026-07-24 00:00:00');
-INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (5, 2, 'Straps', 'Attrezzo per la palestra', 'Prozis', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (6, 1, 'Farina d''Avena', 'Farina d''avena in polvere, ideale per ricette proteiche', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (7, 1, 'Whey Isolate', 'Proteine isolate ad alto contenuto proteico, bassi carboidrati', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (8, 1, 'Whey Vegan', 'Proteine vegetali da piselli e riso, gusto cremoso', 'Hakustore', NULL, '2026-07-24 00:00:00');
@@ -111,7 +110,6 @@ INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, 
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (89, 4, 'Vitamina D3', '90 compresse', 12.9, 10, NULL, 'variante_89.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (90, 4, 'Vitamina K2', '60 compresse', 14.9, 10, NULL, 'variante_90.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (91, 4, 'Multivitaminico', '90 compresse', 16.9, 10, NULL, 'variante_91.jpeg', NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (6, 5, NULL, NULL, 35.0, 4, 'nero', NULL, NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (25, 6, 'Oreo', '500gr', 6.9, 10, NULL, 'variante_25.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (26, 6, 'Oreo', '1000gr', 11.9, 10, NULL, 'variante_26.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (27, 6, 'Oreo', '2000gr', 19.9, 10, NULL, 'variante_27.jpeg', NULL);
@@ -178,7 +176,6 @@ INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, 
 
 INSERT INTO public.dettaglio_carrello (id_carrello, id_dettaglio, id_variante, quantita) VALUES (1, 10, 4, 1);
 INSERT INTO public.dettaglio_carrello (id_carrello, id_dettaglio, id_variante, quantita) VALUES (2, 12, 1, 1);
-INSERT INTO public.dettaglio_carrello (id_carrello, id_dettaglio, id_variante, quantita) VALUES (2, 13, 6, 1);
 
 
 --
@@ -202,7 +199,6 @@ INSERT INTO public.dettaglio_ordine (id_dettaglio, id_ordine, id_variante, quant
 INSERT INTO public.dettaglio_ordine (id_dettaglio, id_ordine, id_variante, quantita, prezzo_unitario) VALUES (4, 4, 3, 1, 20.00);
 INSERT INTO public.dettaglio_ordine (id_dettaglio, id_ordine, id_variante, quantita, prezzo_unitario) VALUES (5, 4, 1, 1, 29.90);
 INSERT INTO public.dettaglio_ordine (id_dettaglio, id_ordine, id_variante, quantita, prezzo_unitario) VALUES (6, 5, 3, 2, 20.00);
-INSERT INTO public.dettaglio_ordine (id_dettaglio, id_ordine, id_variante, quantita, prezzo_unitario) VALUES (7, 5, 6, 1, 35.00);
 
 
 --
