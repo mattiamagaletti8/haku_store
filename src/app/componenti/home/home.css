@@ -25,16 +25,18 @@
   right: -10%;
   bottom: 0;
   z-index: 0;
-  /* raggi piu' stretti (2deg invece di 4deg): partono sottili dal punto di origine
-     in alto e si allargano naturalmente andando verso il basso/esterno, come i
-     raggi disegnati dietro un personaggio nei fumetti */
+  /* origine al centro (non in alto): i raggi partono stretti dal centro della scena
+     e si allargano a raggiera in tutte le direzioni, come i raggi disegnati dietro
+     un personaggio nei fumetti. Il raggio della maschera arriva fino all'angolo piu'
+     lontano (default "farthest-corner"), cosi' i raggi restano visibili fino ai bordi
+     invece di sfumare prima di raggiungerli */
   background-image: repeating-conic-gradient(
-    from 0deg at 50% 0%,
+    from 0deg at 50% 45%,
     rgba(46, 196, 214, 0.38) 0deg 2deg,
     transparent 2deg 11deg
   );
-  -webkit-mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
-  mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at 50% 45%, black 75%, transparent 100%);
+  mask-image: radial-gradient(circle at 50% 45%, black 75%, transparent 100%);
   pointer-events: none;
 }
 .hero-home .hero-title {
