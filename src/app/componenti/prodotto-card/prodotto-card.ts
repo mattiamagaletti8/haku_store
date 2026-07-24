@@ -21,14 +21,18 @@ export class ProdottoCard {
   p = input.required<ProdottoDTO>();
 
   immagineDi(p: ProdottoDTO): string {
-    // il prodotto in se' spesso non ha una foto propria (immagine caricata solo sulle
-    // singole varianti, es. per gusto/colore): qui non c'e' nessuna variante "selezionata"
-    // come nel dettaglio prodotto, quindi si usa la prima variante con una foto reale
-    // (preferendo una disponibile), cosi' la card non mostra il disegno generato quando
-    // in realta' esistono gia' foto vere per quel prodotto
-    const variante = p.varianti?.find((v) => v.immagine && v.quantitaDisponibile > 0) ?? p.varianti?.find((v) => v.immagine);
-    if (variante?.immagine) return API_ORIGIN + variante.immagine;
+    // se il prodotto ha una foto propria (caricata da Admin -> Prodotti), quella vince sempre
     if (p.immagine) return API_ORIGIN + p.immagine;
+
+    // altrimenti, qui non c'e' nessuna variante "selezionata" come nel dettaglio prodotto:
+    // si preferisce il gusto neutro/naturale come rappresentante del prodotto (es. Farina
+    // d'Avena non deve mostrare a caso "Oreo" invece di "Neutro" solo perche' e' stato
+    // creato prima), altrimenti la prima variante con una foto reale (preferendo una disponibile)
+    const varianti = p.varianti ?? [];
+    const neutra = varianti.find((v) => v.immagine && /neutro|natural/i.test(v.gusto ?? ''));
+    const variante = neutra ?? varianti.find((v) => v.immagine && v.quantitaDisponibile > 0) ?? varianti.find((v) => v.immagine);
+    if (variante?.immagine) return API_ORIGIN + variante.immagine;
+
     return generaImmagineProdotto(p.nome, p.marca, p.categoria?.nome ?? '', !!p.categoria?.immagine);
   }
 
