@@ -75,6 +75,8 @@ INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (19, 2, 'Shaker HakuStore', 'Shaker 700ml con mixer a molla, logo HakuStore', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (20, 2, 'Polsini da Sollevamento', 'Polsini imbottiti con fascia regolabile, per sollevamento pesi', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (21, 2, 'Cintura da Powerlifting', 'Cintura in pelle con fibbia a leva, per powerlifting', 'Hakustore', NULL, '2026-07-24 00:00:00');
+INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (22, 3, 'Ketchup Zero', 'Ketchup senza zuccheri aggiunti, zero calorie', 'Hakustore', NULL, '2026-07-24 00:00:00');
+INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (23, 3, 'Salsa Teriyaki', 'Salsa teriyaki premium blend, senza conservanti aggiunti, gluten free', 'Hakustore', NULL, '2026-07-24 00:00:00');
 
 
 --
@@ -105,8 +107,6 @@ INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, 
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (19, 3, 'Naturale', '500gr', 14.9, 10, NULL, 'variante_19.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (20, 3, 'Naturale', '1000gr', 24.9, 10, NULL, 'variante_20.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (21, 3, 'Naturale', '2000gr', 44.9, 10, NULL, 'variante_21.jpeg', NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (4, 4, 'cioccolato', '2kg', 15.0, 9, NULL, NULL, NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (5, 4, 'banana', '500gr', 7.5, 10, NULL, NULL, NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (89, 4, 'Vitamina D3', '90 compresse', 12.9, 10, NULL, 'variante_89.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (90, 4, 'Vitamina K2', '60 compresse', 14.9, 10, NULL, 'variante_90.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (91, 4, 'Multivitaminico', '90 compresse', 16.9, 10, NULL, 'variante_91.jpeg', NULL);
@@ -168,13 +168,14 @@ INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, 
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (83, 19, NULL, NULL, 9.9, 10, 'Trasparente', 'variante_83.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (84, 20, NULL, NULL, 16.9, 10, 'Nero', 'variante_84.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (85, 21, NULL, NULL, 39.9, 10, 'Nero', 'variante_85.jpeg', NULL);
+INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (92, 22, NULL, '350ml', 6.9, 10, NULL, 'variante_92.jpeg', NULL);
+INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (93, 23, NULL, '350ml', 6.9, 10, NULL, 'variante_93.jpeg', NULL);
 
 
 --
 -- Data for Name: dettaglio_carrello; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.dettaglio_carrello (id_carrello, id_dettaglio, id_variante, quantita) VALUES (1, 10, 4, 1);
 INSERT INTO public.dettaglio_carrello (id_carrello, id_dettaglio, id_variante, quantita) VALUES (2, 12, 1, 1);
 
 
@@ -346,7 +347,7 @@ SELECT pg_catalog.setval('public.ordine_id_ordine_seq', 6, false);
 -- Name: prodotto_id_prodotto_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.prodotto_id_prodotto_seq', 22, false);
+SELECT pg_catalog.setval('public.prodotto_id_prodotto_seq', 24, false);
 
 
 --
@@ -367,7 +368,7 @@ SELECT pg_catalog.setval('public.utente_id_utente_seq', 11, false);
 -- Name: variante_prodotto_id_variante_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.variante_prodotto_id_variante_seq', 92, false);
+SELECT pg_catalog.setval('public.variante_prodotto_id_variante_seq', 94, false);
 
 
 --
