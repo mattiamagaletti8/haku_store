@@ -95,6 +95,8 @@ create table if not exists prodotto (
     marca varchar(80) not null,
     nome varchar(150) not null,
     descrizione TEXT,
+    immagine varchar(255),
+    data_creazione timestamp(6) not null,
     primary key (id_prodotto)
 );
 
@@ -128,6 +130,8 @@ create table if not exists variante_prodotto (
     colore varchar(50),
     formato varchar(50),
     gusto varchar(50),
+    immagine varchar(255),
+    data_rifornimento timestamp(6),
     primary key (id_variante)
 );
 
@@ -177,7 +181,8 @@ alter table if exists indirizzo
 alter table if exists ordine
    add constraint fk_ordine_utente
    foreign key (id_utente)
-   references utente;
+   references utente
+   on delete cascade;
 
 alter table if exists prodotto
    add constraint fk_prodotto_categoria
@@ -285,5 +290,19 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'ordine.forbidden', 'Non puoi visualizzare un ordine che non ti appartiene.'),
 ('IT', 'ordine.no.id', 'ID ordine mancante.'),
 ('IT', 'ordine.no.indirizzo', 'Seleziona l''indirizzo di spedizione.'),
-('IT', 'ordine.no.metodo.pagamento', 'Seleziona il metodo di pagamento.')
+('IT', 'ordine.no.metodo.pagamento', 'Seleziona il metodo di pagamento.'),
+
+('IT', 'categoria.immagine.mancante', 'Seleziona un file immagine da caricare.'),
+('IT', 'categoria.immagine.formato.invalido', 'Formato immagine non supportato (usa jpg, png, gif o webp).'),
+('IT', 'categoria.immagine.errore.salvataggio', 'Errore durante il salvataggio dell''immagine.'),
+('IT', 'prodotto.immagine.mancante', 'Seleziona un file immagine da caricare.'),
+('IT', 'prodotto.immagine.formato.invalido', 'Formato immagine non supportato (usa jpg, png, gif o webp).'),
+('IT', 'prodotto.immagine.errore.salvataggio', 'Errore durante il salvataggio dell''immagine.'),
+('IT', 'variante.immagine.mancante', 'Seleziona un file immagine da caricare.'),
+('IT', 'variante.immagine.formato.invalido', 'Formato immagine non supportato (usa jpg, png, gif o webp).'),
+('IT', 'variante.immagine.errore.salvataggio', 'Errore durante il salvataggio dell''immagine.'),
+('IT', 'logo.mancante', 'Seleziona un file immagine da caricare.'),
+('IT', 'logo.formato.invalido', 'Formato immagine non supportato (usa jpg, png, gif, webp o svg).'),
+('IT', 'logo.errore.salvataggio', 'Errore durante il salvataggio del logo.'),
+('IT', 'upload.tipo.invalido', 'Tipo di upload non riconosciuto.')
 ON CONFLICT (lang, code) DO UPDATE SET messagio = EXCLUDED.messagio;
