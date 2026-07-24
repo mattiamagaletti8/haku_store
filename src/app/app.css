@@ -4,7 +4,7 @@
   z-index: 100;
   background: rgba(27, 51, 80, 0.97);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 3px solid var(--lime);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
 }
 .navbar-inner {
@@ -86,7 +86,7 @@
 /* ─── FOOTER ─── */
 footer {
   background: #14263D;
-  border-top: 1px solid var(--border);
+  border-top: 3px solid var(--lime);
   padding-top: 48px;
   margin-top: 64px;
 }

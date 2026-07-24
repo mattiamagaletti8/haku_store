@@ -69,13 +69,16 @@
 .scheda-variante {
   cursor: pointer;
   background: var(--card);
-  border: 2px solid var(--border);
+  border: 3px solid var(--ink);
   padding: 16px;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  box-shadow: 3px 3px 0 var(--ink);
 }
 
 .scheda-variante.selezionata {
   border-color: var(--lime);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
 }
 
 .scheda-variante.esaurita {
