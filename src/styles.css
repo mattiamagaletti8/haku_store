@@ -29,12 +29,7 @@ html { scroll-behavior: smooth; }
 .hero-mini { animation: fadeInUp 0.6s ease both; }
 
 body {
-  /* retino a puntini (screentone) fisso su tutto lo sfondo, come la carta di un fumetto:
-     "fixed" cosi' il pattern non scorre insieme al contenuto durante lo scroll */
-  background-color: var(--bg);
-  background-image: radial-gradient(circle, rgba(27, 51, 80, 0.07) 1px, transparent 1px);
-  background-size: 10px 10px;
-  background-attachment: fixed;
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 15px;
@@ -242,18 +237,13 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
   position: relative;
   overflow: hidden;
 }
-/* collage di pannelli a fumetti con la mascotte (il gatto palestrato) in varie pose
-   da palestra — curl, bilanciere, corsa, shaker — al posto delle solite vignette
-   generiche. Sfumato verso sinistra (dove sta il testo) cosi' resta sempre leggibile */
 .hero-mini::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="260" height="180"><rect width="260" height="180" fill="%23FAF3E4"/><g stroke="%231B3350" stroke-width="3" fill="none"><rect x="1.5" y="1.5" width="115" height="90"/><rect x="122" y="1.5" width="70" height="55"/><rect x="198" y="1.5" width="60" height="90"/><rect x="1.5" y="97" width="70" height="82"/><rect x="77" y="62" width="110" height="117"/><rect x="198" y="97" width="60" height="82"/></g><g transform="translate(18,15)"><path d="M8,20 L2,2 L20,14" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M52,20 L58,2 L40,14" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><circle cx="30" cy="28" r="24" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><circle cx="21" cy="25" r="3.2" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><circle cx="39" cy="25" r="3.2" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><path d="M30,32 L26,37 L34,37 Z" fill="%231B3350"/><rect x="10" y="50" width="40" height="30" rx="10" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M25,50 L20,58 L30,58 Z" fill="%234FC3D9" stroke="%231B3350" stroke-width="2"/><path d="M35,50 L40,58 L30,58 Z" fill="%234FC3D9" stroke="%231B3350" stroke-width="2"/><path d="M50,58 Q68,58 68,44" fill="none" stroke="%23F0D9A8" stroke-width="8" stroke-linecap="round"/><path d="M50,58 Q68,58 68,44" fill="none" stroke="%231B3350" stroke-width="3" stroke-linecap="round"/><circle cx="70" cy="38" r="11" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M10,58 Q-6,64 -2,80" fill="none" stroke="%23F0D9A8" stroke-width="8" stroke-linecap="round"/><path d="M10,58 Q-6,64 -2,80" fill="none" stroke="%231B3350" stroke-width="3" stroke-linecap="round"/></g><g transform="translate(133,8) scale(0.68)"><circle cx="30" cy="26" r="22" fill="%23F0D9A8" stroke="%231B3350" stroke-width="4"/><path d="M8,16 2,0 18,10" fill="%23F0D9A8" stroke="%231B3350" stroke-width="4"/><path d="M52,16 58,0 42,10" fill="%23F0D9A8" stroke="%231B3350" stroke-width="4"/><circle cx="22" cy="24" r="3.4" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><circle cx="38" cy="24" r="3.4" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><rect x="12" y="46" width="36" height="26" rx="8" fill="%23F0D9A8" stroke="%231B3350" stroke-width="4"/><line x1="8" y1="50" x2="52" y2="50" stroke="%231B3350" stroke-width="7"/><rect x="0" y="42" width="8" height="16" fill="%231B3350"/><rect x="52" y="42" width="8" height="16" fill="%231B3350"/></g><g transform="translate(212,15) scale(0.85)"><circle cx="26" cy="24" r="20" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M8,14 2,0 16,8" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M44,14 50,0 36,8" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><circle cx="19" cy="22" r="2.6" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><circle cx="33" cy="22" r="2.6" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><rect x="10" y="42" width="32" height="22" rx="7" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M42,50 Q56,50 56,64" fill="none" stroke="%231B3350" stroke-width="7" stroke-linecap="round"/><rect x="50" y="58" width="14" height="14" rx="3" fill="%232EC4D6" stroke="%231B3350" stroke-width="3"/></g><circle cx="35" cy="125" r="4" fill="%231B3350" opacity="0.15"/><circle cx="50" cy="135" r="4" fill="%231B3350" opacity="0.15"/><circle cx="20" cy="145" r="4" fill="%231B3350" opacity="0.15"/><circle cx="45" cy="155" r="4" fill="%231B3350" opacity="0.15"/><text x="35" y="112" font-family="sans-serif" font-size="14" font-weight="800" fill="%231B3350" text-anchor="middle" font-style="italic">GRRR!</text><g transform="translate(95,72)"><circle cx="36" cy="32" r="28" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M10,22 2,2 22,14" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M62,22 70,2 50,14" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><circle cx="26" cy="28" r="3.6" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><circle cx="46" cy="28" r="3.6" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><path d="M36,34 31,40 41,40" fill="%231B3350"/><rect x="14" y="60" width="44" height="32" rx="10" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M29,60 L23,68 L35,68 Z" fill="%234FC3D9" stroke="%231B3350" stroke-width="2"/><path d="M43,60 L49,68 L37,68 Z" fill="%234FC3D9" stroke="%231B3350" stroke-width="2"/><line x1="-4" y1="70" x2="86" y2="70" stroke="%231B3350" stroke-width="9"/><rect x="-14" y="62" width="10" height="16" fill="%231B3350"/><rect x="88" y="62" width="10" height="16" fill="%231B3350"/><text x="36" y="110" font-family="sans-serif" font-size="16" font-weight="800" fill="%231B3350" text-anchor="middle" font-style="italic">PUMP!!</text></g><g transform="translate(210,110) scale(0.75)"><circle cx="26" cy="22" r="18" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M8,12 2,0 15,6" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><path d="M44,12 50,0 37,6" fill="%23F0D9A8" stroke="%231B3350" stroke-width="3"/><circle cx="20" cy="20" r="2.3" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><circle cx="32" cy="20" r="2.3" fill="%234FC3D9" stroke="%231B3350" stroke-width="1"/><path d="M22,40 Q10,55 16,72" fill="none" stroke="%231B3350" stroke-width="7" stroke-linecap="round"/><path d="M30,40 Q42,55 36,72" fill="none" stroke="%231B3350" stroke-width="7" stroke-linecap="round"/></g></svg>');
-  background-repeat: repeat;
-  background-size: 260px 180px;
-  -webkit-mask-image: linear-gradient(to left, black, transparent 60%);
-  mask-image: linear-gradient(to left, black, transparent 60%);
+  background-image: radial-gradient(circle, var(--ink) 1px, transparent 1px);
+  background-size: 9px 9px;
+  opacity: 0.06;
   pointer-events: none;
 }
 .hero-mini > * { position: relative; }
