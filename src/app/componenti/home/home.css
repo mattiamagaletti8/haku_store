@@ -25,13 +25,16 @@
   right: -10%;
   bottom: 0;
   z-index: 0;
+  /* raggi piu' stretti (2deg invece di 4deg): partono sottili dal punto di origine
+     in alto e si allargano naturalmente andando verso il basso/esterno, come i
+     raggi disegnati dietro un personaggio nei fumetti */
   background-image: repeating-conic-gradient(
     from 0deg at 50% 0%,
-    rgba(46, 196, 214, 0.28) 0deg 4deg,
-    transparent 4deg 16deg
+    rgba(46, 196, 214, 0.38) 0deg 2deg,
+    transparent 2deg 11deg
   );
-  -webkit-mask-image: radial-gradient(ellipse 80% 90% at 50% 0%, black 55%, transparent 100%);
-  mask-image: radial-gradient(ellipse 80% 90% at 50% 0%, black 55%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
   pointer-events: none;
 }
 .hero-home .hero-title {
