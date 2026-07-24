@@ -68,9 +68,6 @@ INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (8, 1, 'Whey Vegan', 'Proteine vegetali da piselli e riso, gusto cremoso', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (9, 1, 'Whey Vegan Isolate', 'Proteine vegetali isolate, massima purezza', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (10, 1, 'Barretta Proteica', 'Barretta proteica 22g proteine, low sugar, box da 12', 'Hakustore', NULL, '2026-07-24 00:00:00');
-INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (11, 1, 'Vitamina D3', 'Cholecalciferolo, supporto immunitario e osseo', 'Hakustore', NULL, '2026-07-24 00:00:00');
-INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (12, 1, 'Vitamina K2', 'Menachinone-7 di purezza, supporto osseo e cardiovascolare', 'Hakustore', NULL, '2026-07-24 00:00:00');
-INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (13, 1, 'Multivitaminico', 'Complesso vitale completo A-B-C-D-Fe', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (14, 1, 'Melatonina', 'N-Acetyl-5-Methoxytryptamine, supporto al sonno', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (15, 1, 'Ashwagandha', 'Withania Somnifera Extract, erba adattogena', 'Hakustore', NULL, '2026-07-24 00:00:00');
 INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca, immagine, data_creazione) VALUES (16, 1, 'Integratore Magnesio e Potassio', 'Compresse di Magnesio e Potassio Citrato', 'Hakustore', NULL, '2026-07-24 00:00:00');
@@ -111,6 +108,9 @@ INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, 
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (21, 3, 'Naturale', '2000gr', 44.9, 10, NULL, 'variante_21.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (4, 4, 'cioccolato', '2kg', 15.0, 9, NULL, NULL, NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (5, 4, 'banana', '500gr', 7.5, 10, NULL, NULL, NULL);
+INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (89, 4, 'Vitamina D3', '90 compresse', 12.9, 10, NULL, 'variante_89.jpeg', NULL);
+INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (90, 4, 'Vitamina K2', '60 compresse', 14.9, 10, NULL, 'variante_90.jpeg', NULL);
+INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (91, 4, 'Multivitaminico', '90 compresse', 16.9, 10, NULL, 'variante_91.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (6, 5, NULL, NULL, 35.0, 4, 'nero', NULL, NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (25, 6, 'Oreo', '500gr', 6.9, 10, NULL, 'variante_25.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (26, 6, 'Oreo', '1000gr', 11.9, 10, NULL, 'variante_26.jpeg', NULL);
@@ -156,9 +156,6 @@ INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, 
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (66, 9, 'Vaniglia', '2000gr', 69.9, 10, NULL, 'variante_66.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (67, 10, 'Pistacchio Fondente', 'Box da 12', 28.9, 10, NULL, 'variante_67.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (68, 10, 'Cioccolato Bianco', 'Box da 12', 28.9, 10, NULL, 'variante_68.jpeg', NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (69, 11, NULL, '90 compresse', 12.9, 10, NULL, 'variante_69.jpeg', NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (70, 12, NULL, '60 compresse', 14.9, 10, NULL, 'variante_70.jpeg', NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (71, 13, NULL, '90 compresse', 16.9, 10, NULL, 'variante_71.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (72, 14, NULL, '60 compresse', 9.9, 10, NULL, 'variante_72.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (73, 15, NULL, '60 capsule', 13.9, 10, NULL, 'variante_73.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (74, 16, NULL, '60 compresse', 11.9, 10, NULL, 'variante_74.jpeg', NULL);
@@ -374,7 +371,7 @@ SELECT pg_catalog.setval('public.utente_id_utente_seq', 11, false);
 -- Name: variante_prodotto_id_variante_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.variante_prodotto_id_variante_seq', 89, false);
+SELECT pg_catalog.setval('public.variante_prodotto_id_variante_seq', 92, false);
 
 
 --
