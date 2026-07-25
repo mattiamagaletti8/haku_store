@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
@@ -116,8 +115,13 @@ public class SaldiImpl implements ISaldiServices {
 
 	@Override
 	public Set<Integer> idProdottiInSaldo() {
+		return new HashSet<>(idProdottiInSaldoOrdinati());
+	}
+
+	@Override
+	public List<Integer> idProdottiInSaldoOrdinati() {
 		if (!isAttivo())
-			return Set.of();
+			return List.of();
 
 		// ogni riga e' [idProdotto, quantitaTotaleVenduta], gia' ordinata dal piu' venduto:
 		// qui si inverte per avere i meno venduti, e si aggiungono in testa i prodotti mai
@@ -137,7 +141,7 @@ public class SaldiImpl implements ISaldiServices {
 
 		return Stream.concat(maiVenduti.stream(), vendutiAscendente.stream())
 				.limit(NUMERO_PRODOTTI_SALDO)
-				.collect(Collectors.toCollection(HashSet::new));
+				.toList();
 	}
 
 	@Override

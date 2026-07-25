@@ -206,6 +206,12 @@ public class ProdottoImpl implements IProdottoServices {
 		return applicaSaldi(lista);
 	}
 
+	@Override
+	public List<ProdottoDTO> selectInSaldo() throws Exception {
+		log.debug("selectInSaldo");
+		return prodottiOrdinatiComeIds(saldiS.idProdottiInSaldoOrdinati());
+	}
+
 	// se i saldi sono attivi, valorizza il prezzo scontato sulle varianti dei prodotti
 	// attualmente in saldo (i meno venduti): modifica la lista ricevuta e la ritorna
 	private List<ProdottoDTO> applicaSaldi(List<ProdottoDTO> lista) {

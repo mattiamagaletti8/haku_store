@@ -63,6 +63,12 @@ public class ProdottoController {
 		return ResponseEntity.ok(prodS.selectNuovamenteDisponibili());
 	}
 
+	// GET /rest/prodotto/inSaldo - i prodotti attualmente in saldo (i meno venduti), per la home, accessibile a chiunque
+	@GetMapping("inSaldo")
+	public ResponseEntity<Object> inSaldo() throws Exception {
+		return ResponseEntity.ok(prodS.selectInSaldo());
+	}
+
 	// POST /rest/prodotto/create - crea un prodotto, solo per utenti ADMIN
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("create")
