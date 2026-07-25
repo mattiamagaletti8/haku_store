@@ -83,21 +83,16 @@ INSERT INTO public.prodotto (id_prodotto, id_categoria, nome, descrizione, marca
 -- Data for Name: variante_prodotto; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (1, 1, 'Cioccolato', '1kg', 31.5, 6, '', 'variante_1.png', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (7, 1, 'Brownie', '500gr', 17.0, 5, NULL, 'variante_7.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (8, 1, 'Brownie', '1KG', 29.9, 4, NULL, 'variante_8.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (9, 1, 'Brownie', '2KG', 54.9, 5, NULL, 'variante_9.jpeg', NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (10, 1, 'Cioccolato', '500gr', 16.9, 5, NULL, 'variante_10.jpeg', NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (11, 1, 'Cioccolato', '2000gr', 54.9, 5, NULL, 'variante_11.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (22, 1, 'Vaniglia', '500gr', 17.0, 10, NULL, 'variante_22.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (23, 1, 'Vaniglia', '1KG', 29.9, 10, NULL, 'variante_23.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (24, 1, 'Vaniglia', '2KG', 54.9, 10, NULL, 'variante_24.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (86, 1, 'Naturale', '500gr', 17.0, 10, NULL, 'variante_86.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (87, 1, 'Naturale', '1KG', 29.9, 10, NULL, 'variante_87.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (88, 1, 'Naturale', '2KG', 54.9, 10, NULL, 'variante_88.jpeg', NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (2, 2, 'Banana', '200ml', 30.0, 0, NULL, 'variante_2.jpeg', NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (3, 3, 'Fragola', '300 ml', 19.9, 5, '', NULL, NULL);
-INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (12, 3, 'Lime', '300 ml', 19.9, 5, NULL, 'variante_12.jpeg', NULL);
+INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (2, 2, 'Banana', '200ml', 30.0, 5, NULL, 'variante_2.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (13, 3, 'Cola', '500gr', 14.9, 10, NULL, 'variante_13.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (14, 3, 'Cola', '1000gr', 24.9, 10, NULL, 'variante_14.jpeg', NULL);
 INSERT INTO public.variante_prodotto (id_variante, id_prodotto, gusto, formato, prezzo, quantita_disponibile, colore, immagine, data_rifornimento) VALUES (15, 3, 'Cola', '2000gr', 44.9, 10, NULL, 'variante_15.jpeg', NULL);
