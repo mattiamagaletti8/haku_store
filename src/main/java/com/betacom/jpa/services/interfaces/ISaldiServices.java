@@ -17,6 +17,9 @@ public interface ISaldiServices {
 	// id dei prodotti scontati in questo momento (i meno venduti), vuoto se i saldi non sono attivi
 	Set<Integer> idProdottiInSaldo();
 
+	// stessi id, ma in lista ordinata dal meno venduto: per la sezione "In saldo" della home
+	java.util.List<Integer> idProdottiInSaldoOrdinati();
+
 	BigDecimal calcolaPrezzoScontato(BigDecimal prezzoOriginale);
 
 	// prezzo realmente da pagare per questa variante in questo momento: scontato se il suo
