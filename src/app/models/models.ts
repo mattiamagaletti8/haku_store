@@ -44,6 +44,9 @@ export interface VarianteProdottoDTO {
   formato?: string;
   colore?: string;
   prezzo: number;
+  // valorizzato solo se il prodotto e' attualmente in saldo: e' il prezzo REALMENTE pagato
+  // (usato anche per calcolare i subtotali di carrello/checkout), non solo un'etichetta
+  prezzoScontato?: number | null;
   quantitaDisponibile: number;
   // path relativo (es. "/immagini/varianti/variante_5.png"), null se non ancora caricata
   immagine?: string | null;
@@ -59,6 +62,14 @@ export interface ProdottoDTO {
   immagine?: string | null;
   categoria: CategoriaDTO;
   varianti: VarianteProdottoDTO[];
+}
+
+export interface SaldiStatoDTO {
+  attivo: boolean;
+  inizioSettimana?: string | null;   // valorizzata solo se attivo
+  fineSettimana?: string | null;     // valorizzata solo se attivo
+  prossimoInizio?: string | null;    // valorizzata solo se non attivo
+  percentualeSconto: number;
 }
 
 export interface RecensioneDTO {

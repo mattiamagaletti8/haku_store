@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthServices } from './auth/auth-services';
 import { CarrelloServices } from './services/carrello-services';
+import { SaldiServices } from './services/saldi-services';
 
 // ============================================================================
 // PROPRIETARIO: Infrastruttura condivisa (non appartiene a una sola persona)
@@ -24,45 +25,29 @@ export class App implements OnInit {
   // su ogni pagina dell'app
   auth = inject(AuthServices);
   carrelloS = inject(CarrelloServices);
+  private saldiS = inject(SaldiServices);
   private router = inject(Router);
 
   annoCorrente = new Date().getFullYear();
 
-  // Saldi in settimane "casuali" dell'anno: la posizione delle settimane e' generata da un
-  // seed (l'anno corrente), quindi e' la stessa per tutti i visitatori e non cambia ad ogni
-  // refresh della pagina, ma resta comunque imprevedibile senza guardare il codice.
-  // Se oggi non cade in nessuna settimana di saldi, la topbar mostra il coupon di benvenuto.
-  private readonly saldi = this.calcolaSettimanaSaldi();
-  saldiAttivi = this.saldi.attivo;
-  fineSaldi = this.saldi.fineSettimana;
-
-  private calcolaSettimanaSaldi(): { attivo: boolean; fineSettimana: Date | null } {
-    const oggi = new Date();
-    const anno = oggi.getFullYear();
-    const giornoDellAnno = Math.floor((oggi.getTime() - new Date(anno, 0, 0).getTime()) / 86400000);
-
-    // generatore pseudo-casuale deterministico (seedato sull'anno): stesse settimane
-    // per tutto l'anno, diverse da un anno all'altro
-    let seed = anno;
-    const random = () => {
-      seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-      return seed / 0x7fffffff;
-    };
-
-    const numeroSettimaneSaldi = 5;
-    for (let i = 0; i < numeroSettimaneSaldi; i++) {
-      const inizioGiorno = Math.floor(random() * 350) + 1;
-      if (giornoDellAnno >= inizioGiorno && giornoDellAnno < inizioGiorno + 7) {
-        return { attivo: true, fineSettimana: new Date(anno, 0, inizioGiorno + 7) };
-      }
-    }
-    return { attivo: false, fineSettimana: null };
-  }
+  // Stato dei saldi calcolato SOLO dal backend (unica fonte di verita', condivisa con lo
+  // sconto reale applicato in carrello/checkout): qui si mostra solo cosa risponde l'API.
+  saldiAttivi = signal(false);
+  fineSaldi = signal<Date | null>(null);
+  prossimoSaldi = signal<Date | null>(null);
+  percentualeSconto = signal<number | null>(null);
 
   ngOnInit(): void {
     // Se l'utente arriva gia' loggato (sessione salvata in localStorage, vedi AuthServices),
     // precarica subito il carrello cosi' il badge nella navbar e' corretto fin da subito
     if (this.auth.isLogged()) this.carrelloS.ricarica();
+
+    this.saldiS.stato().subscribe((s) => {
+      this.saldiAttivi.set(s.attivo);
+      this.fineSaldi.set(s.fineSettimana ? new Date(s.fineSettimana) : null);
+      this.prossimoSaldi.set(s.prossimoInizio ? new Date(s.prossimoInizio) : null);
+      this.percentualeSconto.set(s.percentualeSconto);
+    });
   }
 
   logout(): void {

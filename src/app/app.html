@@ -2,8 +2,10 @@
 <!-- PROPRIETARIO: Infrastruttura condivisa (non appartiene a una sola persona) -->
 <!-- ============================================================================ -->
 <div class="topbar">
-  @if (saldiAttivi) {
-    Saldi in corso, sconti su tutto il catalogo fino al {{ fineSaldi | date: 'dd/MM' }}
+  @if (saldiAttivi()) {
+    Saldi in corso: -{{ percentualeSconto() }}% su una selezione di prodotti, fino al {{ fineSaldi() | date: 'dd/MM' }}
+  } @else if (prossimoSaldi()) {
+    Prossimi saldi dal {{ prossimoSaldi() | date: 'dd/MM' }} · Intanto usa il codice WELCOME10 al primo acquisto
   } @else {
     Il tuo primo acquisto? Usa il codice WELCOME10 e ottieni subito il 10% di sconto
   }
