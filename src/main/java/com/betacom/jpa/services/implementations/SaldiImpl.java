@@ -43,12 +43,17 @@ public class SaldiImpl implements ISaldiServices {
 	private record Settimana(int giornoInizio, int giornoFine) {
 	}
 
-	// stesse 5 settimane per tutto l'anno indicato, diverse da un anno all'altro: generatore
-	// pseudo-casuale deterministico (LCG) seedato sull'anno
+	// stesse settimane per tutto l'anno indicato, diverse da un anno all'altro: una e' fissa a
+	// inizio agosto (i saldi di lancio, coerenti con la fine del percorso di formazione
+	// raccontata in about), le altre sono pseudo-casuali (LCG seedato sull'anno)
 	private List<Settimana> settimaneAnno(int anno) {
 		List<Settimana> settimane = new ArrayList<>();
+
+		int giornoInizioAgosto = LocalDate.of(anno, 8, 1).getDayOfYear();
+		settimane.add(new Settimana(giornoInizioAgosto, giornoInizioAgosto + 7));
+
 		long seed = anno;
-		for (int i = 0; i < NUMERO_SETTIMANE_SALDI; i++) {
+		for (int i = 0; i < NUMERO_SETTIMANE_SALDI - 1; i++) {
 			seed = (seed * 1103515245L + 12345L) & 0x7fffffffL;
 			double random = seed / (double) 0x7fffffff;
 			int giornoInizio = (int) Math.floor(random * 350) + 1;
