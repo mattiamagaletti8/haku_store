@@ -47,8 +47,15 @@ img { display: block; max-width: 100%; }
 h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
 
 /* ─── LAYOUT ─── */
-.container { max-width: 1600px; margin: 0 auto; padding: 0 24px; }
-.page { padding: 48px 0 80px; }
+/* padding laterale che cresce con lo schermo (clamp: min 24px, max 96px), cosi' il
+   contenuto ha sempre una distanza visibile dai bordi, non solo sugli schermi larghi
+   dove entra in gioco il max-width, ma anche su quelli medi dove il container
+   coincide quasi con la larghezza della finestra */
+.container { max-width: 1600px; margin: 0 auto; padding: 0 clamp(24px, 6vw, 96px); }
+/* solo top/bottom (non lo shorthand a 3 valori): "padding: 48px 0 80px" azzererebbe anche
+   il padding laterale di .container sull'elemento <main class="container page">, che ha
+   la stessa specificita' e viene dopo nel foglio di stile — annullando il margine dai bordi */
+.page { padding-top: 48px; padding-bottom: 80px; }
 
 .section-label {
   font-family: var(--font-body);
