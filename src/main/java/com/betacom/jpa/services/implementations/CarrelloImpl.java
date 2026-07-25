@@ -20,6 +20,7 @@ import com.betacom.jpa.repositories.IUtenteRepository;
 import com.betacom.jpa.repositories.IVarianteProdottoRepository;
 import com.betacom.jpa.services.interfaces.ICarrelloServices;
 import com.betacom.jpa.services.interfaces.ICouponServices;
+import com.betacom.jpa.services.interfaces.ISaldiServices;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class CarrelloImpl implements ICarrelloServices {
 	private final IUtenteRepository repU;
 	private final IVarianteProdottoRepository repVar;
 	private final ICouponServices couponS;
+	private final ISaldiServices saldiS;
 
 	@Transactional
 	@Override
@@ -59,7 +61,7 @@ public class CarrelloImpl implements ICarrelloServices {
 	@Override
 	public CarrelloDTO getCarrello(Integer idUtente) throws Exception {
 		log.debug("getCarrello {}", idUtente);
-		return CarrelloMap.buildCarrelloDTO(getOrCreateForUtente(idUtente));
+		return CarrelloMap.buildCarrelloDTO(getOrCreateForUtente(idUtente), saldiS);
 	}
 
 	@Transactional

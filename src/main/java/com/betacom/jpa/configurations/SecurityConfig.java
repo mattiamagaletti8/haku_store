@@ -153,6 +153,8 @@ public class SecurityConfig {
 					// le immagini caricate (es. quelle delle categorie e il logo) sono visibili a chiunque
 					.requestMatchers(HttpMethod.GET, "/rest/logo").permitAll()
 					// chiunque puo' chiedere l'URL del logo attuale del sito
+					.requestMatchers(HttpMethod.GET, "/rest/saldi/**").permitAll()
+					// e sapere se ci sono saldi in corso o quando saranno i prossimi
 					.anyRequest().authenticated()   // tutto il resto richiede un login valido
 					)
 			.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
