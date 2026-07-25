@@ -3,7 +3,7 @@
 <!-- ============================================================================ -->
 <div class="topbar">
   @if (saldiAttivi()) {
-    Saldi in corso: -{{ percentualeSconto() }}% su una selezione di prodotti, fino al {{ fineSaldi() | date: 'dd/MM' }}
+    Saldi in corso: -{{ percentualeSconto() }}% su una selezione di prodotti, fino al {{ fineSaldi() | date: 'dd/MM' }} · Al primo acquisto usa anche il codice WELCOME10
   } @else if (prossimoSaldi()) {
     Prossimi saldi dal {{ prossimoSaldi() | date: 'dd/MM' }} · Intanto usa il codice WELCOME10 al primo acquisto
   } @else {
