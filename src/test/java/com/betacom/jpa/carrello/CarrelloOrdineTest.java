@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -180,7 +181,11 @@ public class CarrelloOrdineTest {
 
 		assertNotNull(dto.getCoupon());
 		assertFalse(dto.getRighe().isEmpty());
-		assertEquals(0, dto.getValoreSconto().compareTo(new BigDecimal("5.58")));
+		// WELCOME10 e' un 10% sul totale prodotti: si verifica la relazione invece di un importo
+		// fisso, perche' il totale (e quindi lo sconto) varia se e' in corso una vera settimana
+		// di saldi (i prezzi delle varianti in saldo sono gia' scontati in totaleProdotti)
+		BigDecimal scontoAtteso = dto.getTotaleProdotti().multiply(new BigDecimal("0.10")).setScale(2, RoundingMode.HALF_UP);
+		assertEquals(0, dto.getValoreSconto().compareTo(scontoAtteso));
 		log.debug("carrello: {}", dto);
 	}
 
