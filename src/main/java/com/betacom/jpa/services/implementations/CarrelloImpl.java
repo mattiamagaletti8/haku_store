@@ -112,7 +112,7 @@ public class CarrelloImpl implements ICarrelloServices {
 	public void applyCoupon(Integer idUtente, String codice) throws Exception {
 		log.debug("applyCoupon {} / {}", idUtente, codice);
 		Carrello car = getOrCreateForUtente(idUtente);
-		Coupon coupon = couponS.validateAndGet(codice);
+		Coupon coupon = couponS.validateAndGet(codice, idUtente);
 		car.setCoupon(coupon);
 	}
 

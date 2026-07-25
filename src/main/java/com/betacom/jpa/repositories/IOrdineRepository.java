@@ -20,4 +20,9 @@ public interface IOrdineRepository extends JpaRepository<Ordine, Integer> {
 			@Param("stato") StatoOrdine stato,
 			@Param("statoPagamento") StatoPagamento statoPagamento
 			);
+
+	// true se l'utente ha gia' un ordine (non annullato) con questo stesso coupon: serve per
+	// impedire di riusare piu' volte un coupon "una tantum" come WELCOME10
+	boolean existsByUtenteIdUtenteAndCodiceCouponUsatoIgnoreCaseAndStatoNot(
+			Integer idUtente, String codiceCouponUsato, StatoOrdine stato);
 }
