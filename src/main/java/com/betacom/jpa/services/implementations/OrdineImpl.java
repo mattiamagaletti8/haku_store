@@ -30,6 +30,7 @@ import com.betacom.jpa.repositories.IVarianteProdottoRepository;
 import com.betacom.jpa.services.interfaces.ICarrelloServices;
 import com.betacom.jpa.services.interfaces.ICouponServices;
 import com.betacom.jpa.services.interfaces.IOrdineServices;
+import com.betacom.jpa.services.interfaces.ISaldiServices;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,7 @@ public class OrdineImpl implements IOrdineServices {
 	private final IDettaglioCarrelloRepository repDetCar;
 	private final ICarrelloServices carrelloS;
 	private final ICouponServices couponS;
+	private final ISaldiServices saldiS;
 
 	@Transactional
 	@Override
@@ -72,8 +74,10 @@ public class OrdineImpl implements IOrdineServices {
 
 		Coupon coupon = car.getCoupon() == null ? null : couponS.validateAndGet(car.getCoupon().getCodice(), idUtente);
 
+		// prezzo effettivo (scontato se il prodotto e' in saldo in questo momento): e' il vero
+		// prezzo pagato, non solo quello mostrato nel catalogo
 		BigDecimal totaleProdotti = car.getRighe().stream()
-				.map(r -> r.getVariante().getPrezzo().multiply(BigDecimal.valueOf(r.getQuantita())))
+				.map(r -> saldiS.prezzoEffettivo(r.getVariante()).multiply(BigDecimal.valueOf(r.getQuantita())))
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 		BigDecimal valoreSconto = coupon == null ? BigDecimal.ZERO : CouponMap.calcolaSconto(totaleProdotti, coupon);
 		BigDecimal totalePagato = totaleProdotti.subtract(valoreSconto);
@@ -104,7 +108,7 @@ public class OrdineImpl implements IOrdineServices {
 			rigaOrd.setOrdine(ordine);
 			rigaOrd.setVariante(var);
 			rigaOrd.setQuantita(rigaCar.getQuantita());
-			rigaOrd.setPrezzoUnitario(var.getPrezzo());
+			rigaOrd.setPrezzoUnitario(saldiS.prezzoEffettivo(var));
 			repDetOrd.save(rigaOrd);
 			ordine.getRighe().add(rigaOrd);
 

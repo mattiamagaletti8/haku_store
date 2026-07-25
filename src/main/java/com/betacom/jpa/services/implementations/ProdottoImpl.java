@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.betacom.jpa.dto.input.ProdottoReq;
 import com.betacom.jpa.dto.output.ProdottoDTO;
+import com.betacom.jpa.dto.output.VarianteProdottoDTO;
 import com.betacom.jpa.exceptions.ApiException;
 import com.betacom.jpa.mapping.ProdottoMap;
 import com.betacom.jpa.models.Categoria;
@@ -26,6 +27,7 @@ import com.betacom.jpa.repositories.IDettaglioOrdineRepository;
 import com.betacom.jpa.repositories.IProdottoRepository;
 import com.betacom.jpa.repositories.IVarianteProdottoRepository;
 import com.betacom.jpa.services.interfaces.IProdottoServices;
+import com.betacom.jpa.services.interfaces.ISaldiServices;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +49,7 @@ public class ProdottoImpl implements IProdottoServices {
 	private final ICategoriaRepository repC;
 	private final IDettaglioOrdineRepository repDO;
 	private final IVarianteProdottoRepository repV;
+	private final ISaldiServices saldiS;
 
 	// cartella su disco dove vengono salvate le immagini, configurata in application.properties
 	@Value("${upload.dir.prodotti}")
@@ -105,7 +108,7 @@ public class ProdottoImpl implements IProdottoServices {
 	public List<ProdottoDTO> list(Integer idCategoria, String marca, String nome) throws Exception {
 		log.debug("list {} / {} / {}", idCategoria, marca, nome);
 		List<Prodotto> lP = repP.searchByFilter(idCategoria, marca, nome);
-		return ProdottoMap.buildProdottoDTOList(lP);
+		return applicaSaldi(ProdottoMap.buildProdottoDTOList(lP));
 	}
 
 	@Override
@@ -113,7 +116,7 @@ public class ProdottoImpl implements IProdottoServices {
 		log.debug("getById {}", id);
 		Prodotto p = repP.findById(id)
 				.orElseThrow(() -> new ApiException("prodotto.ntfnd"));
-		return ProdottoMap.buildProdottoDTO(p);
+		return applicaSaldi(List.of(ProdottoMap.buildProdottoDTO(p))).get(0);
 	}
 
 	@Transactional
@@ -174,7 +177,7 @@ public class ProdottoImpl implements IProdottoServices {
 	public List<ProdottoDTO> selectNovita() throws Exception {
 		log.debug("selectNovita");
 		List<Prodotto> lP = repP.selectNovita().stream().limit(LIMITE_SEZIONE_HOME).toList();
-		return ProdottoMap.buildProdottoDTOList(lP);
+		return applicaSaldi(ProdottoMap.buildProdottoDTOList(lP));
 	}
 
 	@Override
@@ -195,11 +198,28 @@ public class ProdottoImpl implements IProdottoServices {
 	private List<ProdottoDTO> prodottiOrdinatiComeIds(List<Integer> idOrdinati) {
 		Map<Integer, Prodotto> mappaPerId = repP.findAllById(idOrdinati).stream()
 				.collect(Collectors.toMap(Prodotto::getIdProdotto, p -> p));
-		return idOrdinati.stream()
+		List<ProdottoDTO> lista = idOrdinati.stream()
 				.map(mappaPerId::get)
 				.filter(Objects::nonNull)
 				.map(ProdottoMap::buildProdottoDTO)
 				.toList();
+		return applicaSaldi(lista);
+	}
+
+	// se i saldi sono attivi, valorizza il prezzo scontato sulle varianti dei prodotti
+	// attualmente in saldo (i meno venduti): modifica la lista ricevuta e la ritorna
+	private List<ProdottoDTO> applicaSaldi(List<ProdottoDTO> lista) {
+		if (!saldiS.isAttivo())
+			return lista;
+
+		Set<Integer> idInSaldo = saldiS.idProdottiInSaldo();
+		for (ProdottoDTO p : lista) {
+			if (!idInSaldo.contains(p.getId()))
+				continue;
+			for (VarianteProdottoDTO v : p.getVarianti())
+				v.setPrezzoScontato(saldiS.calcolaPrezzoScontato(v.getPrezzo()));
+		}
+		return lista;
 	}
 
 }
