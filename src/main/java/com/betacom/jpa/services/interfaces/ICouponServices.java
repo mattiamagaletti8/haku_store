@@ -18,5 +18,7 @@ public interface ICouponServices {
 
 	CouponDTO getById(Integer id) throws Exception;
 
-	Coupon validateAndGet(String codice) throws Exception;
+	// idUtente serve per controllare che l'utente non abbia gia' usato questo stesso coupon
+	// in un ordine precedente (non annullato): un coupon come WELCOME10 va usato una volta sola
+	Coupon validateAndGet(String codice, Integer idUtente) throws Exception;
 }

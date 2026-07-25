@@ -70,7 +70,7 @@ public class OrdineImpl implements IOrdineServices {
 		if (!insufficienti.isEmpty())
 			throw new ApiException("variante.stock.insufficient");
 
-		Coupon coupon = car.getCoupon() == null ? null : couponS.validateAndGet(car.getCoupon().getCodice());
+		Coupon coupon = car.getCoupon() == null ? null : couponS.validateAndGet(car.getCoupon().getCodice(), idUtente);
 
 		BigDecimal totaleProdotti = car.getRighe().stream()
 				.map(r -> r.getVariante().getPrezzo().multiply(BigDecimal.valueOf(r.getQuantita())))

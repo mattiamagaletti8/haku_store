@@ -271,6 +271,7 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'coupon.not.started', 'Il coupon non e'' ancora valido.'),
 ('IT', 'coupon.expired', 'Il coupon e'' scaduto.'),
 ('IT', 'coupon.dates.invalid', 'La data di fine deve essere successiva alla data di inizio.'),
+('IT', 'coupon.already.used', 'Hai già utilizzato questo coupon in un ordine precedente.'),
 ('IT', 'coupon.no.id', 'ID coupon mancante.'),
 ('IT', 'coupon.no.codice', 'Inserisci il codice del coupon.'),
 ('IT', 'coupon.no.tipologia', 'Seleziona il tipo di coupon (percentuale o fisso).'),

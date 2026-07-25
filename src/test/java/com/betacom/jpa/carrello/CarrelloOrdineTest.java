@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.betacom.jpa.dto.input.CarrelloReq;
+import com.betacom.jpa.dto.input.CouponReq;
 import com.betacom.jpa.dto.input.DettaglioCarrelloReq;
 import com.betacom.jpa.dto.input.IndirizzoReq;
 import com.betacom.jpa.dto.input.LoginReq;
@@ -306,10 +308,25 @@ public class CarrelloOrdineTest {
 	@Test
 	@Order(13)
 	public void removeCouponTest() throws Exception {
-		log.debug("removeCouponTest");
+		log.debug("removeCouponTest - WELCOME10 e' gia' stato usato dal cliente in checkoutTest, quindi si crea un coupon nuovo per testare l'apply/remove");
+
+		String adminToken = registraLoggaEPromuoviAdmin("admin.removecoupon@test.it");
+
+		CouponReq creaReq = new CouponReq();
+		creaReq.setCodice("REMOVETEST");
+		creaReq.setTipologia("FISSO");
+		creaReq.setValore(new BigDecimal("5.00"));
+		creaReq.setDataInizio(LocalDateTime.of(2020, 1, 1, 0, 0));
+		creaReq.setDataFine(LocalDateTime.of(2030, 1, 1, 0, 0));
+
+		mockMvc.perform(post("/rest/coupon/create")
+				.header("Authorization", adminToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(creaReq)))
+				.andExpect(status().isOk());
 
 		CarrelloReq req = new CarrelloReq();
-		req.setCodiceCoupon("WELCOME10");
+		req.setCodiceCoupon("REMOVETEST");
 
 		mockMvc.perform(post("/rest/carrello/coupon")
 				.header("Authorization", clienteToken)

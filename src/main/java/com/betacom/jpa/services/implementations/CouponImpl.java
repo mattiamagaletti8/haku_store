@@ -11,10 +11,12 @@ import com.betacom.jpa.dto.output.CouponDTO;
 import com.betacom.jpa.enums.TipologiaCoupon;
 import com.betacom.jpa.exceptions.ApiException;
 import com.betacom.jpa.mapping.CouponMap;
+import com.betacom.jpa.enums.StatoOrdine;
 import com.betacom.jpa.models.Carrello;
 import com.betacom.jpa.models.Coupon;
 import com.betacom.jpa.repositories.ICarrelloRepository;
 import com.betacom.jpa.repositories.ICouponRepository;
+import com.betacom.jpa.repositories.IOrdineRepository;
 import com.betacom.jpa.services.interfaces.ICouponServices;
 
 import jakarta.transaction.Transactional;
@@ -29,6 +31,7 @@ public class CouponImpl implements ICouponServices {
 
 	private final ICouponRepository repC;
 	private final ICarrelloRepository repCar;
+	private final IOrdineRepository repO;
 
 	@Transactional
 	@Override
@@ -105,8 +108,8 @@ public class CouponImpl implements ICouponServices {
 	}
 
 	@Override
-	public Coupon validateAndGet(String codice) throws Exception {
-		log.debug("validateAndGet {}", codice);
+	public Coupon validateAndGet(String codice, Integer idUtente) throws Exception {
+		log.debug("validateAndGet {} / utente {}", codice, idUtente);
 		Coupon c = repC.findByCodice(codice)
 				.orElseThrow(() -> new ApiException("coupon.ntfnd"));
 
@@ -118,6 +121,11 @@ public class CouponImpl implements ICouponServices {
 			throw new ApiException("coupon.not.started");
 		if (now.isAfter(c.getDataFine()))
 			throw new ApiException("coupon.expired");
+
+		// un coupon si puo' usare una volta sola per utente: se esiste gia' un suo ordine
+		// non annullato con questo stesso codice, non puo' riapplicarlo
+		if (repO.existsByUtenteIdUtenteAndCodiceCouponUsatoIgnoreCaseAndStatoNot(idUtente, codice, StatoOrdine.ANNULLATO))
+			throw new ApiException("coupon.already.used");
 
 		return c;
 	}
