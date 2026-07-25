@@ -10,6 +10,13 @@
   /* annulla lo spazio tra la navbar e l'hero (padding di .page + altri margini):
      cosi' l'hero (e i raggi dietro al titolo) tocca davvero il bordo della navbar */
   margin-top: -66px;
+  /* "full bleed": l'hero esce dal contenitore centrato (.container, max 1600px) e
+     arriva ai bordi veri dello schermo, cosi' anche i raggi dietro al titolo finiscono
+     a fine schermo invece di fermarsi al bordo del container. Il contenuto (tag/titolo/
+     sottotitolo) resta comunque centrato perche' e' un flex container con align-items:center */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 /* raggi di sole dietro al titolo: linee che si alternano a raggiera dal centro,
    sfumate ai bordi con una maschera radiale cosi' non creano un rettangolo netto.

@@ -36,6 +36,10 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  /* l'hero "full bleed" (100vw, vedi .hero-home) e' leggermente piu' largo del viewport
+     visibile sui browser dove 100vw include la scrollbar: senza questo la pagina
+     guadagnerebbe qualche pixel di scroll orizzontale indesiderato */
+  overflow-x: hidden;
 }
 
 a { text-decoration: none; color: inherit; }
@@ -43,7 +47,7 @@ img { display: block; max-width: 100%; }
 h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
 
 /* ─── LAYOUT ─── */
-.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+.container { max-width: 1600px; margin: 0 auto; padding: 0 24px; }
 .page { padding: 48px 0 80px; }
 
 .section-label {
