@@ -16,6 +16,9 @@
   <div class="layout-dettaglio">
     <div class="product-img product-img-dettaglio">
       <img [src]="immagineDi(p)" [alt]="p.nome" />
+      @if (percentualeScontoDi(varianteSelezionata()); as percentuale) {
+        <span class="product-badge product-badge-saldo">SALDO<br />-{{ percentuale }}%</span>
+      }
       <!-- foto vera della categoria, sovrapposta al bollino (solo se caricata) -->
       @if (immagineCategoriaDi(p); as urlCategoria) {
         <img class="badge-categoria" [src]="urlCategoria" [alt]="p.categoria?.nome ?? ''" />

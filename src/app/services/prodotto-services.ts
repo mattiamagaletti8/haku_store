@@ -38,6 +38,10 @@ export class ProdottoServices {
     return this.http.get<ProdottoDTO[]>(this.url + 'nuovamenteDisponibili');
   }
 
+  inSaldo() {
+    return this.http.get<ProdottoDTO[]>(this.url + 'inSaldo');
+  }
+
   create(body: { idCategoria: number; nome: string; marca: string; descrizione?: string }) {
     return this.http.post<ResponseDTO>(this.url + 'create', body);
   }

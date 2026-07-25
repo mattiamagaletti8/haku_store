@@ -59,4 +59,12 @@ export class ProdottoCard {
       .filter((prezzo): prezzo is number => prezzo != null);
     return scontati.length ? Math.min(...scontati) : null;
   }
+
+  // percentuale di sconto da mostrare nel bollino "SALDO -20%": tutte le varianti scontate
+  // di un prodotto condividono la stessa percentuale, quindi basta calcolarla sulla prima
+  percentualeSconto(p: ProdottoDTO): number | null {
+    const v = (p.varianti ?? []).find((v) => v.prezzoScontato != null);
+    if (!v || v.prezzoScontato == null) return null;
+    return Math.round((1 - v.prezzoScontato / v.prezzo) * 100);
+  }
 }

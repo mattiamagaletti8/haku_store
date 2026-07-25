@@ -5,7 +5,7 @@
   <div class="product-img">
     <img [src]="immagineDi(p())" [alt]="p().nome" />
     @if (inSaldo(p())) {
-      <span class="product-badge product-badge-saldo">SALDO!</span>
+      <span class="product-badge product-badge-saldo">SALDO<br />-{{ percentualeSconto(p()) }}%</span>
     }
     @if (immagineCategoriaDi(p()); as urlCategoria) {
       <img class="badge-categoria" [src]="urlCategoria" [alt]="p().categoria?.nome ?? ''" />
