@@ -1,3 +1,14 @@
+.topbar {
+  background: var(--lime);
+  color: var(--ink);
+  text-align: center;
+  padding: 8px 24px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .navbar {
   position: sticky;
   top: 0;

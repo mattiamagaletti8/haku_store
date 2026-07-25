@@ -1,6 +1,14 @@
 <!-- ============================================================================ -->
 <!-- PROPRIETARIO: Infrastruttura condivisa (non appartiene a una sola persona) -->
 <!-- ============================================================================ -->
+<div class="topbar">
+  @if (saldiAttivi) {
+    Saldi in corso, sconti su tutto il catalogo fino al {{ fineSaldi | date: 'dd/MM' }}
+  } @else {
+    Il tuo primo acquisto? Usa il codice WELCOME10 e ottieni subito il 10% di sconto
+  }
+</div>
+
 <nav class="navbar">
   <div class="container navbar-inner">
     <a routerLink="/catalogo" class="logo">
