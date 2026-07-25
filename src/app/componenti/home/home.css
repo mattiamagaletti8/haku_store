@@ -17,10 +17,6 @@
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  /* sfondo pieno + bordo (gia' presente da .hero-mini) cosi' si vede chiaramente dove
-     finisce la fascia dell'hero, invece di sfumare nello stesso colore della pagina
-     sotto (senza un colore diverso, essere "a tutto schermo" non si notava) */
-  background: var(--card);
 }
 /* raggi di sole dietro al titolo: linee che si alternano a raggiera dal centro,
    sfumate ai bordi con una maschera radiale cosi' non creano un rettangolo netto.
