@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { API_ORIGIN } from '../core/api-config';
 import { ResponseDTO } from '../models/models';
 
-export type TipoUpload = 'categoria' | 'prodotto' | 'variante';
+export type TipoUpload = 'categoria' | 'variante';
 
 // ============================================================================
 // PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
@@ -13,13 +13,13 @@ export type TipoUpload = 'categoria' | 'prodotto' | 'variante';
 // cui scaricarlo. A differenza degli altri service di questo progetto, questi
 // endpoint NON sono sotto /rest (per questo si usa API_ORIGIN e non API_BASE_URL).
 // "tipo" in piu' rispetto a Veicoli: qui serve per dire al backend a quale entita'
-// appartiene "id" (categoria, prodotto o variante: tre entita' diverse con la propria immagine).
+// appartiene "id" (categoria o variante: due entita' diverse con la propria immagine).
 @Injectable({ providedIn: 'root' })
 export class UploadServices {
   private http = inject(HttpClient);
   private url = API_ORIGIN + '/upload/admin/';
 
-  // "id" e' l'id della categoria o del prodotto a cui appartiene l'immagine (richiede token ADMIN)
+  // "id" e' l'id dell'entita' (categoria o variante) a cui appartiene l'immagine (richiede token ADMIN)
   uploadImage(file: File, id: number, tipo: TipoUpload = 'categoria') {
     const formData = new FormData();
     formData.append('file', file);

@@ -33,8 +33,6 @@ export class AdminProdotti implements OnInit {
   erroreMsg = signal<string | null>(null);
   // Id del prodotto attualmente "aperto" nella tabella (mostra le sue varianti) — null = nessuno espanso
   prodottoEspanso = signal<number | null>(null);
-  // Id del prodotto per cui e' in corso un upload immagine (per disabilitare il bottone)
-  caricamentoImmagine = signal<number | null>(null);
   // Id della variante in modifica inline (null = nessuna) — stesso pattern di
   // inModifica in admin-categorie.ts
   varianteInModifica = signal<number | null>(null);
@@ -94,42 +92,6 @@ export class AdminProdotti implements OnInit {
     this.prodottoS.delete(id).subscribe({
       next: () => this.carica(),
       error: (err) => this.erroreMsg.set(err.error?.msg ?? 'Errore'),
-    });
-  }
-
-  // Stesso schema a due passaggi di admin-categorie.ts (upload -> getUrl), ma con
-  // tipo="prodotto" cosi' il backend sa di aggiornare Prodotto.immagine, non Categoria
-  onFileSelected(event: Event, prodotto: ProdottoDTO): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
-
-    const file = input.files[0];
-    this.caricaImmagine(file, prodotto);
-
-    input.value = '';
-  }
-
-  private caricaImmagine(file: File, prodotto: ProdottoDTO): void {
-    this.erroreMsg.set(null);
-    this.caricamentoImmagine.set(prodotto.id);
-
-    this.uploadS.uploadImage(file, prodotto.id, 'prodotto').subscribe({
-      next: (r) => {
-        this.uploadS.getUrl(r.msg, 'prodotto').subscribe({
-          next: (r2) => {
-            prodotto.immagine = r2.msg;
-            this.caricamentoImmagine.set(null);
-          },
-          error: (err) => {
-            this.erroreMsg.set(err.error?.msg ?? 'Errore');
-            this.caricamentoImmagine.set(null);
-          },
-        });
-      },
-      error: (err) => {
-        this.erroreMsg.set(err.error?.msg ?? 'Errore');
-        this.caricamentoImmagine.set(null);
-      },
     });
   }
 

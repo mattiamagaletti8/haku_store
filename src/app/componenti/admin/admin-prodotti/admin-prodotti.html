@@ -10,24 +10,10 @@
 @for (p of prodotti(); track p.id) {
   <div class="riga-prodotto">
     <div class="flex-between">
-      <div class="intestazione-prodotto" style="display:flex; align-items:center; gap:10px;">
-        <!-- anteprima dell'immagine attuale, o un segnaposto se non ancora caricata -->
-        @if (p.immagine) {
-          <img [src]="apiOrigin + p.immagine" alt="{{ p.nome }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0;">
-        } @else {
-          <span class="errore" style="font-size:11px;flex-shrink:0;">nessuna immagine</span>
-        }
-        <span (click)="espandi(p.id)" style="cursor:pointer;">
-          <strong>{{ p.nome }}</strong> <span class="muted">— {{ p.marca }} ({{ p.categoria?.nome }}) — {{ p.varianti.length }} varianti</span>
-        </span>
-      </div>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button class="btn-text" type="button" [disabled]="caricamentoImmagine() === p.id" (click)="fileInput.click()">
-          {{ caricamentoImmagine() === p.id ? 'Caricamento...' : 'Carica immagine' }}
-        </button>
-        <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileSelected($event, p)">
-        <button class="btn-text btn-danger" (click)="eliminaProdotto(p.id)">Elimina prodotto</button>
-      </div>
+      <span (click)="espandi(p.id)" style="cursor:pointer;">
+        <strong>{{ p.nome }}</strong> <span class="muted">— {{ p.marca }} ({{ p.categoria?.nome }}) — {{ p.varianti.length }} varianti</span>
+      </span>
+      <button class="btn-text btn-danger" (click)="eliminaProdotto(p.id)">Elimina prodotto</button>
     </div>
 
     @if (prodottoEspanso() === p.id) {
