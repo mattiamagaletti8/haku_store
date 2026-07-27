@@ -23,8 +23,7 @@ SET row_security = off;
 -- Data for Name: coupon; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.coupon (id_coupon, codice, tipologia, valore, data_inizio, data_fine, is_attivo) VALUES (1, 'WELCOME10', 'PERCENTUALE', 10.00, '2020-01-01 00:00:00', '2030-01-01 23:59:59', true);
-INSERT INTO public.coupon (id_coupon, codice, tipologia, valore, data_inizio, data_fine, is_attivo) VALUES (2, 'GERARD10', 'FISSO', 30.00, '2026-07-07 00:00:00', '2026-12-01 23:59:59', true);
+INSERT INTO public.coupon (id_coupon, codice, tipologia, valore, data_inizio, data_fine, is_attivo) VALUES (2, 'GERARD10', 'PERCENTUALE', 10.00, '2020-01-01 00:00:00', '2030-01-01 23:59:59', true);
 
 
 --

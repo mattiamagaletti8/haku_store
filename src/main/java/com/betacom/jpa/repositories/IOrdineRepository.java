@@ -22,7 +22,7 @@ public interface IOrdineRepository extends JpaRepository<Ordine, Integer> {
 			);
 
 	// true se l'utente ha gia' un ordine (non annullato) con questo stesso coupon: serve per
-	// impedire di riusare piu' volte un coupon "una tantum" come WELCOME10
+	// impedire di riusare piu' volte un coupon "una tantum" come GERARD10
 	boolean existsByUtenteIdUtenteAndCodiceCouponUsatoIgnoreCaseAndStatoNot(
 			Integer idUtente, String codiceCouponUsato, StatoOrdine stato);
 }
