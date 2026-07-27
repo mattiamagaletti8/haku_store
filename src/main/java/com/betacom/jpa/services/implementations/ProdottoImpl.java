@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.betacom.jpa.dto.input.ProdottoReq;
 import com.betacom.jpa.dto.output.ProdottoDTO;
@@ -38,9 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class ProdottoImpl implements IProdottoServices {
-
-	// estensioni accettate per l'immagine di un prodotto
-	private static final Set<String> ESTENSIONI_VALIDE = Set.of("jpg", "jpeg", "png", "gif", "webp");
 
 	// quanti prodotti mostrare al massimo in ciascuna sezione della home (in evidenza/novita'/nuovamente disponibili)
 	private static final int LIMITE_SEZIONE_HOME = 8;
@@ -117,39 +113,6 @@ public class ProdottoImpl implements IProdottoServices {
 		Prodotto p = repP.findById(id)
 				.orElseThrow(() -> new ApiException("prodotto.ntfnd"));
 		return applicaSaldi(List.of(ProdottoMap.buildProdottoDTO(p))).get(0);
-	}
-
-	@Transactional
-	@Override
-	public String uploadImmagine(Integer id, MultipartFile file) throws Exception {
-		log.debug("uploadImmagine {} {}", id, file != null ? file.getOriginalFilename() : null);
-		Prodotto p = repP.findById(id)
-				.orElseThrow(() -> new ApiException("prodotto.ntfnd"));
-
-		if (file == null || file.isEmpty())
-			throw new ApiException("prodotto.immagine.mancante");
-
-		String nomeOriginale = file.getOriginalFilename();
-		int puntoIdx = (nomeOriginale != null) ? nomeOriginale.lastIndexOf('.') : -1;
-		String estensione = (puntoIdx >= 0) ? nomeOriginale.substring(puntoIdx + 1).toLowerCase() : "";
-
-		if (!ESTENSIONI_VALIDE.contains(estensione))
-			throw new ApiException("prodotto.immagine.formato.invalido");
-
-		eliminaFileImmagine(p.getImmagine());
-
-		String nuovoNomeFile = "prodotto_" + id + "." + estensione;
-
-		try {
-			Path cartella = Path.of(uploadDir);
-			Files.createDirectories(cartella);
-			file.transferTo(cartella.resolve(nuovoNomeFile));
-		} catch (IOException e) {
-			throw new ApiException("prodotto.immagine.errore.salvataggio");
-		}
-
-		p.setImmagine(nuovoNomeFile);
-		return nuovoNomeFile;
 	}
 
 	private void eliminaFileImmagine(String filename) {

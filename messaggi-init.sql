@@ -41,9 +41,6 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'prodotto.no.categoria', 'Seleziona la categoria del prodotto.'),
 ('IT', 'prodotto.no.nome', 'Inserisci il nome del prodotto.'),
 ('IT', 'prodotto.no.marca', 'Inserisci la marca del prodotto.'),
-('IT', 'prodotto.immagine.mancante', 'Seleziona un file immagine da caricare.'),
-('IT', 'prodotto.immagine.formato.invalido', 'Formato immagine non supportato (usa jpg, png, gif o webp).'),
-('IT', 'prodotto.immagine.errore.salvataggio', 'Errore durante il salvataggio dell''immagine.'),
 
 ('IT', 'variante.ntfnd', 'Variante prodotto non trovata.'),
 ('IT', 'variante.exists', 'Esiste gia'' una variante con questi stessi attributi per questo prodotto.'),

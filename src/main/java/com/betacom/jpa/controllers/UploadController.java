@@ -39,7 +39,6 @@ public class UploadController {
 			@RequestParam(value = "tipo", defaultValue = "categoria") String tipo) throws Exception {
 		String filename = switch (tipo) {
 			case "categoria" -> catS.uploadImmagine(id, file);
-			case "prodotto" -> prodS.uploadImmagine(id, file);
 			case "variante" -> variS.uploadImmagine(id, file);
 			default -> throw new ApiException("upload.tipo.invalido");
 		};
@@ -56,7 +55,6 @@ public class UploadController {
 			@RequestParam(value = "tipo", defaultValue = "categoria") String tipo) throws Exception {
 		String cartella = switch (tipo) {
 			case "categoria" -> "categorie";
-			case "prodotto" -> "prodotti";
 			case "variante" -> "varianti";
 			default -> throw new ApiException("upload.tipo.invalido");
 		};
