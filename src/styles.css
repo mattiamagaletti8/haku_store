@@ -315,7 +315,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
   transform: translate(-2px, -2px);
   box-shadow: 8px 8px 0 var(--ink);
 }
-/* badge a forma di "scoppio" (stella a punte), come i bollini "NUOVO!"/"SCONTO!" dei fumetti */
+/* bollino rotondo, come i bollini "NUOVO!"/"SCONTO!" dei fumetti */
 .product-badge {
   position: absolute;
   top: 10px; left: 10px;
@@ -329,18 +329,21 @@ h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; }
   letter-spacing: 0.02em;
   text-transform: uppercase;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  line-height: 1.1;
+  line-height: 1.15;
   border: 2px solid var(--ink);
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  border-radius: 50%;
+  /* la scritta deve restare dentro al cerchio, non sporgere oltre il bordo */
+  overflow: hidden;
 }
-/* stessa forma "scoppio" ma rossa, per i prodotti scontati durante i saldi */
+/* stesso cerchio ma rosso, per i prodotti scontati durante i saldi */
 .product-badge-saldo {
   background: var(--danger);
   color: var(--white);
-  font-size: 11px;
+  font-size: 10px;
 }
 .product-img {
   position: relative;
