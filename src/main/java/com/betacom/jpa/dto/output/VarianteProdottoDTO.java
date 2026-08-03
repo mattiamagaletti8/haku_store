@@ -24,7 +24,6 @@ public class VarianteProdottoDTO {
 	private String formato;
 	private String colore;
 	private BigDecimal prezzo;
-	private BigDecimal prezzoScontato;   // valorizzato solo se il prodotto e' attualmente in saldo, altrimenti null
 	private Integer quantitaDisponibile;
 	private String immagine;
 }
