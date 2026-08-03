@@ -22,12 +22,10 @@ export class Home implements OnInit {
   prodotti = signal<ProdottoDTO[]>([]);
   categorie = signal<CategoriaDTO[]>([]);
 
-  // Le vetrine della home, indipendenti dal catalogo filtrato sotto
+  // Le 3 vetrine della home, indipendenti dal catalogo filtrato sotto
   prodottiInEvidenza = signal<ProdottoDTO[]>([]);
   prodottiNovita = signal<ProdottoDTO[]>([]);
   prodottiNuovamenteDisponibili = signal<ProdottoDTO[]>([]);
-  // vuota fuori dalle settimane di saldi: il backend restituisce [] se non sono attivi
-  prodottiInSaldo = signal<ProdottoDTO[]>([]);
 
   filtriForm: FormGroup = new FormGroup({
     nome: new FormControl(null),
@@ -42,7 +40,6 @@ export class Home implements OnInit {
     this.prodottoS.inEvidenza().subscribe({ next: (resp) => this.prodottiInEvidenza.set(resp) });
     this.prodottoS.novita().subscribe({ next: (resp) => this.prodottiNovita.set(resp) });
     this.prodottoS.nuovamenteDisponibili().subscribe({ next: (resp) => this.prodottiNuovamenteDisponibili.set(resp) });
-    this.prodottoS.inSaldo().subscribe({ next: (resp) => this.prodottiInSaldo.set(resp) });
   }
 
   // Chiamata sia al primo caricamento sia ogni volta che i filtri cambiano

@@ -167,13 +167,6 @@ export class ProdottoDettaglio implements OnInit {
     return p.categoria?.immagine ? API_ORIGIN + p.categoria.immagine : null;
   }
 
-  // percentuale di sconto della variante selezionata, per il bollino "SALDO -20%": null se
-  // questa variante non e' attualmente scontata
-  percentualeScontoDi(v: VarianteProdottoDTO | null): number | null {
-    if (!v || v.prezzoScontato == null) return null;
-    return Math.round((1 - v.prezzoScontato / v.prezzo) * 100);
-  }
-
   inviaRecensione(): void {
     this.recensioneS.create({
       idProdotto: this.idProdotto,

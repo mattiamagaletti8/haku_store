@@ -2,13 +2,7 @@
 <!-- PROPRIETARIO: Infrastruttura condivisa (non appartiene a una sola persona) -->
 <!-- ============================================================================ -->
 <div class="topbar">
-  @if (saldiAttivi()) {
-    Saldi in corso: -{{ percentualeSconto() }}% su una selezione di prodotti, fino al {{ fineSaldi() | date: 'dd/MM' }} · Al primo acquisto usa anche il codice GERARD10
-  } @else if (prossimoSaldi()) {
-    Prossimi saldi dal {{ prossimoSaldi() | date: 'dd/MM' }} · Intanto usa il codice GERARD10 al primo acquisto
-  } @else {
-    Il tuo primo acquisto? Usa il codice GERARD10 e ottieni subito il 10% di sconto
-  }
+  Il tuo primo acquisto? Usa il codice GERARD10 e ottieni subito il 10% di sconto
 </div>
 
 <nav class="navbar">

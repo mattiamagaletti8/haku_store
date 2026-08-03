@@ -46,25 +46,4 @@ export class ProdottoCard {
     if (!p.varianti?.length) return null;
     return Math.min(...p.varianti.map((v) => v.prezzo));
   }
-
-  // true se questo prodotto e' tra quelli attualmente in saldo (il backend valorizza
-  // prezzoScontato solo sulle varianti dei prodotti davvero scontati in questo momento)
-  inSaldo(p: ProdottoDTO): boolean {
-    return (p.varianti ?? []).some((v) => v.prezzoScontato != null);
-  }
-
-  prezzoScontatoMinimo(p: ProdottoDTO): number | null {
-    const scontati = (p.varianti ?? [])
-      .map((v) => v.prezzoScontato)
-      .filter((prezzo): prezzo is number => prezzo != null);
-    return scontati.length ? Math.min(...scontati) : null;
-  }
-
-  // percentuale di sconto da mostrare nel bollino "SALDO -20%": tutte le varianti scontate
-  // di un prodotto condividono la stessa percentuale, quindi basta calcolarla sulla prima
-  percentualeSconto(p: ProdottoDTO): number | null {
-    const v = (p.varianti ?? []).find((v) => v.prezzoScontato != null);
-    if (!v || v.prezzoScontato == null) return null;
-    return Math.round((1 - v.prezzoScontato / v.prezzo) * 100);
-  }
 }

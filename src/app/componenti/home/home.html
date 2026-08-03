@@ -7,20 +7,9 @@
   <p class="hero-sub">Integratori e accessori premium formulati per chi non si accontenta.</p>
 </section>
 
-<!-- Le vetrine della home: ognuna e' indipendente dal catalogo filtrato sotto e sparisce
+<!-- Le 3 vetrine della home: ognuna e' indipendente dal catalogo filtrato sotto e sparisce
      da sola se il backend non ha ancora dati per quella sezione (es. nessun ordine ancora
-     evaso per "in evidenza", nessun rifornimento registrato per "nuovamente disponibile",
-     nessuna settimana di saldi in corso per "in saldo") -->
-@if (prodottiInSaldo().length > 0) {
-  <div class="section-label">Solo per poco</div>
-  <h2 class="section-title">In saldo</h2>
-  <div class="griglia-prodotti mb-16">
-    @for (p of prodottiInSaldo(); track p.id) {
-      <app-prodotto-card [p]="p" />
-    }
-  </div>
-}
-
+     evaso per "in evidenza", nessun rifornimento registrato per "nuovamente disponibile") -->
 @if (prodottiInEvidenza().length > 0) {
   <div class="section-label">Più richiesti</div>
   <h2 class="section-title">In evidenza</h2>

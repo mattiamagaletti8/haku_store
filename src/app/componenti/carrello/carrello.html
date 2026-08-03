@@ -28,14 +28,8 @@
             </td>
             <!-- prezzo CORRENTE della variante (non congelato): coerente col fatto che
                  nel backend DettaglioCarrelloMap calcola il subtotale sul prezzo live, non su
-                 uno storicizzato — a differenza di un ordine gia' concluso. Se il prodotto e'
-                 in saldo, prezzoScontato e' quello davvero usato per il subtotale: va mostrato
-                 al posto del prezzo pieno, altrimenti i due numeri non tornerebbero -->
-            @if (riga.variante.prezzoScontato) {
-              <td>{{ riga.variante.prezzoScontato | currency: 'EUR' }} <span class="product-price-old">{{ riga.variante.prezzo | currency: 'EUR' }}</span></td>
-            } @else {
-              <td>{{ riga.variante.prezzo | currency: 'EUR' }}</td>
-            }
+                 uno storicizzato — a differenza di un ordine gia' concluso -->
+            <td>{{ riga.variante.prezzo | currency: 'EUR' }}</td>
             <td>
               <input
                 type="number"

@@ -16,9 +16,6 @@
   <div class="layout-dettaglio">
     <div class="product-img product-img-dettaglio">
       <img [src]="immagineDi(p)" [alt]="p.nome" />
-      @if (percentualeScontoDi(varianteSelezionata()); as percentuale) {
-        <span class="product-badge product-badge-saldo">SALDO<br />-{{ percentuale }}%</span>
-      }
       <!-- foto vera della categoria, sovrapposta al bollino (solo se caricata) -->
       @if (immagineCategoriaDi(p); as urlCategoria) {
         <img class="badge-categoria" [src]="urlCategoria" [alt]="p.categoria?.nome ?? ''" />
@@ -44,14 +41,7 @@
         <p class="muted rating-testo mb-16">Ancora nessuna recensione</p>
       }
 
-      @if (varianteSelezionata()?.prezzoScontato) {
-        <p class="prezzo-dettaglio">
-          {{ varianteSelezionata()!.prezzoScontato | currency: 'EUR' }}
-          <span class="product-price-old">{{ varianteSelezionata()!.prezzo | currency: 'EUR' }}</span>
-        </p>
-      } @else {
-        <p class="prezzo-dettaglio">{{ (varianteSelezionata()?.prezzo ?? 0) | currency: 'EUR' }}</p>
-      }
+      <p class="prezzo-dettaglio">{{ (varianteSelezionata()?.prezzo ?? 0) | currency: 'EUR' }}</p>
       <p class="disponibilita-dettaglio" [class.esaurito]="!varianteSelezionata() || varianteSelezionata()!.quantitaDisponibile <= 0">
         {{ varianteSelezionata() && varianteSelezionata()!.quantitaDisponibile > 0 ? varianteSelezionata()!.quantitaDisponibile + ' disponibili' : 'Esaurito' }}
       </p>
@@ -123,11 +113,7 @@
           <p class="muted" style="font-size:12px">{{ attivo.formato }}</p>
         }
 
-        @if (attivo.prezzoScontato) {
-          <p class="product-price">{{ attivo.prezzoScontato | currency: 'EUR' }} <span class="product-price-old">{{ attivo.prezzo | currency: 'EUR' }}</span></p>
-        } @else {
-          <p class="product-price">{{ attivo.prezzo | currency: 'EUR' }}</p>
-        }
+        <p class="product-price">{{ attivo.prezzo | currency: 'EUR' }}</p>
         <p class="disponibilita">
           {{ attivo.quantitaDisponibile > 0 ? attivo.quantitaDisponibile + ' disponibili' : 'Esaurito' }}
         </p>
