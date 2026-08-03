@@ -182,8 +182,7 @@ public class CarrelloOrdineTest {
 		assertNotNull(dto.getCoupon());
 		assertFalse(dto.getRighe().isEmpty());
 		// WELCOME10 e' un 10% sul totale prodotti: si verifica la relazione invece di un importo
-		// fisso, perche' il totale (e quindi lo sconto) varia se e' in corso una vera settimana
-		// di saldi (i prezzi delle varianti in saldo sono gia' scontati in totaleProdotti)
+		// fisso, per non dipendere dai prezzi esatti dei prodotti di test
 		BigDecimal scontoAtteso = dto.getTotaleProdotti().multiply(new BigDecimal("0.10")).setScale(2, RoundingMode.HALF_UP);
 		assertEquals(0, dto.getValoreSconto().compareTo(scontoAtteso));
 		log.debug("carrello: {}", dto);

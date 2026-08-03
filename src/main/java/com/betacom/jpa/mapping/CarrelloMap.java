@@ -6,13 +6,12 @@ import java.util.List;
 import com.betacom.jpa.dto.output.CarrelloDTO;
 import com.betacom.jpa.dto.output.DettaglioCarrelloDTO;
 import com.betacom.jpa.models.Carrello;
-import com.betacom.jpa.services.interfaces.ISaldiServices;
 
 // Proprietario: Pier
 public class CarrelloMap {
 
-	public static CarrelloDTO buildCarrelloDTO(Carrello c, ISaldiServices saldiS) {
-		List<DettaglioCarrelloDTO> righe = DettaglioCarrelloMap.buildDettaglioCarrelloDTOList(c.getRighe(), saldiS);
+	public static CarrelloDTO buildCarrelloDTO(Carrello c) {
+		List<DettaglioCarrelloDTO> righe = DettaglioCarrelloMap.buildDettaglioCarrelloDTOList(c.getRighe());
 
 		BigDecimal totaleProdotti = righe.stream()
 				.map(DettaglioCarrelloDTO::getSubtotale)

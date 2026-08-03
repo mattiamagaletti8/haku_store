@@ -25,7 +25,4 @@ public interface IProdottoServices {
 
 	// prodotti tornati disponibili dopo essere stati esauriti, per la home
 	List<ProdottoDTO> selectNuovamenteDisponibili() throws Exception;
-
-	// i prodotti attualmente in saldo (i meno venduti, solo durante le settimane di saldi), per la home
-	List<ProdottoDTO> selectInSaldo() throws Exception;
 }
