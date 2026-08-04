@@ -1,6 +1,3 @@
-<!-- ============================================================================ -->
-<!-- PROPRIETARIO: Valerio — Ordini (Ordine / DettaglioOrdine / checkout) -->
-<!-- ============================================================================ -->
 <h2 class="section-title">I miei ordini</h2>
 
 @if (ordini().length === 0) {
@@ -25,7 +22,7 @@
           <td><span class="badge-stato">{{ o.stato }}</span></td>
           <td>{{ o.statoPagamento }}</td>
           <td>{{ o.totalePagato | currency: 'EUR' }}</td>
-          <!-- [routerLink] con array: naviga a /ordini/:id (teoria cap. 21) -->
+
           <td><a class="btn-text lime" [routerLink]="['/ordini', o.id]">Dettagli →</a></td>
         </tr>
       }

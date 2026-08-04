@@ -1,10 +1,5 @@
-<!-- ============================================================================ -->
-<!-- PROPRIETARIO: Pier — Carrello (Carrello / DettaglioCarrello / Coupon) -->
-<!-- ============================================================================ -->
 <h2 class="section-title">Il tuo carrello</h2>
 
-<!-- @if (carrelloS.carrello(); as c) (teoria cap. 16): finche' il carrello non e' ancora
-     arrivato dal backend (null), mostra "Caricamento..."; appena arriva, "c" e' il valore vero -->
 @if (carrelloS.carrello(); as c) {
   @if (c.righe.length === 0) {
     <p class="muted">Il carrello è vuoto. <a class="lime" routerLink="/catalogo">Vai al catalogo</a></p>
@@ -26,9 +21,7 @@
               <strong>{{ riga.variante.nomeProdotto }}</strong>
               <span class="muted"> — {{ riga.variante.gusto }} {{ riga.variante.formato }} {{ riga.variante.colore }}</span>
             </td>
-            <!-- prezzo CORRENTE della variante (non congelato): coerente col fatto che
-                 nel backend DettaglioCarrelloMap calcola il subtotale sul prezzo live, non su
-                 uno storicizzato — a differenza di un ordine gia' concluso -->
+
             <td>{{ riga.variante.prezzo | currency: 'EUR' }}</td>
             <td>
               <input

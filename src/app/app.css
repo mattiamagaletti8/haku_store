@@ -32,8 +32,7 @@
   cursor: pointer;
 }
 .logo img {
-  /* niente piu' sfondo bianco/padding: il logo ora e' un PNG con trasparenza vera,
-     deve appoggiarsi direttamente sul navy della navbar senza una "scatola" dietro */
+
   height: 52px;
   width: auto;
   transition: transform 0.25s ease;
@@ -94,7 +93,6 @@
   justify-content: center;
 }
 
-/* ─── FOOTER ─── */
 footer {
   background: #14263D;
   border-top: 3px solid var(--lime);

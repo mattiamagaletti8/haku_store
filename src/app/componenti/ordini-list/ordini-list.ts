@@ -4,9 +4,6 @@ import { RouterLink } from '@angular/router';
 import { OrdineServices } from '../../services/ordine-services';
 import { OrdineDTO } from '../../models/models';
 
-// ============================================================================
-// PROPRIETARIO: Valerio — Ordini (Ordine / DettaglioOrdine / checkout)
-// ============================================================================
 @Component({
   selector: 'app-ordini-list',
   imports: [RouterLink, CurrencyPipe, DatePipe],
@@ -19,8 +16,7 @@ export class OrdiniList implements OnInit {
   ordini = signal<OrdineDTO[]>([]);
 
   ngOnInit(): void {
-    // Nessun filtro passato: il backend, sapendo che il chiamante non e' ADMIN,
-    // restituisce automaticamente solo gli ordini di questo utente
+
     this.ordineS.list().subscribe({
       next: (resp) => this.ordini.set(resp),
     });

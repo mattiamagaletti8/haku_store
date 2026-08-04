@@ -3,9 +3,6 @@ import { Injectable, inject } from '@angular/core';
 import { API_BASE_URL } from '../core/api-config';
 import { ResponseDTO, VarianteProdottoDTO } from '../models/models';
 
-// ============================================================================
-// PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
-// ============================================================================
 @Injectable({ providedIn: 'root' })
 export class VarianteServices {
   private http = inject(HttpClient);
@@ -23,9 +20,6 @@ export class VarianteServices {
     return this.http.post<ResponseDTO>(this.url + 'create', body);
   }
 
-  // Usato anche solo per aggiornare quantitaDisponibile dal pannello admin: essendo
-  // un update parziale, passare solo quel campo lascia intatti gli altri (stesso
-  // pattern Optional.ofNullable visto in VarianteProdottoImpl.update nel backend)
   update(body: { id: number; gusto?: string; formato?: string; colore?: string; prezzo?: number; quantitaDisponibile?: number }) {
     return this.http.patch<ResponseDTO>(this.url + 'update', body);
   }

@@ -1,13 +1,3 @@
-// ============================================================================
-// PROPRIETARIO: Infrastruttura condivisa (non appartiene a una sola persona)
-// ============================================================================
-// Interfacce TypeScript che rispecchiano i DTO del backend hakustore (stessi nomi di campo,
-// perche' Jackson serializza i field Java cosi' come sono, in camelCase).
-// Best practice esplicita in teoria (cap. 28): "definisci sempre interface per i dati
-// invece di usare any" — qui c'e' una interface per ogni DTO di output del backend,
-// cosi' ogni service (HttpClient<T>) e componente ha l'autocompletamento e i controlli
-// di tipo di TypeScript, invece di lavorare con oggetti generici non tipizzati.
-
 export interface UtenteDTO {
   idUtente: number;
   nome: string;
@@ -31,8 +21,7 @@ export interface ResponseDTO {
 export interface CategoriaDTO {
   id: number;
   nome: string;
-  // path relativo (es. "/immagini/categorie/categoria_3.jpeg"), null se non ancora caricata:
-  // va sempre concatenato con API_ORIGIN per ottenere un URL utilizzabile in un <img>
+
   immagine?: string | null;
 }
 
@@ -45,7 +34,7 @@ export interface VarianteProdottoDTO {
   colore?: string;
   prezzo: number;
   quantitaDisponibile: number;
-  // path relativo (es. "/immagini/varianti/variante_5.png"), null se non ancora caricata
+
   immagine?: string | null;
 }
 
@@ -54,8 +43,7 @@ export interface ProdottoDTO {
   nome: string;
   descrizione?: string;
   marca: string;
-  // path relativo (es. "/immagini/prodotti/prodotto_3.png"), null se non ancora caricata:
-  // va sempre concatenato con API_ORIGIN per ottenere un URL utilizzabile in un <img>
+
   immagine?: string | null;
   categoria: CategoriaDTO;
   varianti: VarianteProdottoDTO[];

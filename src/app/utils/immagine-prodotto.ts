@@ -1,17 +1,5 @@
-// ============================================================================
-// PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
-// ============================================================================
-// Lo schema non prevede un campo immagine per prodotto: disegniamo quindi una sagoma
-// SVG coerente con il tipo di prodotto (barattolo, flacone, manubrio, capo di
-// abbigliamento...) invece di una foto vera. La scelta di forma/colore e' deterministica
-// (stesso nome+marca+categoria => stessa immagine sempre), cosi' il catalogo resta
-// coerente ad ogni ricarica. La Categoria invece un'immagine ce l'ha (upload da
-// Admin -> Categorie): quando presente, il bollino "H" viene omesso (haCategoriaImmagine)
-// e il chiamante sovrappone la vera foto con un <img> HTML (vedi .badge-categoria nel
-// template) — un SVG in <img src="data:..."> non puo' caricare immagini esterne al suo interno.
-
 const PALETTE_CONTENITORE = ['#1B3350', '#8A6D1A', '#5B4632', '#3F5A46', '#6B3B3B', '#33506B'];
-const ACCENTO = '#2EC4D6'; // ciano del logo (papillon/scritta), non piu' oro
+const ACCENTO = '#2EC4D6';
 const CREMA = '#FBF4E3';
 const NAVY = '#1B3350';
 
@@ -43,12 +31,6 @@ function formaProdotto(nome: string, categoria: string): Forma {
   return 'scatola';
 }
 
-// piccolo marchio circolare in un angolo, come "bollino" di fabbrica. Quando la
-// categoria del prodotto ha una foto propria, il bollino qui viene omesso del tutto:
-// un <img> HTML vero viene sovrapposto sopra da fuori (vedi .badge-categoria nel
-// template), perche' un SVG mostrato via <img src="data:..."> NON puo' caricare
-// immagini esterne al suo interno (i browser lo bloccano per sicurezza: si vedrebbe
-// solo l'icona di "immagine non trovata", non la foto vera).
 function marchioSvg(nascondiMarchio: boolean): string {
   if (nascondiMarchio) return '';
 

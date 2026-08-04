@@ -7,12 +7,6 @@ import { IndirizzoServices } from '../../services/indirizzo-services';
 import { OrdineServices } from '../../services/ordine-services';
 import { IndirizzoDTO } from '../../models/models';
 
-// ============================================================================
-// PROPRIETARIO: Valerio — Ordini (Ordine / DettaglioOrdine / checkout)
-// ============================================================================
-// La pagina che chiude il flusso di vendita: legge il carrello di Pier, gli indirizzi
-// di Sarah, e chiama OrdineServices.checkout — l'equivalente frontend del "cuore"
-// di OrdineImpl.checkout nel backend.
 @Component({
   selector: 'app-checkout',
   imports: [ReactiveFormsModule, CurrencyPipe],
@@ -51,9 +45,9 @@ export class Checkout implements OnInit {
     this.indirizzoS.list().subscribe({
       next: (resp) => {
         this.indirizzi.set(resp);
-        // Se non ha nessun indirizzo salvato, mostra subito il form per crearne uno
+
         this.mostraNuovoIndirizzo.set(resp.length === 0);
-        // Preseleziona il primo indirizzo disponibile, per comodita'
+
         if (resp.length > 0) this.checkoutForm.patchValue({ idIndirizzo: resp[0].id });
       },
     });
@@ -75,18 +69,13 @@ export class Checkout implements OnInit {
     const metodoPagamento = this.checkoutForm.value.metodoPagamento;
     if (!idIndirizzo || !metodoPagamento) return;
 
-    // Questa singola chiamata scatena, lato backend, tutta la logica di checkout:
-    // validazione stock, ri-validazione coupon, congelamento prezzi, decremento stock,
-    // svuotamento carrello — qui il frontend riceve semplicemente l'ordine gia' creato
     this.ordineS.checkout({ idIndirizzo, metodoPagamento }).subscribe({
       next: (ordine) => {
-        // Il carrello sul backend e' gia' stato svuotato dal checkout: si ricarica
-        // qui solo per allineare lo stato locale (es. il contatore nella navbar)
+
         this.carrelloS.ricarica();
         this.router.navigate(['/ordini', ordine.id]);
       },
-      // Puo' arrivare "variante.stock.insufficient" se nel frattempo lo stock e' cambiato,
-      // o un errore relativo al coupon se e' scaduto proprio ora (vedi teoria del backend)
+
       error: (err) => this.erroreMsg.set(err.error?.msg ?? 'Errore durante il checkout'),
     });
   }

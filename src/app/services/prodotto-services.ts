@@ -3,16 +3,11 @@ import { Injectable, inject } from '@angular/core';
 import { API_BASE_URL } from '../core/api-config';
 import { ProdottoDTO, ResponseDTO } from '../models/models';
 
-// ============================================================================
-// PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
-// ============================================================================
 @Injectable({ providedIn: 'root' })
 export class ProdottoServices {
   private http = inject(HttpClient);
   private url = API_BASE_URL + '/prodotto/';
 
-  // I 3 filtri sono tutti facoltativi (mirror di ProdottoController.list nel backend):
-  // vengono aggiunti ai query params solo se effettivamente passati
   list(filtri?: { idCategoria?: number; marca?: string; nome?: string }) {
     const params: any = {};
     if (filtri?.idCategoria) params.idCategoria = filtri.idCategoria;
@@ -25,7 +20,6 @@ export class ProdottoServices {
     return this.http.get<ProdottoDTO>(this.url + 'getById', { params: { id } });
   }
 
-  // Le 3 sezioni della home: piu' venduti, ultimi aggiunti, tornati disponibili dopo l'esaurimento
   inEvidenza() {
     return this.http.get<ProdottoDTO[]>(this.url + 'inEvidenza');
   }

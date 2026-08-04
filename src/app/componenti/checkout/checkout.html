@@ -1,6 +1,3 @@
-<!-- ============================================================================ -->
-<!-- PROPRIETARIO: Valerio — Ordini (Ordine / DettaglioOrdine / checkout) -->
-<!-- ============================================================================ -->
 <h2 class="section-title">Checkout</h2>
 
 @if (carrelloS.carrello(); as c) {
@@ -13,9 +10,7 @@
       <div class="lista-indirizzi">
         @for (ind of indirizzi(); track ind.id) {
           <label class="opzione-radio">
-            <!-- [formControl] collega direttamente il singolo radio al FormControl
-                 "idIndirizzo" (alternativa a formControlName quando non si e' dentro
-                 un formGroupName annidato) -->
+
             <input type="radio" name="idIndirizzo" [formControl]="checkoutForm.controls.idIndirizzo" [value]="ind.id" />
             {{ ind.via }}, {{ ind.citta }} ({{ ind.cap }}) {{ ind.provincia }} - {{ ind.nazione }}
           </label>
@@ -54,8 +49,6 @@
       </label>
     </div>
 
-    <!-- Riepilogo finale: gli stessi totali gia' visti nel carrello (calcolati dal backend
-         in CarrelloMap), ripetuti qui per conferma prima dell'ordine -->
     <div class="riepilogo card mt-24">
       <div class="flex-between"><span class="light">Totale prodotti</span><span>{{ c.totaleProdotti | currency: 'EUR' }}</span></div>
       @if (c.coupon) {

@@ -8,11 +8,6 @@ import { UploadServices } from '../../../services/upload-services';
 import { CategoriaDTO, ProdottoDTO, VarianteProdottoDTO } from '../../../models/models';
 import { API_ORIGIN } from '../../../core/api-config';
 
-// ============================================================================
-// PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto)
-// ============================================================================
-// Il pannello admin piu' complesso del catalogo: gestisce prodotti E le loro varianti
-// insieme (tabella espandibile), incrociando 3 service diversi (Categoria/Prodotto/Variante)
 @Component({
   selector: 'app-admin-prodotti',
   imports: [ReactiveFormsModule, CurrencyPipe],
@@ -25,18 +20,16 @@ export class AdminProdotti implements OnInit {
   private varianteS = inject(VarianteServices);
   private uploadS = inject(UploadServices);
 
-  // esposta al template per costruire l'URL completo delle immagini (path relativo + origine backend)
   readonly apiOrigin = API_ORIGIN;
 
   categorie = signal<CategoriaDTO[]>([]);
   prodotti = signal<ProdottoDTO[]>([]);
   erroreMsg = signal<string | null>(null);
-  // Id del prodotto attualmente "aperto" nella tabella (mostra le sue varianti) — null = nessuno espanso
+
   prodottoEspanso = signal<number | null>(null);
-  // Id della variante in modifica inline (null = nessuna) — stesso pattern di
-  // inModifica in admin-categorie.ts
+
   varianteInModifica = signal<number | null>(null);
-  // Id della variante per cui e' in corso un upload immagine
+
   caricamentoImmagineVariante = signal<number | null>(null);
 
   nuovoProdottoForm = new FormGroup({
@@ -81,8 +74,6 @@ export class AdminProdotti implements OnInit {
         this.nuovoProdottoForm.reset();
         this.carica();
       },
-      // Corrisponde all'errore "prodotto.exists" lanciato da ProdottoImpl.create nel backend
-      // se esiste gia' un prodotto con lo stesso nome+marca
       error: (err) => this.erroreMsg.set(err.error?.msg ?? 'Errore'),
     });
   }
@@ -95,15 +86,11 @@ export class AdminProdotti implements OnInit {
     });
   }
 
-  // Apri/chiudi (toggle): se clicco sul prodotto gia' espanso, lo richiudo
   espandi(idProdotto: number): void {
     this.prodottoEspanso.set(this.prodottoEspanso() === idProdotto ? null : idProdotto);
     this.nuovaVarianteForm.reset({ quantitaDisponibile: 0 });
   }
 
-  // Lo schema non prevede attributi per-categoria: questa mappa e' un'euristica solo
-  // di presentazione (nasconde/rinomina i campi gusto/formato/colore in base al nome
-  // della categoria) per non mostrare "Gusto" su un capo di abbigliamento, ad esempio.
   attributiCategoria(nomeCategoria?: string): { gusto: boolean; formato: boolean; colore: boolean; labelFormato: string; labelColore: string } {
     const nome = (nomeCategoria ?? '').toLowerCase();
 
@@ -145,8 +132,6 @@ export class AdminProdotti implements OnInit {
     });
   }
 
-  // Precompila il form di modifica e attiva la modalita' editing inline per quella
-  // specifica riga di variante — stesso schema di iniziaModifica() in admin-categorie.ts
   iniziaModificaVariante(v: VarianteProdottoDTO): void {
     this.varianteInModifica.set(v.id);
     this.modificaVarianteForm.setValue({
@@ -158,8 +143,6 @@ export class AdminProdotti implements OnInit {
     });
   }
 
-  // Stesso schema a due passaggi di onFileSelected/caricaImmagine per il prodotto,
-  // ma con tipo="variante" cosi' il backend aggiorna VarianteProdotto.immagine
   onFileSelectedVariante(event: Event, variante: VarianteProdottoDTO): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
@@ -215,9 +198,6 @@ export class AdminProdotti implements OnInit {
     });
   }
 
-  // Aggiornamento rapido dello stock direttamente dalla tabella, senza aprire un form
-  // di modifica completo: chiama VarianteServices.update passando SOLO quantitaDisponibile
-  // (aggiornamento parziale, gli altri campi della variante restano invariati)
   aggiornaQuantita(v: VarianteProdottoDTO, quantita: number): void {
     if (quantita < 0) return;
     this.erroreMsg.set(null);

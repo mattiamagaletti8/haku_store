@@ -1,9 +1,3 @@
-<!-- ============================================================================ -->
-<!-- PROPRIETARIO: Mattia — Catalogo (Categoria / Prodotto / VarianteProdotto) -->
-<!-- ============================================================================ -->
-<!-- "@if (prodotto(); as p)" (teoria cap. 16): valuta il signal UNA volta e lo salva
-     nella variabile locale "p" per tutto il blocco, evitando di richiamare prodotto()
-     ripetutamente — utile anche perche' finche' e' null (dati non ancora arrivati) va al ramo @else -->
 @if (prodotto(); as p) {
   <div class="breadcrumb muted">
     <a routerLink="/catalogo">Catalogo</a>
@@ -16,7 +10,7 @@
   <div class="layout-dettaglio">
     <div class="product-img product-img-dettaglio">
       <img [src]="immagineDi(p)" [alt]="p.nome" />
-      <!-- foto vera della categoria, sovrapposta al bollino (solo se caricata) -->
+
       @if (immagineCategoriaDi(p); as urlCategoria) {
         <img class="badge-categoria" [src]="urlCategoria" [alt]="p.categoria?.nome ?? ''" />
       }
@@ -26,8 +20,6 @@
       <div class="section-label">{{ p.marca }} · {{ p.categoria?.nome }}</div>
       <h1 class="section-title">{{ p.nome }}</h1>
 
-      <!-- Valutazione media calcolata dal computed mediaVoto (basato sulle vere recensioni
-           caricate sotto): niente di finto, se non ci sono ancora recensioni si vede il messaggio -->
       @if (mediaVoto(); as mv) {
         <div class="rating-riga">
           <span class="stelle">
@@ -46,8 +38,6 @@
         {{ varianteSelezionata() && varianteSelezionata()!.quantitaDisponibile > 0 ? varianteSelezionata()!.quantitaDisponibile + ' disponibili' : 'Esaurito' }}
       </p>
 
-      <!-- auth.isLogged() (dal service di Sarah): mostra il form di acquisto solo se autenticato,
-           coerente col fatto che il backend richiede comunque il login per /rest/carrello/items -->
       @if (auth.isLogged()) {
         <form class="form-riga" [formGroup]="quantitaForm" (ngSubmit)="aggiungiAlCarrello()">
           <div class="campo campo-quantita">
@@ -87,9 +77,7 @@
 
   <h3 class="mt-24 mb-16">Varianti</h3>
   <div class="griglia-varianti">
-    <!-- Una scheda per gusto (non per ogni combinazione gusto+formato): il formato si
-         sceglie con la tendina dentro la scheda, cosi' non si ripete lo stesso gusto
-         piu' volte solo perche' cambia il formato -->
+
     @for (g of gruppiVarianti(); track g.gusto + '|' + g.colore) {
       @let attivo = formatoAttivo(g);
       <div
@@ -129,7 +117,7 @@
         <p class="mt-8"><strong>{{ r.titolo }}</strong></p>
       }
       <p class="light">{{ r.commento }}</p>
-      <!-- pipe "date" (teoria cap. 17) con formato personalizzato -->
+
       <p class="data-recensione muted">{{ r.dataRecensione | date: 'dd/MM/yyyy' }}</p>
     </div>
   } @empty {

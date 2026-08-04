@@ -18,33 +18,23 @@ import { AdminOrdini } from './componenti/admin/admin-ordini/admin-ordini';
 import { authGuardGuard } from './auth/auth-guard-guard';
 import { adminGuardGuard } from './auth/admin-guard-guard';
 
-// ============================================================================
-// PROPRIETARIO: Infrastruttura condivisa (non appartiene a una sola persona)
-// ============================================================================
-// La mappa di tutte le "pagine" dell'app (teoria cap. 21): ogni oggetto collega
-// un path dell'URL a un componente. E' il punto in cui si vede a colpo d'occhio
-// il lavoro di tutte e 4 le persone del team riunito in un'unica applicazione.
 export const routes: Routes = [
-    // pathMatch:'full' + redirectTo: la home "/" rimanda subito al catalogo
+
     {path :'', pathMatch:'full', redirectTo:'catalogo'},
-    // Rotte pubbliche (Mattia/Sarah): nessun canActivate, accessibili anche senza login
+
     {path:'catalogo', component:Home},
-    // ":id" e' un parametro di rotta (teoria cap. 21): letto con ActivatedRoute nel componente
+
     {path:'prodotto/:id', component:ProdottoDettaglio},
     {path:'about', component:About},
     {path:'login', component:Login},
     {path:'registrati', component:Registrazione},
 
-    // Rotte protette da authGuardGuard (Sarah): serve solo essere autenticati
     {path:'carrello', component:Carrello, canActivate:[authGuardGuard]},
     {path:'checkout', component:Checkout, canActivate:[authGuardGuard]},
     {path:'ordini', component:OrdiniList, canActivate:[authGuardGuard]},
     {path:'ordini/:id', component:OrdineDettaglio, canActivate:[authGuardGuard]},
     {path:'profilo', component:Profilo, canActivate:[authGuardGuard]},
 
-    // Rotte annidate (children, teoria cap. 21): tutte le pagine admin condividono
-    // lo stesso AdminLayout come "guscio" (sidebar + <router-outlet> interno), e sono
-    // protette da adminGuardGuard — serve sia login sia ruolo ADMIN
     {path:'admin', component:AdminLayout, canActivate:[adminGuardGuard], children:[
         {path:'', pathMatch:'full', redirectTo:'categorie'},
         {path:'categorie', component:AdminCategorie},
@@ -53,8 +43,6 @@ export const routes: Routes = [
         {path:'ordini', component:AdminOrdini},
     ]},
 
-    // Rotta wildcard "**" (teoria cap. 21): cattura qualunque URL non riconosciuto
-    // sopra e lo rimanda alla pagina 404 — va sempre messa per ultima
     {path:'404', component:Notfnd},
     {path: '**', redirectTo: '404'}
 ];

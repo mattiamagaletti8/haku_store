@@ -42,7 +42,6 @@
   font-size: 13px;
 }
 
-/* ─── TIMELINE ─── */
 .timeline {
   position: relative;
   padding-left: 28px;
@@ -75,7 +74,6 @@
   margin-bottom: 4px;
 }
 
-/* ─── PREMI ─── */
 .premio-card {
   text-align: center;
 }
