@@ -7,6 +7,8 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'auth.unauthorized', 'Devi effettuare il login per accedere a questa risorsa.'),
 ('IT', 'auth.no.email', 'Inserisci l''email.'),
 ('IT', 'auth.no.password', 'Inserisci la password.'),
+('IT', 'auth.disabilitato', 'Il tuo account e'' stato disattivato. Contatta l''assistenza per maggiori informazioni.'),
+('IT', 'auth.token.nonvalido', 'Il link di reset password non e'' valido o e'' scaduto. Richiedine uno nuovo.'),
 
 ('IT', 'utente.ntfnd', 'Utente non trovato.'),
 ('IT', 'utente.forbidden', 'Non puoi modificare i dati di un altro utente.'),
@@ -18,6 +20,7 @@ INSERT INTO messaggi_sistema (lang, code, messagio) VALUES
 ('IT', 'utente.no.email', 'Inserisci l''email.'),
 ('IT', 'utente.no.password', 'Inserisci la password.'),
 ('IT', 'utente.password.short', 'La password deve contenere almeno 8 caratteri.'),
+('IT', 'utente.password.errata', 'La password attuale non e'' corretta.'),
 
 ('IT', 'indirizzo.ntfnd', 'Indirizzo non trovato.'),
 ('IT', 'indirizzo.forbidden', 'Non puoi modificare un indirizzo che non ti appartiene.'),

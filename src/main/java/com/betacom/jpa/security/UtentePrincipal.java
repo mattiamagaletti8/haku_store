@@ -21,6 +21,7 @@ public class UtentePrincipal implements UserDetails { // "adatta" il nostro Uten
 	private final String email;
 	private final String password;
 	private final Roles ruolo;
+	private final boolean attivo;
 
 	public UtentePrincipal(Utente ut) {
 		// copia i dati dall'entità Utente presa dal database
@@ -28,11 +29,18 @@ public class UtentePrincipal implements UserDetails { // "adatta" il nostro Uten
 		this.email = ut.getEmail();
 		this.password = ut.getPassword();
 		this.ruolo = ut.getRuolo();
+		this.attivo = ut.isAttivo();
 	}
 
 	public boolean isAdmin() {
 		// metodo comodo per controllare velocemente se l'utente è admin
 		return ruolo == Roles.ADMIN;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// account disattivato (es. per storico ordini fiscali) non può più autenticarsi
+		return attivo;
 	}
 
 	@Override

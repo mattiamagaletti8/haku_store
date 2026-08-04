@@ -56,7 +56,7 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
 		if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			// se non c'è già un utente autenticato in questa richiesta, prova ad autenticarlo
 			UserDetails userDetails = utenteDetailsService.loadUserByUsername(email);
-			if (jwtService.isTokenValid(token, userDetails)) {
+			if (userDetails.isEnabled() && jwtService.isTokenValid(token, userDetails)) {
 				// token valido: crea l'oggetto di autenticazione che vuole Spring Security
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());

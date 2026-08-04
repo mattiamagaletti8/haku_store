@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.betacom.jpa.dto.input.ForgotPasswordReq;
 import com.betacom.jpa.dto.input.LoginReq;
+import com.betacom.jpa.dto.input.ResetPasswordReq;
 import com.betacom.jpa.dto.input.UtenteReq;
 import com.betacom.jpa.dto.input.ValidationGroups;
+import com.betacom.jpa.dto.output.ResponseDTO;
 import com.betacom.jpa.services.interfaces.IAuthServices;
 
 import jakarta.validation.Valid;
@@ -33,5 +36,21 @@ public class AuthController {
 	@PostMapping("login")
 	public ResponseEntity<Object> login(@RequestBody(required = true) @Valid LoginReq req) throws Exception {
 		return ResponseEntity.ok(authS.login(req));
+	}
+
+	@PostMapping("forgotPassword")
+	public ResponseEntity<ResponseDTO> forgotPassword(@RequestBody(required = true) @Valid ForgotPasswordReq req) throws Exception {
+		authS.forgotPassword(req);
+		return ResponseEntity.ok(ResponseDTO.builder()
+				.msg("Se l'indirizzo e' registrato, riceverai a breve un'email con le istruzioni per reimpostare la password.")
+				.build());
+	}
+
+	@PostMapping("resetPassword")
+	public ResponseEntity<ResponseDTO> resetPassword(@RequestBody(required = true) @Valid ResetPasswordReq req) throws Exception {
+		authS.resetPassword(req);
+		return ResponseEntity.ok(ResponseDTO.builder()
+				.msg("Password reimpostata con successo. Ora puoi accedere con la nuova password.")
+				.build());
 	}
 }

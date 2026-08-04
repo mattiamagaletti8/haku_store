@@ -48,6 +48,7 @@ public class OrdineImpl implements IOrdineServices {
 	private final IDettaglioCarrelloRepository repDetCar;
 	private final ICarrelloServices carrelloS;
 	private final ICouponServices couponS;
+	private final EmailService emailService;
 
 	@Transactional
 	@Override
@@ -115,6 +116,8 @@ public class OrdineImpl implements IOrdineServices {
 		repDetCar.deleteAll(righeCarrello);
 		car.getRighe().clear();
 		car.setCoupon(null);
+
+		emailService.inviaConfermaOrdine(car.getUtente(), ordine);
 
 		return OrdineMap.buildOrdineDTO(ordine);
 	}

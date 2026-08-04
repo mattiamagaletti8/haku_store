@@ -22,6 +22,7 @@ public class UtenteMap {
 				.email(u.getEmail())
 				.telefono(u.getTelefono())
 				.ruolo(u.getRuolo().toString())
+				.attivo(u.isAttivo())
 				.build();
 	}
 }

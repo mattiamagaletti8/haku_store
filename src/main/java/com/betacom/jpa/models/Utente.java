@@ -1,5 +1,6 @@
 package com.betacom.jpa.models;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.betacom.jpa.enums.Roles;
@@ -50,6 +51,15 @@ public class Utente {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Roles ruolo;
+
+	@Column(nullable = false)
+	private boolean attivo = true;
+
+	@Column(name = "reset_token", length = 100)
+	private String resetToken;
+
+	@Column(name = "reset_token_scadenza")
+	private LocalDateTime resetTokenScadenza;
 
 	@OneToMany(mappedBy = "utente", fetch = FetchType.LAZY)
 	private List<Indirizzo> indirizzi;

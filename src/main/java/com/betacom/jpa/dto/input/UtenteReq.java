@@ -36,4 +36,7 @@ public class UtenteReq {
 	private String telefono;
 
 	private String ruolo;
+
+	// Applicato solo se il chiamante e' ADMIN (es. riattivare un account disattivato); ignorato altrimenti.
+	private Boolean attivo;
 }
